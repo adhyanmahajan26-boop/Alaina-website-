@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Alaina Shockers — Precision Damping Engineered for India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════════════════ */
+:root{
+  --orange:#FF4D00;
+  --orange-2:#FF6B2C;
+  --orange-dark:#DD4100;
+  --orange-soft:#FFF0E9;
+  --ink:#121316;
+  --ink-2:#3A3B42;
+  --grey:#74757D;
+  --line:#E9E8E4;
+  --bg:#FFFFFF;
+  --soft:#F7F6F2;
+  --dark:#0B0C0F;
+  --dark-2:#15171C;
+  --fd:'Archivo', sans-serif;     /* display */
+  --fb:'Inter', sans-serif;       /* body */
+  --fm:'Space Mono', monospace;   /* technical */
+}
+
+/* ══════════════════════════════════════════════════════
+   RESET
+══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--fb);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+::selection{background:var(--orange);color:#fff}
+
+/* ══════════════════════════════════════════════════════
+   REVEAL (robust: only hidden when JS active)
+══════════════════════════════════════════════════════ */
+.js [data-reveal]{opacity:0;will-change:opacity,transform}
+.js [data-reveal="up"]{transform:translateY(40px)}
+.js [data-reveal="left"]{transform:translateX(-48px)}
+.js [data-reveal="right"]{transform:translateX(48px)}
+.js [data-reveal].in{
+  opacity:1;transform:none;
+  transition:opacity .85s cubic-bezier(.22,1,.36,1),
+             transform .85s cubic-bezier(.22,1,.36,1);
+}
+
+/* ══════════════════════════════════════════════════════
+   SCROLL PROGRESS
+══════════════════════════════════════════════════════ */
+#bar{
+  position:fixed;top:0;left:0;height:3px;width:0;
+  background:var(--orange);z-index:9999;transition:width .1s linear;
+}
+
+/* ══════════════════════════════════════════════════════
+   SHARED TYPE
+══════════════════════════════════════════════════════ */
+.wrap{max-width:1240px;margin:0 auto;padding:0 48px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--fd);font-weight:700;font-size:12px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--orange);
+  margin-bottom:22px;
+}
+.eyebrow::before{content:'';width:28px;height:2px;background:var(--orange)}
+.h-xl{
+  font-family:var(--fd);font-weight:900;
+  font-size:clamp(46px,6.5vw,92px);
+  line-height:.98;letter-spacing:-.02em;color:var(--ink);
+  text-transform:uppercase;
+}
+.h-lg{
+  font-family:var(--fd);font-weight:900;
+  font-size:clamp(34px,4vw,56px);
+  line-height:1;letter-spacing:-.015em;text-transform:uppercase;
+}
+.lead{font-size:17px;line-height:1.7;color:var(--ink-2);font-weight:300}
+.orange{color:var(--orange)}
+
+/* buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--fd);font-weight:700;font-size:14px;
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:16px 32px;cursor:pointer;border:none;
+  transition:transform .25s,background .25s,box-shadow .25s,color .25s;
+}
+.btn-fill{background:var(--orange);color:#fff}
+.btn-fill:hover{background:var(--orange-dark);transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,77,0,.28)}
+.btn-line{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn-line:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+
+/* ══════════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:800;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 48px;
+  transition:padding .4s,background .4s,box-shadow .4s;
+}
+nav.stuck{
+  padding:14px 48px;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--line);
+}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{
+  width:13px;height:13px;background:var(--orange);
+  border-radius:50%;
+}
+.brand-name{
+  font-family:var(--fd);font-weight:900;font-size:24px;
+  letter-spacing:.04em;color:var(--ink);
+}
+.brand-name small{font-weight:600;font-size:11px;letter-spacing:.18em;color:var(--grey);display:block;line-height:1;margin-top:1px}
+.navlinks{display:flex;align-items:center;gap:36px}
+.navlinks a{
+  font-family:var(--fd);font-weight:600;font-size:13px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);
+  transition:color .2s;
+}
+.navlinks a:hover{color:var(--orange)}
+.nav-btn{
+  background:var(--orange);color:#fff !important;
+  padding:11px 22px;font-size:12px;
+  transition:background .25s !important;
+}
+.nav-btn:hover{background:var(--orange-dark)}
+
+/* ══════════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════════ */
+#hero{
+  position:relative;padding:160px 0 90px;overflow:hidden;
+  background:var(--bg);
+}
+/* soft orange graphic */
+.hero-blob{
+  position:absolute;top:-180px;right:-160px;
+  width:680px;height:680px;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,rgba(255,77,0,.10),transparent 62%);
+  pointer-events:none;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;
+  position:relative;z-index:2;
+}
+.hero-brand-tag{
+  font-family:var(--fd);font-weight:700;font-size:13px;
+  letter-spacing:.3em;text-transform:uppercase;color:var(--orange);
+  margin-bottom:26px;
+}
+.hero-title{
+  font-family:var(--fd);font-weight:900;
+  font-size:clamp(54px,7.5vw,108px);
+  line-height:.92;letter-spacing:-.025em;text-transform:uppercase;
+  color:var(--ink);
+}
+.hero-title .accent{color:var(--orange)}
+.hero-sub{margin-top:26px;max-width:460px;font-size:17px;line-height:1.7;color:var(--ink-2);font-weight:300}
+.hero-cta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap}
+/* product visual */
+.hero-visual{position:relative;display:flex;align-items:center;justify-content:center}
+.hero-arc{
+  position:absolute;width:380px;height:380px;border-radius:50%;
+  background:var(--orange);
+  z-index:1;
+}
+.hero-arc::after{
+  content:'';position:absolute;inset:14px;border-radius:50%;
+  background:var(--bg);
+}
+.hero-prod{
+  position:relative;z-index:2;max-height:520px;
+  filter:drop-shadow(0 30px 50px rgba(0,0,0,.25));
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+.hero-prod-fallback{
+  position:relative;z-index:2;width:240px;height:460px;
+  background:linear-gradient(160deg,#2a2c33,#0e0f12);
+  border-radius:120px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 30px 60px rgba(0,0,0,.3);
+  animation:float 5s ease-in-out infinite;
+}
+.hero-prod-fallback span{
+  font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:.2em;
+  color:rgba(255,255,255,.4);text-transform:uppercase;text-align:center;padding:20px;
+}
+
+/* ══════════════════════════════════════════════════════
+   STAT STRIP
+══════════════════════════════════════════════════════ */
+#stats{background:var(--ink);padding:0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{
+  padding:44px 40px;border-right:1px solid rgba(255,255,255,.08);
+}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--fd);font-weight:900;font-size:54px;color:#fff;line-height:1;letter-spacing:-.02em}
+.stat-n .orange{color:var(--orange)}
+.stat-l{margin-top:8px;font-family:var(--fd);font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+
+/* ══════════════════════════════════════════════════════
+   MARQUEE
+══════════════════════════════════════════════════════ */
+.marquee{overflow:hidden;background:var(--orange);padding:14px 0}
+.marquee-t{display:flex;width:max-content;animation:scrollX 22s linear infinite}
+.marquee-t span{
+  font-family:var(--fd);font-weight:800;font-size:15px;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff;
+  padding:0 34px;white-space:nowrap;display:flex;align-items:center;gap:34px;
+}
+.marquee-t span::after{content:'●';font-size:7px;color:rgba(255,255,255,.6)}
+@keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══════════════════════════════════════════════════════
+   ASSEMBLY (DARK CINEMATIC)
+══════════════════════════════════════════════════════ */
+#assembly{position:relative;height:600vh;background:var(--dark)}
+.asm-sticky{
+  position:sticky;top:0;height:100vh;overflow:hidden;
+  display:flex;align-items:center;
+  background:var(--dark);
+}
+/* scrubbed vector build stage */
+.asm-stage{
+  position:absolute;top:0;right:0;bottom:0;
+  width:54%;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.asm-stage svg{width:min(78%,560px);height:92%;overflow:visible;display:block}
+.asm-glow{
+  position:absolute;top:50%;left:50%;width:520px;height:520px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,77,0,.20) 0%,transparent 62%);
+  filter:blur(20px);opacity:0;transition:opacity .4s;pointer-events:none;
+}
+.asm-ring{
+  position:absolute;top:50%;left:50%;width:600px;height:600px;
+  transform:translate(-50%,-50%);
+  border:1px solid rgba(255,255,255,.05);border-radius:50%;
+  pointer-events:none;
+}
+.asm-ring::after{
+  content:'';position:absolute;inset:42px;border-radius:50%;
+  border:1px dashed rgba(255,77,0,.14);
+}
+.asm-shade2{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to bottom,var(--dark) 0%,transparent 14%,transparent 82%,var(--dark) 100%);
+}
+.asm-ui{position:relative;z-index:5;width:100%;max-width:1240px;margin:0 auto;padding:0 48px}
+.asm-tag{
+  display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:30px;
+}
+.asm-tag::before{content:'';width:28px;height:2px;background:var(--orange)}
+.asm-count{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.asm-num{
+  font-family:var(--fd);font-weight:900;font-size:92px;line-height:1;
+  color:var(--orange);letter-spacing:-.03em;
+  transition:opacity .3s,transform .3s;
+}
+.asm-sep{font-family:var(--fm);font-size:18px;color:rgba(255,255,255,.3)}
+.asm-tot{font-family:var(--fm);font-size:18px;color:rgba(255,255,255,.3)}
+.asm-label{
+  font-family:var(--fd);font-weight:900;
+  font-size:clamp(40px,5.5vw,76px);line-height:.96;
+  text-transform:uppercase;color:#fff;letter-spacing:-.01em;
+  transition:opacity .3s,transform .3s;
+}
+.asm-desc{
+  margin-top:20px;max-width:440px;font-size:15px;line-height:1.75;
+  color:rgba(255,255,255,.6);font-weight:300;
+  transition:opacity .3s,transform .3s;
+}
+.asm-changing .asm-num,
+.asm-changing .asm-label,
+.asm-changing .asm-desc{opacity:0;transform:translateY(10px)}
+/* dots */
+.asm-dots{position:absolute;right:48px;top:50%;transform:translateY(-50%);z-index:6;display:flex;flex-direction:column;gap:11px}
+.asm-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:all .3s}
+.asm-dot.on{background:var(--orange);height:26px;border-radius:4px}
+/* progress */
+.asm-prog{position:absolute;left:48px;right:48px;bottom:42px;z-index:6}
+.asm-prog-track{height:2px;background:rgba(255,255,255,.12);position:relative}
+.asm-prog-fill{position:absolute;left:0;top:0;height:100%;background:var(--orange);width:10%;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ══════════════════════════════════════════════════════
+   PRODUCTS
+══════════════════════════════════════════════════════ */
+#products{padding:120px 0;background:var(--bg)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px;gap:40px}
+.sec-head .lead{max-width:330px;text-align:right}
+.prods{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.prod{
+  border:1px solid var(--line);background:var(--bg);
+  transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s,border-color .4s;
+  cursor:pointer;overflow:hidden;
+}
+.prod:hover{transform:translateY(-8px);box-shadow:0 24px 50px rgba(0,0,0,.10);border-color:transparent}
+.prod-img{
+  height:280px;background-size:cover;background-position:center;
+  background-color:var(--soft);position:relative;overflow:hidden;
+}
+.prod-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(18,19,22,.35),transparent 55%);
+}
+.prod-img-fallback{
+  height:280px;background:linear-gradient(160deg,#26282e,#0e0f12);
+  display:flex;align-items:center;justify-content:center;
+}
+.prod-img-fallback span{font-family:var(--fd);font-weight:700;font-size:13px;letter-spacing:.2em;color:rgba(255,255,255,.35);text-transform:uppercase}
+.prod-num{
+  position:absolute;top:18px;left:18px;z-index:2;
+  width:40px;height:40px;background:var(--orange);color:#fff;
+  font-family:var(--fd);font-weight:900;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+}
+.prod-body{padding:30px}
+.prod-tag{font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
+.prod-title{font-family:var(--fd);font-weight:900;font-size:30px;line-height:1;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:14px}
+.prod-desc{font-size:14px;line-height:1.65;color:var(--grey)}
+.prod-link{
+  margin-top:22px;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink);transition:gap .25s,color .25s;
+}
+.prod:hover .prod-link{color:var(--orange);gap:14px}
+
+/* ══════════════════════════════════════════════════════
+   TECHNOLOGY
+══════════════════════════════════════════════════════ */
+#tech{background:var(--soft);padding:120px 0}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.tech-visual{position:relative}
+.tech-visual-img{
+  width:100%;height:540px;object-fit:cover;
+  background:linear-gradient(160deg,#26282e,#0e0f12);
+}
+.tech-badge{
+  position:absolute;bottom:-22px;left:-22px;
+  background:var(--orange);color:#fff;padding:22px 28px;
+}
+.tech-badge b{font-family:var(--fd);font-weight:900;font-size:40px;line-height:1;display:block}
+.tech-badge span{font-family:var(--fd);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.9}
+.spec{display:grid;grid-template-columns:44px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--line)}
+.spec:first-of-type{border-top:1px solid var(--line)}
+.spec-n{font-family:var(--fd);font-weight:900;font-size:18px;color:var(--orange)}
+.spec h4{font-family:var(--fd);font-weight:700;font-size:16px;letter-spacing:.01em;margin-bottom:5px;text-transform:uppercase}
+.spec p{font-size:13.5px;line-height:1.6;color:var(--grey)}
+.spec-rows{margin-top:34px}
+
+/* ══════════════════════════════════════════════════════
+   TRUCKS
+══════════════════════════════════════════════════════ */
+#trucks{padding:120px 0;background:var(--bg)}
+.trucks-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:60px;align-items:center}
+.trucks-img{
+  height:560px;background-size:cover;background-position:center;
+  background:linear-gradient(160deg,#1a1c20,#0a0b0d);position:relative;
+}
+.trucks-img::after{content:'';position:absolute;inset:0;border:1px solid var(--line)}
+.trucks-pills{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.t-pill{
+  font-family:var(--fd);font-weight:800;font-size:16px;letter-spacing:.08em;
+  text-transform:uppercase;padding:13px 30px;border:2px solid var(--ink);
+  color:var(--ink);transition:all .3s;
+}
+.t-pill:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+
+/* ══════════════════════════════════════════════════════
+   CATALOGUE
+══════════════════════════════════════════════════════ */
+#catalog{padding:120px 0;background:var(--soft)}
+.filters{display:flex;gap:10px;margin:44px 0 34px;flex-wrap:wrap}
+.filt{
+  font-family:var(--fd);font-weight:700;font-size:13px;letter-spacing:.06em;
+  text-transform:uppercase;padding:11px 26px;border:2px solid var(--line);
+  background:var(--bg);color:var(--ink-2);cursor:pointer;transition:all .2s;
+}
+.filt.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.filt:hover:not(.on){border-color:var(--orange);color:var(--orange)}
+.tbl{width:100%;border-collapse:collapse;background:var(--bg)}
+.tbl thead th{
+  font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--grey);text-align:left;
+  padding:16px 18px;border-bottom:2px solid var(--ink);
+}
+.tbl tbody tr{border-bottom:1px solid var(--line);transition:background .2s}
+.tbl tbody tr:hover{background:var(--orange-soft)}
+.tbl td{padding:16px 18px;font-size:14px;color:var(--ink-2)}
+.tbl .p{font-family:var(--fm);font-size:12px;color:var(--orange)}
+.tbl .n{font-weight:600;color:var(--ink)}
+.tbl .b{display:inline-block;font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;background:var(--orange-soft);color:var(--orange-dark)}
+.tbl .r{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--ink)}
+.tbl-note{margin-top:16px;font-size:12px;color:var(--grey)}
+
+/* ══════════════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════════════ */
+#contact{padding:120px 0;background:var(--bg)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+label{display:block;font-family:var(--fd);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px}
+input,select,textarea{
+  width:100%;background:var(--soft);border:1px solid var(--line);
+  color:var(--ink);font-family:var(--fb);font-size:15px;padding:14px 16px;
+  outline:none;transition:border-color .2s,background .2s;margin-bottom:20px;-webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--orange);background:#fff}
+textarea{height:110px;resize:vertical}
+.submit{width:100%;background:var(--orange);color:#fff;padding:17px;font-family:var(--fd);font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;border:none;cursor:pointer;transition:background .25s,transform .2s}
+.submit:hover{background:var(--orange-dark);transform:translateY(-2px)}
+.cdet{display:flex;align-items:flex-start;gap:16px;padding:20px 0;border-bottom:1px solid var(--line)}
+.cdet:first-of-type{border-top:1px solid var(--line)}
+.cdet-i{width:44px;height:44px;background:var(--orange-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cdet-i svg{width:18px;height:18px;fill:var(--orange)}
+.cdet-l{font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--orange);margin-bottom:3px}
+.cdet-v{font-size:16px;color:var(--ink);font-weight:500}
+.wa{display:inline-flex;align-items:center;gap:11px;background:#25D366;color:#fff;padding:15px 26px;margin-top:26px;font-family:var(--fd);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;transition:background .2s,transform .2s}
+.wa:hover{background:#1da851;transform:translateY(-2px)}
+.wa svg{width:21px;height:21px;fill:#fff}
+
+/* ══════════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════════ */
+footer{background:var(--ink);padding:56px 48px 36px}
+.foot-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.1)}
+.foot-brand{font-family:var(--fd);font-weight:900;font-size:34px;letter-spacing:.04em;color:#fff}
+.foot-brand small{display:block;font-weight:600;font-size:11px;letter-spacing:.18em;color:var(--orange);margin-top:4px}
+.foot-cols{display:flex;gap:64px}
+.foot-col h5{font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:16px}
+.foot-col a{display:block;font-size:14px;color:rgba(255,255,255,.8);margin-bottom:10px;transition:color .2s}
+.foot-col a:hover{color:var(--orange)}
+.foot-bot{display:flex;justify-content:space-between;align-items:center;padding-top:28px;gap:20px;flex-wrap:wrap}
+.foot-bot p{font-size:12px;color:rgba(255,255,255,.4)}
+
+/* ══════════════════════════════════════════════════════
+   MOBILE
+══════════════════════════════════════════════════════ */
+@media(max-width:920px){
+  .wrap{padding:0 24px}
+  nav{padding:18px 24px}
+  nav.stuck{padding:12px 24px}
+  .navlinks{display:none}
+  .hero-grid{grid-template-columns:1fr;gap:50px}
+  .hero-visual{order:-1}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat{border-bottom:1px solid rgba(255,255,255,.08)}
+  .stat:nth-child(2){border-right:none}
+  .asm-ui{padding:0 24px}
+  .asm-dots{right:18px}
+  .asm-num{font-size:60px}
+  .asm-prog{left:24px;right:24px}
+  .prods{grid-template-columns:1fr}
+  .sec-head{display:block}
+  .sec-head .lead{text-align:left;margin-top:20px}
+  .tech-grid,.trucks-grid,.contact-grid{grid-template-columns:1fr;gap:48px}
+  .trucks-img{height:380px}
+  .foot-top{flex-direction:column}
+  .foot-cols{flex-wrap:wrap;gap:36px}
+  footer{padding:48px 24px 28px}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-name">ALAINA<small>SHOCKERS</small></div>
+  </a>
+  <div class="navlinks">
+    <a href="#assembly">Process</a>
+    <a href="#products">Products</a>
+    <a href="#tech">Technology</a>
+    <a href="#trucks">Heavy Duty</a>
+    <a href="#catalog">Catalogue</a>
+    <a href="#contact" class="nav-btn">Enquire</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-blob"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div data-reveal="up">
+        <div class="hero-brand-tag">Precision Damping · Since 1978</div>
+        <h1 class="hero-title">Engineered<br>For The <span class="accent">Toughest</span><br>Roads</h1>
+        <p class="hero-sub">Advanced shock absorbers, struts, and heavy-duty cabin dampers built for Indian conditions — for Eicher, Leyland &amp; Tata commercial trucks and every passenger vehicle in between.</p>
+        <div class="hero-cta">
+          <a href="#products" class="btn btn-fill">Explore Products
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-line">Get a Quote</a>
+        </div>
+      </div>
+      <div class="hero-visual" data-reveal="right">
+        <div class="hero-arc"></div>
+        <img class="hero-prod" src="images/product-damper.jpg" alt="Alaina shock absorber"
+             onerror="this.outerHTML='<div class=&quot;hero-prod-fallback&quot;><span>Product Image<br>product-damper.jpg</span></div>'"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat"><div class="stat-n"><span data-count="45">0</span><span class="orange">+</span></div><div class="stat-l">Years of Engineering</div></div>
+    <div class="stat"><div class="stat-n"><span data-count="3">0</span></div><div class="stat-l">Major Truck Brands</div></div>
+    <div class="stat"><div class="stat-n"><span data-count="200">0</span><span class="orange">+</span></div><div class="stat-l">Active SKUs</div></div>
+    <div class="stat"><div class="stat-n"><span data-count="120">0</span><span class="orange">+</span></div><div class="stat-l">Cities Served</div></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-t">
+    <span>Rare Struts</span><span>Passenger Dampers</span><span>Cabin Dampers</span><span>Eicher</span><span>Leyland</span><span>Tata</span><span>Heavy Duty Engineering</span><span>Pan-India Supply</span>
+    <span>Rare Struts</span><span>Passenger Dampers</span><span>Cabin Dampers</span><span>Eicher</span><span>Leyland</span><span>Tata</span><span>Heavy Duty Engineering</span><span>Pan-India Supply</span>
+  </div>
+</div>
+
+<!-- ASSEMBLY (DARK) -->
+<section id="assembly">
+  <div class="asm-sticky">
+    <div class="asm-stage">
+      <div class="asm-ring"></div>
+      <div class="asm-glow" id="asmGlow"></div>
+      <svg id="asmSvg" viewBox="0 0 380 760" aria-hidden="true">
+        <defs>
+          <linearGradient id="gMetal" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#2a2d34"/>
+            <stop offset=".28" stop-color="#52565f"/>
+            <stop offset=".5" stop-color="#6b6f78"/>
+            <stop offset=".72" stop-color="#3a3d44"/>
+            <stop offset="1" stop-color="#1c1e23"/>
+          </linearGradient>
+          <linearGradient id="gChrome" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#9aa0aa"/>
+            <stop offset=".4" stop-color="#eef1f5"/>
+            <stop offset=".55" stop-color="#ffffff"/>
+            <stop offset=".7" stop-color="#c4c9d1"/>
+            <stop offset="1" stop-color="#70747d"/>
+          </linearGradient>
+          <linearGradient id="gCoil" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#7a1500"/>
+            <stop offset=".45" stop-color="#ff4d00"/>
+            <stop offset=".6" stop-color="#ff7a3c"/>
+            <stop offset="1" stop-color="#9c2400"/>
+          </linearGradient>
+          <radialGradient id="gSeat" cx=".5" cy=".4" r=".7">
+            <stop offset="0" stop-color="#5a5e67"/>
+            <stop offset="1" stop-color="#1a1c21"/>
+          </radialGradient>
+          <radialGradient id="gRim" cx=".42" cy=".38" r=".7">
+            <stop offset="0" stop-color="#7d828c"/>
+            <stop offset=".5" stop-color="#4a4e57"/>
+            <stop offset="1" stop-color="#202329"/>
+          </radialGradient>
+          <radialGradient id="gTire" cx=".42" cy=".4" r=".75">
+            <stop offset="0" stop-color="#2a2c31"/>
+            <stop offset=".7" stop-color="#141519"/>
+            <stop offset="1" stop-color="#070809"/>
+          </radialGradient>
+          <radialGradient id="gDisc" cx=".42" cy=".4" r=".7">
+            <stop offset="0" stop-color="#6e727a"/>
+            <stop offset="1" stop-color="#34373d"/>
+          </radialGradient>
+        </defs>
+
+        <!-- ===== SUSPENSION SCENE (fades in during fitment) ===== -->
+        <g id="scene" opacity="0">
+          <!-- road -->
+          <rect x="-40" y="726" width="470" height="40" fill="#000"/>
+          <rect x="-40" y="726" width="470" height="4" fill="#ff4d00" opacity=".5"/>
+          <g id="roadDash">
+            <rect x="-10" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+            <rect x="70"  y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+            <rect x="150" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+            <rect x="230" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+            <rect x="310" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+            <rect x="390" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
+          </g>
+          <ellipse cx="195" cy="726" rx="140" ry="14" fill="#000" opacity=".55"/>
+          <!-- speed / motion lines -->
+          <g id="speed" opacity="0">
+            <rect x="20" y="540" width="60" height="3" rx="1.5" fill="#ff4d00" opacity=".7"/>
+            <rect x="6"  y="570" width="44" height="3" rx="1.5" fill="#ff4d00" opacity=".5"/>
+            <rect x="28" y="600" width="52" height="3" rx="1.5" fill="#ff4d00" opacity=".6"/>
+          </g>
+
+          <!-- chassis: wheel arch + strut tower (bobs while driving) -->
+          <g id="chassis">
+            <path d="M 14 510 Q 195 250 376 510" fill="none" stroke="#16181d" stroke-width="30" stroke-linecap="round"/>
+            <path d="M 14 510 Q 195 250 376 510" fill="none" stroke="#2c2f36" stroke-width="2"/>
+            <rect x="150" y="150" width="62" height="22" rx="6" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+            <circle cx="160" cy="161" r="4" fill="#0c0d10"/>
+            <circle cx="202" cy="161" r="4" fill="#0c0d10"/>
+          </g>
+
+          <!-- control arm -->
+          <g id="arm">
+            <path d="M 36 648 L 196 612 L 196 640 L 44 672 Z" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+            <circle cx="40" cy="660" r="11" fill="#16181d" stroke="#5a5e67" stroke-width="3"/>
+          </g>
+
+          <!-- wheel -->
+          <g id="wheel">
+            <circle cx="195" cy="610" r="150" fill="url(#gTire)" stroke="#000" stroke-width="2"/>
+            <circle cx="195" cy="610" r="148" fill="none" stroke="#2e3036" stroke-width="2" stroke-dasharray="3 7" opacity=".6"/>
+            <circle cx="195" cy="610" r="116" fill="none" stroke="#05060700" stroke-width="0"/>
+            <circle cx="195" cy="610" r="100" fill="url(#gRim)" stroke="#0c0d10" stroke-width="3"/>
+            <circle cx="195" cy="610" r="68" fill="url(#gDisc)" stroke="#26282d" stroke-width="2"/>
+            <g id="discHoles"></g>
+            <!-- caliper -->
+            <rect x="250" y="566" width="26" height="50" rx="6" fill="#ff4d00" stroke="#7a1500" stroke-width="2"/>
+            <g id="spokes"></g>
+            <circle cx="195" cy="610" r="22" fill="#1c1e23" stroke="#ff4d00" stroke-width="3"/>
+            <circle cx="195" cy="610" r="6" fill="#0c0d10"/>
+          </g>
+        </g>
+
+        <!-- ===== COILOVER UNIT (builds part-by-part) ===== -->
+        <g id="unitWrap">
+        <g id="rig">
+          <!-- bottom eye + bolt -->
+          <g id="gEye">
+            <ellipse cx="180" cy="668" rx="32" ry="25" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+            <ellipse cx="180" cy="668" rx="14" ry="12" fill="#0b0c0f"/>
+            <ellipse cx="180" cy="668" rx="14" ry="12" fill="none" stroke="#ff4d00" stroke-width="2" opacity=".55"/>
+            <circle cx="180" cy="668" r="6" fill="url(#gChrome)"/>
+          </g>
+          <!-- damper body -->
+          <g id="gBody">
+            <rect x="148" y="372" width="64" height="266" rx="16" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+            <rect x="148" y="372" width="64" height="266" rx="16" fill="none" stroke="#ffffff" stroke-opacity=".06" stroke-width="1"/>
+            <rect x="165" y="382" width="6" height="248" rx="3" fill="#ffffff" opacity=".12"/>
+            <rect x="156" y="356" width="48" height="24" rx="10" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+            <!-- threaded lower body -->
+            <g id="gThreads"></g>
+            <!-- brand badge -->
+            <rect x="159" y="398" width="42" height="30" rx="3" fill="#0e0f12" stroke="#ff4d00" stroke-width="1.5"/>
+            <text x="180" y="418" text-anchor="middle" fill="#ff4d00" font-family="Archivo,sans-serif" font-weight="800" font-size="9" letter-spacing="1.4">ALAINA</text>
+            <!-- adjuster lock collars -->
+            <ellipse cx="180" cy="582" rx="36" ry="9" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="1.5"/>
+            <ellipse cx="180" cy="596" rx="36" ry="9" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="1.5"/>
+          </g>
+          <!-- lower spring seat -->
+          <g id="gSeatL">
+            <ellipse cx="180" cy="606" rx="72" ry="15" fill="url(#gSeat)" stroke="#0c0d10" stroke-width="2"/>
+          </g>
+          <!-- moving top assembly: rod (+boot) + upper seat + mount -->
+          <g id="gTop">
+            <g id="gRod">
+              <rect x="171" y="150" width="18" height="180" rx="7" fill="url(#gChrome)" stroke="#0c0d10" stroke-width="1.5"/>
+              <rect x="177" y="156" width="3" height="168" fill="#ffffff" opacity=".7"/>
+              <!-- dust boot over exposed rod -->
+              <g id="gBoot"></g>
+              <!-- bump stop -->
+              <ellipse cx="180" cy="300" rx="15" ry="8" fill="#7a1500"/>
+            </g>
+            <g id="gSeatU">
+              <ellipse cx="180" cy="320" rx="64" ry="13" fill="url(#gSeat)" stroke="#0c0d10" stroke-width="2"/>
+            </g>
+            <g id="gMount">
+              <ellipse cx="180" cy="150" rx="72" ry="15" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+              <ellipse cx="180" cy="150" rx="72" ry="15" fill="none" stroke="#ff4d00" stroke-width="1.5" opacity=".4"/>
+              <rect x="120" y="126" width="120" height="26" rx="9" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
+              <rect x="172" y="96" width="16" height="34" rx="6" fill="url(#gChrome)" stroke="#0c0d10" stroke-width="1"/>
+              <circle cx="132" cy="150" r="8" fill="#16181d" stroke="#ff4d00" stroke-width="2"/>
+              <circle cx="180" cy="150" r="8" fill="#16181d" stroke="#ff4d00" stroke-width="2"/>
+              <circle cx="228" cy="150" r="8" fill="#16181d" stroke="#ff4d00" stroke-width="2"/>
+            </g>
+          </g>
+          <!-- coil spring (generated by JS) -->
+          <g id="gSpring"></g>
+        </g>
+        </g>
+      </svg>
+      <div class="asm-shade2"></div>
+    </div>
+
+    <div class="asm-ui" id="asmUi">
+      <div class="asm-tag">The Making Of A Shocker</div>
+      <div class="asm-count">
+        <div class="asm-num" id="asmNum">01</div>
+        <div class="asm-sep">/</div>
+        <div class="asm-tot">10</div>
+      </div>
+      <div class="asm-label" id="asmLabel">Parts Ready</div>
+      <div class="asm-desc" id="asmDesc">Every precision component laid out before assembly — piston, seals, springs, mounts, and the damper body.</div>
+    </div>
+
+    <div class="asm-dots" id="asmDots">
+      <div class="asm-dot on"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div>
+      <div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div>
+    </div>
+
+    <div class="asm-prog">
+      <div class="asm-prog-track"><div class="asm-prog-fill" id="asmFill"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="wrap">
+    <div class="sec-head">
+      <div data-reveal="up">
+        <div class="eyebrow">Our Range</div>
+        <h2 class="h-xl">Built For<br>Every Vehicle</h2>
+      </div>
+      <p class="lead" data-reveal="up">Three core product lines covering passenger cars, rare specialty fitments, and India's heaviest commercial trucks.</p>
+    </div>
+    <div class="prods">
+      <div class="prod" data-reveal="up">
+        <div class="prod-img" style="background-image:url('images/hero-suspension.jpg')">
+          <div class="prod-num">01</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-tag">Specialty Fitments</div>
+          <div class="prod-title">Rare Struts</div>
+          <div class="prod-desc">Precision struts for discontinued and low-volume vehicle fitments that are unavailable in the standard aftermarket.</div>
+          <div class="prod-link">View Range
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="prod" data-reveal="up" style="transition-delay:.1s">
+        <div class="prod-img" style="background-image:url('images/product-damper.jpg')">
+          <div class="prod-num">02</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-tag">Passenger &amp; LCV</div>
+          <div class="prod-title">Dampers</div>
+          <div class="prod-desc">Twin-tube and mono-tube gas dampers for passenger cars, SUVs, and light commercial vehicles across all Indian models.</div>
+          <div class="prod-link">View Range
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="prod" data-reveal="up" style="transition-delay:.2s">
+        <div class="prod-img" style="background-image:url('images/truck-cabin.jpg')">
+          <div class="prod-num">03</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-tag">Heavy Commercial</div>
+          <div class="prod-title">Cabin Dampers</div>
+          <div class="prod-desc">Heavy-duty cabin units for Eicher, Leyland, and Tata trucks — chrome-rod, high-load seals, built for long-haul duty.</div>
+          <div class="prod-link">View Range
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section id="tech">
+  <div class="wrap">
+    <div class="tech-grid">
+      <div class="tech-visual" data-reveal="left">
+        <img class="tech-visual-img" src="images/damper-closeup.jpg" alt="Chrome piston rod"
+             onerror="this.style.display='none'"/>
+        <div class="tech-badge"><b>1M+</b><span>Test Cycles</span></div>
+      </div>
+      <div data-reveal="right">
+        <div class="eyebrow">Engineering</div>
+        <h2 class="h-lg">Built For Precision</h2>
+        <div class="spec-rows">
+          <div class="spec"><div class="spec-n">01</div><div><h4>Chrome-Plated Piston Rod</h4><p>Hard-chrome coating for sustained corrosion resistance and low-friction operation under repeated load.</p></div></div>
+          <div class="spec"><div class="spec-n">02</div><div><h4>High-Cycle Dual Seals</h4><p>Double-seal construction tested beyond one million compression cycles in simulated Indian road conditions.</p></div></div>
+          <div class="spec"><div class="spec-n">03</div><div><h4>Gas-Charged Twin-Tube</h4><p>Nitrogen charge eliminates cavitation for consistent damping force across all operating temperatures.</p></div></div>
+          <div class="spec"><div class="spec-n">04</div><div><h4>Progressive Valving</h4><p>Soft at low load for comfort, firm under maximum payload — engineered for real Indian duty cycles.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUCKS -->
+<section id="trucks">
+  <div class="wrap">
+    <div class="trucks-grid">
+      <div data-reveal="left">
+        <div class="eyebrow">Heavy Commercial</div>
+        <h2 class="h-xl">India's<br>Heaviest<br>Hauls</h2>
+        <p class="lead" style="margin-top:24px;max-width:420px">Alaina cabin dampers are engineered specifically for Indian commercial truck conditions — extreme payloads, unmaintained roads, and relentless duty cycles.</p>
+        <div class="trucks-pills">
+          <div class="t-pill">Eicher</div>
+          <div class="t-pill">Leyland</div>
+          <div class="t-pill">Tata</div>
+        </div>
+      </div>
+      <div class="trucks-img" style="background-image:url('images/truck-cabin.jpg')" data-reveal="right"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOGUE -->
+<section id="catalog">
+  <div class="wrap">
+    <div data-reveal="up">
+      <div class="eyebrow">Price List</div>
+      <h2 class="h-xl">Cabin Damper Catalogue</h2>
+      <p class="lead" style="margin-top:16px;max-width:520px">Indicative pricing for the heavy-duty cabin damper range. Contact us for confirmed trade pricing and bulk quotations.</p>
+    </div>
+    <div class="filters" data-reveal="up">
+      <button class="filt on" onclick="ft('all',this)">All Trucks</button>
+      <button class="filt" onclick="ft('Eicher',this)">Eicher</button>
+      <button class="filt" onclick="ft('Leyland',this)">Leyland</button>
+      <button class="filt" onclick="ft('Tata',this)">Tata</button>
+    </div>
+    <div style="overflow-x:auto" data-reveal="up">
+      <table class="tbl" id="tbl">
+        <thead><tr><th>Part No.</th><th>Product Name</th><th>Make</th><th>Model</th><th>Position</th><th>MRP</th></tr></thead>
+        <tbody>
+          <tr data-m="Eicher"><td class="p">AL-CD-E001</td><td class="n">Cabin Damper – Pro 1049</td><td><span class="b">Eicher</span></td><td>Pro 1049</td><td>Cabin Front</td><td class="r">₹1,850</td></tr>
+          <tr data-m="Eicher"><td class="p">AL-CD-E002</td><td class="n">Cabin Damper – Pro 2095</td><td><span class="b">Eicher</span></td><td>Pro 2095</td><td>Cabin Front</td><td class="r">₹2,100</td></tr>
+          <tr data-m="Eicher"><td class="p">AL-CD-E003</td><td class="n">Cabin Damper – Pro 3015</td><td><span class="b">Eicher</span></td><td>Pro 3015</td><td>Cabin Front</td><td class="r">₹2,450</td></tr>
+          <tr data-m="Eicher"><td class="p">AL-CD-E004</td><td class="n">Cabin Damper – 10.90</td><td><span class="b">Eicher</span></td><td>10.90</td><td>Cabin Rear</td><td class="r">₹1,950</td></tr>
+          <tr data-m="Eicher"><td class="p">AL-CD-E005</td><td class="n">Cabin Damper – 14.14</td><td><span class="b">Eicher</span></td><td>14.14</td><td>Front / Rear</td><td class="r">₹2,600</td></tr>
+          <tr data-m="Leyland"><td class="p">AL-CD-L001</td><td class="n">Cabin Damper – Dost</td><td><span class="b">Leyland</span></td><td>Dost</td><td>Cabin Front</td><td class="r">₹1,600</td></tr>
+          <tr data-m="Leyland"><td class="p">AL-CD-L002</td><td class="n">Cabin Damper – Partner</td><td><span class="b">Leyland</span></td><td>Partner</td><td>Cabin Front</td><td class="r">₹1,750</td></tr>
+          <tr data-m="Leyland"><td class="p">AL-CD-L003</td><td class="n">Cabin Damper – 1615</td><td><span class="b">Leyland</span></td><td>1615</td><td>Cabin Front</td><td class="r">₹2,200</td></tr>
+          <tr data-m="Leyland"><td class="p">AL-CD-L004</td><td class="n">Cabin Damper – 2518</td><td><span class="b">Leyland</span></td><td>2518</td><td>Front / Rear</td><td class="r">₹2,800</td></tr>
+          <tr data-m="Leyland"><td class="p">AL-CD-L005</td><td class="n">Cabin Damper – 3718</td><td><span class="b">Leyland</span></td><td>3718</td><td>Cabin Front</td><td class="r">₹3,100</td></tr>
+          <tr data-m="Tata"><td class="p">AL-CD-T001</td><td class="n">Cabin Damper – Ace Gold</td><td><span class="b">Tata</span></td><td>Ace Gold</td><td>Cabin Front</td><td class="r">₹1,200</td></tr>
+          <tr data-m="Tata"><td class="p">AL-CD-T002</td><td class="n">Cabin Damper – Ultra 1012</td><td><span class="b">Tata</span></td><td>Ultra 1012</td><td>Cabin Front</td><td class="r">₹1,900</td></tr>
+          <tr data-m="Tata"><td class="p">AL-CD-T003</td><td class="n">Cabin Damper – LPT 1613</td><td><span class="b">Tata</span></td><td>LPT 1613</td><td>Cabin Front</td><td class="r">₹2,300</td></tr>
+          <tr data-m="Tata"><td class="p">AL-CD-T004</td><td class="n">Cabin Damper – Prima 2528</td><td><span class="b">Tata</span></td><td>Prima 2528</td><td>Front / Rear</td><td class="r">₹2,950</td></tr>
+          <tr data-m="Tata"><td class="p">AL-CD-T005</td><td class="n">Cabin Damper – Signa 4625</td><td><span class="b">Tata</span></td><td>Signa 4625</td><td>Front / Rear</td><td class="r">₹3,400</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">* Indicative pricing only — contact for confirmed trade rates and bulk availability.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <div data-reveal="up">
+        <div class="eyebrow">Enquiry</div>
+        <h2 class="h-xl" style="margin-bottom:34px">Get A Quote</h2>
+        <form onsubmit="sendForm(event)">
+          <label>Your Name</label><input type="text" placeholder="Rajesh Kumar" required/>
+          <label>Phone / WhatsApp</label><input type="tel" placeholder="+91 98765 43210" required/>
+          <label>Product Category</label>
+          <select>
+            <option value="">Select…</option>
+            <option>Cabin Dampers — Eicher</option>
+            <option>Cabin Dampers — Leyland</option>
+            <option>Cabin Dampers — Tata</option>
+            <option>Passenger Dampers</option>
+            <option>Rare Struts</option>
+            <option>Bulk / Fleet Order</option>
+          </select>
+          <label>Message</label><textarea placeholder="Vehicle model, quantity, fitment details…"></textarea>
+          <button type="submit" class="submit" id="sbtn">Send Enquiry</button>
+        </form>
+      </div>
+      <div data-reveal="up" style="transition-delay:.12s">
+        <h3 class="h-lg" style="margin-bottom:18px">Talk To Us</h3>
+        <p class="lead" style="margin-bottom:30px">Reach us on WhatsApp for the fastest response. Trade buyers, fleet operators, and workshop owners welcome across India.</p>
+        <div class="cdet">
+          <div class="cdet-i"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><div class="cdet-l">Phone / WhatsApp</div><div class="cdet-v">+91 79825 55636</div></div>
+        </div>
+        <div class="cdet">
+          <div class="cdet-i"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6" fill="none" stroke="#FF4D00" stroke-width="2"/></svg></div>
+          <div><div class="cdet-l">Email</div><div class="cdet-v">adhyanmahajan26@gmail.com</div></div>
+        </div>
+        <div class="cdet">
+          <div class="cdet-i"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg></div>
+          <div><div class="cdet-l">Coverage</div><div class="cdet-v">Pan-India · 120+ Cities</div></div>
+        </div>
+        <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" class="wa">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.024.502 3.932 1.386 5.605L0 24l6.585-1.367A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 01-5.031-1.386l-.36-.214-3.733.776.794-3.634-.235-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+          WhatsApp Us Now
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div class="foot-brand">ALAINA<small>SHOCKERS</small></div>
+    <div class="foot-cols">
+      <div class="foot-col">
+        <h5>Products</h5>
+        <a href="#products">Rare Struts</a>
+        <a href="#products">Dampers</a>
+        <a href="#products">Cabin Dampers</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#tech">Technology</a>
+        <a href="#trucks">Heavy Duty</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+917982555636">+91 79825 55636</a>
+        <a href="mailto:adhyanmahajan26@gmail.com">Email Us</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bot">
+    <p>© 2025 Alaina Shockers. Engineered for India's Roads.</p>
+    <p>Distributed by Mahajan Motors India</p>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js');
+
+/* PROGRESS BAR */
+const bar=document.getElementById('bar');
+addEventListener('scroll',()=>{bar.style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%'},{passive:true});
+
+/* NAV STICK */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('stuck',scrollY>40),{passive:true});
+
+/* REVEAL */
+const obs=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('[data-reveal]').forEach(el=>obs.observe(el));
+/* safety net: reveal everything after 3s no matter what */
+setTimeout(()=>document.querySelectorAll('[data-reveal]:not(.in)').forEach(el=>el.classList.add('in')),3000);
+
+/* STAT COUNTERS */
+function up(el,t){let n=0,s=Math.max(1,Math.ceil(t/45));const iv=setInterval(()=>{n=Math.min(n+s,t);el.textContent=n;if(n>=t)clearInterval(iv)},26)}
+const sObs=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('[data-count]').forEach(el=>up(el,+el.dataset.count));sObs.unobserve(e.target)}}),{threshold:.4});
+sObs.observe(document.getElementById('statsGrid'));
+
+/* ASSEMBLY SEQUENCE */
+const STEPS=[
+ ['Parts Ready','Every precision component laid out before assembly — piston, seals, springs, mounts, and the damper body.'],
+ ['Seal & Oil Seal','High-performance oil seals pressed into the body, engineered for over a million compression cycles without leakage.'],
+ ['Piston Rod Inserted','The chrome-plated piston rod slid into the cylinder with zero-tolerance alignment for consistent damping force.'],
+ ['Coil Spring Fitted','The precision-wound coil spring seated around the body — rated for the exact load range of the application.'],
+ ['Top Mount Fixed','The top mount assembly torqued to specification, completing the connection between damper and chassis.'],
+ ['Shocker Assembled','A fully assembled Alaina shocker, ready for quality inspection before dispatch to the fitment stage.'],
+ ['Shocker Installed','The unit mounted into the wheel arch, connecting knuckle, brake, and suspension geometry in one step.'],
+ ['Wheel Fitted','The wheel refitted and torqued — the shocker now sits live in the suspension, carrying full vehicle weight.'],
+ ['Smooth Performance','On the road the damper absorbs every input — potholes, undulations, hard stops — invisibly and consistently.'],
+ ['Driving Smoothly','From raw components to confident driving. This is what every Alaina shocker is built to deliver, kilometre after kilometre.']
+];
+const asmSec=document.getElementById('assembly'),
+      dots=document.querySelectorAll('.asm-dot'),
+      aNum=document.getElementById('asmNum'),
+      aLab=document.getElementById('asmLabel'),
+      aDesc=document.getElementById('asmDesc'),
+      aFill=document.getElementById('asmFill'),
+      aUi=document.getElementById('asmUi'),
+      glow=document.getElementById('asmGlow'),
+      rig=document.getElementById('rig'),
+      unitWrap=document.getElementById('unitWrap'),
+      gBody=document.getElementById('gBody'),
+      gEye=document.getElementById('gEye'),
+      gSeatL=document.getElementById('gSeatL'),
+      gRod=document.getElementById('gRod'),
+      gSeatU=document.getElementById('gSeatU'),
+      gMount=document.getElementById('gMount'),
+      gTop=document.getElementById('gTop'),
+      gSpring=document.getElementById('gSpring'),
+      scene=document.getElementById('scene'),
+      chassis=document.getElementById('chassis'),
+      spokesG=document.getElementById('spokes'),
+      roadDash=document.getElementById('roadDash'),
+      speed=document.getElementById('speed'),
+      gThreads=document.getElementById('gThreads'),
+      gBoot=document.getElementById('gBoot'),
+      discHoles=document.getElementById('discHoles');
+
+/* ---- generate detail parts ---- */
+const SPR_TOP=330, SPR_BOT=596, COILS=8, RX=66, RY=15;
+const SPRH=SPR_BOT-SPR_TOP, GAP=SPRH/(COILS-1);
+(function(){
+  // coil spring
+  let s='';
+  for(let i=0;i<COILS;i++){
+    const cy=SPR_TOP+i*GAP;
+    s+=`<ellipse cx="180" cy="${cy+4}" rx="${RX}" ry="${RY}" fill="none" stroke="#000" stroke-opacity=".3" stroke-width="12"/>`;
+    s+=`<path d="M ${180-RX} ${cy} A ${RX} ${RY} 0 0 0 ${180+RX} ${cy}" fill="none" stroke="url(#gCoil)" stroke-width="13" stroke-linecap="round"/>`;
+    s+=`<path d="M ${180+RX} ${cy} A ${RX} ${RY} 0 0 0 ${180-RX} ${cy-2}" fill="none" stroke="url(#gCoil)" stroke-width="10" stroke-linecap="round" opacity=".55"/>`;
+    s+=`<path d="M ${180-RX+8} ${cy+3} A ${RX-8} ${RY-3} 0 0 0 ${180+RX-8} ${cy+3}" fill="none" stroke="#ff9a5c" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>`;
+  }
+  gSpring.innerHTML=s;
+  // threaded lower body
+  let t='';
+  for(let y=486;y<=576;y+=11){
+    t+=`<rect x="152" y="${y}" width="56" height="2.4" rx="1" fill="#000" opacity=".26"/>`;
+    t+=`<rect x="152" y="${y+3}" width="56" height="1.2" rx="1" fill="#fff" opacity=".06"/>`;
+  }
+  gThreads.innerHTML=t;
+  // dust boot rings over rod
+  let bt='';
+  for(let y=182;y<=292;y+=17){
+    bt+=`<ellipse cx="180" cy="${y}" rx="20" ry="8" fill="#3a3d44" stroke="#0c0d10" stroke-width="1.5"/>`;
+    bt+=`<ellipse cx="180" cy="${y}" rx="20" ry="8" fill="none" stroke="#ffffff" stroke-opacity=".06" stroke-width="1"/>`;
+  }
+  gBoot.innerHTML=bt;
+  // wheel spokes
+  let sk='';
+  for(let i=0;i<5;i++){
+    sk+=`<rect x="183" y="512" width="24" height="80" rx="6" fill="url(#gRim)" stroke="#0c0d10" stroke-width="2" transform="rotate(${i*72} 195 610)"/>`;
+  }
+  spokesG.innerHTML=sk;
+  // brake disc drill holes
+  let dh='';
+  for(let i=0;i<8;i++){
+    const a=i/8*2*Math.PI, x=195+44*Math.cos(a), y=610+44*Math.sin(a);
+    dh+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="#1a1c21"/>`;
+  }
+  discHoles.innerHTML=dh;
+})();
+
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const seg=(p,a,b)=>clamp((p-a)/(b-a),0,1);
+const eo=t=>1-Math.pow(1-t,3);
+function setG(el,dy,op){el.setAttribute('transform',`translate(0 ${dy})`);el.setAttribute('opacity',op);}
+
+function frame(p){
+  /* ---- PHASE 1: BUILD (0 – .50) ---- */
+  const b=eo(seg(p,0,.10));   setG(gBody,(1-b)*-130,b);
+  const e=eo(seg(p,.03,.12)); setG(gEye,(1-e)*90,e);
+  const sl=eo(seg(p,.16,.24));setG(gSeatL,(1-sl)*-50,sl);
+  const rd=eo(seg(p,.10,.22));setG(gRod,(1-rd)*200,rd);
+  const su=eo(seg(p,.30,.38));setG(gSeatU,(1-su)*-34,su);
+  const mt=eo(seg(p,.40,.52));setG(gMount,(1-mt)*-190,mt);
+  const sp=eo(seg(p,.22,.40));
+
+  /* ---- PHASE 3 inputs: WORKING stroke (.72 – 1) ---- */
+  const w=seg(p,.72,1);
+  let d=0,sy=1;
+  if(w>0){ d=((1-Math.cos(w*5*Math.PI))/2)*32; sy=(SPRH-d)/SPRH; }
+  gTop.setAttribute('transform',`translate(0 ${d})`);
+
+  const spDy=(1-sp)*-215;
+  gSpring.setAttribute('opacity',sp);
+  gSpring.setAttribute('transform',`translate(0 ${spDy}) translate(0 ${SPR_BOT}) scale(1 ${sy}) translate(0 ${-SPR_BOT})`);
+
+  /* assembled pop at end of build */
+  const pop=seg(p,.46,.58), ps=1+0.03*Math.sin(pop*Math.PI);
+  rig.setAttribute('transform',`translate(180 400) scale(${ps}) translate(-180 -400)`);
+
+  /* ---- PHASE 2: FITMENT (.50 – .72) — unit shrinks into the corner ---- */
+  const f=eo(seg(p,.50,.72));
+  const si=1-0.30*f, tyU=10*f;
+  unitWrap.setAttribute('transform',`translate(0 ${tyU}) translate(180 400) scale(${si}) translate(-180 -400)`);
+
+  /* scene fade-in + settle rise; chassis bobs during working */
+  scene.setAttribute('opacity',clamp(seg(p,.50,.64),0,1));
+  const sceneDy=(1-f)*26;
+  scene.setAttribute('transform',`translate(0 ${sceneDy})`);
+  chassis.setAttribute('transform',`translate(0 ${d})`);
+
+  /* ---- PHASE 3: WORKING visuals ---- */
+  spokesG.setAttribute('transform',`rotate(${w*1080} 195 610)`);
+  roadDash.setAttribute('transform',`translate(${-((w*420)%80)} 0)`);
+  speed.setAttribute('opacity',(clamp(seg(p,.74,.84),0,1)*0.85*(0.5+0.5*Math.sin(w*8*Math.PI))).toFixed(3));
+
+  glow.style.opacity=(seg(p,.46,.62)*0.8)*(w>0?(.5+.5*((1-Math.cos(w*4*Math.PI))/2)):1);
+}
+
+let curIdx=-1;
+function narrate(p){
+  aFill.style.width=(p*100)+'%';
+  const idx=Math.min(9,Math.floor(p*9.999));
+  dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+  if(idx===curIdx)return;
+  curIdx=idx;
+  aUi.classList.add('asm-changing');
+  setTimeout(()=>{
+    aNum.textContent=String(idx+1).padStart(2,'0');
+    aLab.textContent=STEPS[idx][0];
+    aDesc.textContent=STEPS[idx][1];
+    aUi.classList.remove('asm-changing');
+  },220);
+}
+
+let ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(()=>{
+    const r=asmSec.getBoundingClientRect();
+    const total=asmSec.offsetHeight-innerHeight;
+    const p=clamp((-r.top)/total,0,1);
+    frame(p);narrate(p);
+    ticking=false;
+  });
+}
+addEventListener('scroll',onScroll,{passive:true});
+addEventListener('resize',onScroll);
+frame(0);narrate(0);
+
+/* TABLE FILTER */
+function ft(m,b){document.querySelectorAll('.filt').forEach(t=>t.classList.remove('on'));b.classList.add('on');document.querySelectorAll('#tbl tbody tr').forEach(r=>r.style.display=(m==='all'||r.dataset.m===m)?'':'none')}
+
+/* FORM */
+function sendForm(e){e.preventDefault();const b=document.getElementById('sbtn');b.textContent='✓ Sent — we\'ll call you shortly';b.style.background='#25D366';setTimeout(()=>{b.textContent='Send Enquiry';b.style.background='';e.target.reset()},3500)}
+
+/* PRODUCT CARD: hide image div if image fails -> show fallback bg already set via CSS background-color */
+</script>
+</body>
+</html>
