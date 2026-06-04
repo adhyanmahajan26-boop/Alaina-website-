@@ -765,14 +765,15 @@ footer{background:#050507;padding:72px 80px 40px;border-top:1px solid var(--bord
 @media(hover:none){#cursorGlow{display:none}}
 
 /* ── STAGGERED CARD ENTRANCE ── */
-.cat-card{
+/* Only animate cards that JS has opted into — cards are visible by default */
+.cat-card.will-animate{
   opacity:0;
   transform:translateY(28px);
   transition:opacity .5s ease, transform .5s ease;
 }
 .cat-card.card-visible{
-  opacity:1;
-  transform:translateY(0);
+  opacity:1 !important;
+  transform:translateY(0) !important;
 }
 
 /* ── VIDEO SCRUB — smooth overlay fade on scroll ── */

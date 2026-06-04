@@ -328,41 +328,34 @@ sections.forEach(id => {
 ══════════════════════════════════════════ */
 (function() {
   const observer = new IntersectionObserver((entries) => {
-    // Group visible entries and stagger them
     const visible = entries.filter(e => e.isIntersecting);
     visible.forEach((entry, i) => {
       const card = entry.target;
       setTimeout(() => {
         card.classList.add('card-visible');
-      }, i * 60);
+      }, i * 55);
       observer.unobserve(card);
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
 
-  // Observe all cards — also re-observe when filter changes
   function observeCards() {
-    document.querySelectorAll('.cat-card:not(.card-visible)').forEach(card => {
-      observer.observe(card);
+    document.querySelectorAll('.cat-card').forEach(card => {
+      if (!card.classList.contains('card-visible')) {
+        card.classList.add('will-animate'); // opt-in to hidden state
+        observer.observe(card);
+      }
     });
+    // Safety net: any card still hidden after 1.5s gets revealed
+    setTimeout(() => {
+      document.querySelectorAll('.cat-card.will-animate:not(.card-visible)').forEach(c => {
+        c.classList.add('card-visible');
+      });
+    }, 1500);
   }
 
-  // Initial observe on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', observeCards);
   } else {
-    observeCards();
+    setTimeout(observeCards, 50); // slight delay so layout is stable
   }
-
-  // Re-run after filter/search reveals hidden cards
-  const origFt = window.ft;
-  window.ft = function(m, btn) {
-    if (origFt) origFt(m, btn);
-    setTimeout(() => {
-      document.querySelectorAll('.cat-card').forEach(card => {
-        if (card.style.display !== 'none' && !card.classList.contains('card-visible')) {
-          card.classList.add('card-visible');
-        }
-      });
-    }, 80);
-  };
 })();
