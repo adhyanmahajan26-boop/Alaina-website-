@@ -10,38 +10,45 @@
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+
+<!-- SCROLL PROGRESS -->
 <div id="bar"></div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#" class="brand">
-    <div class="brand-mark"></div>
-    <div class="brand-name">ALAINA<small>SHOCKERS</small></div>
-  </a>
-  <div class="navlinks" id="navLinks">
-    <a href="#">Home</a>
-    <a href="#products">Products</a>
-    <a href="#tech">Technology</a>
-    <a href="#trucks">Heavy Duty</a>
-    <a href="#catalog">Catalogue</a>
-    <a href="#contact" class="nav-btn">Enquire</a>
+  <div class="nav-inner">
+    <a href="#hero" class="brand">
+      <div class="brand-dot"></div>
+      <div class="brand-name">ALAINA<small>SHOCKERS</small></div>
+    </a>
+    <div class="navlinks" id="navLinks">
+      <a href="#hero" class="nav-active">Home</a>
+      <a href="#catalog">Products</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a href="tel:+917982555636" class="nav-phone">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        +91 79825 55636
+      </a>
+      <a href="#contact" class="nav-btn">Enquire</a>
+    </div>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <button class="nav-burger" id="navBurger" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
 </nav>
 
-<!-- MOBILE NAV OVERLAY -->
+<!-- MOBILE NAV -->
 <div class="mob-nav" id="mobNav">
-  <button class="mob-nav-close" id="mobClose" aria-label="Close menu">&#x2715;</button>
-  <a href="#" class="mob-brand">ALAINA <span>SHOCKERS</span></a>
+  <button class="mob-nav-close" id="mobClose">&#x2715;</button>
+  <a href="#hero" class="mob-brand">ALAINA <span>SHOCKERS</span></a>
   <nav class="mob-links">
-    <a href="#">Home</a>
-    <a href="#products">Products</a>
-    <a href="#tech">Technology</a>
-    <a href="#trucks">Heavy Duty</a>
-    <a href="#catalog">Catalogue</a>
-    <a href="#contact">Enquire</a>
+    <a href="#hero">Home</a>
+    <a href="#catalog">Products</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
   </nav>
   <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" class="mob-wa">
     <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path fill="currentColor" d="M12 0C5.373 0 0 5.373 0 12c0 2.024.502 3.932 1.386 5.605L0 24l6.585-1.367A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 01-5.031-1.386l-.36-.214-3.733.776.794-3.634-.235-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
@@ -49,1613 +56,756 @@
   </a>
 </div>
 
-<!-- HERO -->
+<!-- ═══ HERO ═══ -->
 <section id="hero">
-  <div class="hero-blob"></div>
-  <div class="wrap">
-    <div class="hero-grid">
-      <div data-reveal="up">
-        <div class="hero-brand-tag">Precision Damping · Since 1978</div>
-        <h1 class="hero-title">Engineered<br>For The <span class="accent">Toughest</span><br>Roads</h1>
-        <p class="hero-sub">Advanced shock absorbers, struts, and heavy-duty cabin dampers built for Indian conditions — for Eicher, Leyland &amp; Tata commercial trucks and every passenger vehicle in between.</p>
-        <div class="hero-cta">
-          <a href="#products" class="btn btn-fill">Explore Products
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-          <a href="#contact" class="btn btn-line">Get a Quote</a>
-        </div>
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="hero-video.mp4" type="video/mp4"/>
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Precision Damping · Since 1978</div>
+    <h1 class="hero-title">ENGINEERED<br>FOR INDIA'S<br><span class="hero-accent">TOUGHEST</span> ROADS</h1>
+    <p class="hero-sub">Heavy-duty cabin dampers &amp; rare struts for Tata, Leyland, Eicher and more — built for Indian conditions.</p>
+    <div class="hero-cta">
+      <a href="#catalog" class="btn-hero-fill">View Products
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#contact" class="btn-hero-line">Get a Quote</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="hero-scroll-line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- ═══ CATEGORY SHOWCASE ═══ -->
+<section id="showcase">
+  <div class="showcase-grid">
+    <div class="showcase-panel" onclick="scrollToCat('Tata')">
+      <div class="showcase-bg" style="background-image:url('images/tata-4018-hywa-cabin.png')"></div>
+      <div class="showcase-overlay"></div>
+      <div class="showcase-content">
+        <div class="showcase-sub">HEAVY DUTY</div>
+        <div class="showcase-title">TATA<br>CABIN DAMPERS</div>
+        <div class="showcase-cta">Shop Now →</div>
       </div>
-      <div class="hero-visual" data-reveal="right">
-        <div class="hero-arc"></div>
-        <svg class="hero-svg" viewBox="0 0 220 600" aria-label="Alaina shock absorber" role="img">
-          <defs>
-            <linearGradient id="hRod" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#3e4249"/><stop offset=".14" stop-color="#8a9099"/>
-              <stop offset=".32" stop-color="#dde2e8"/><stop offset=".46" stop-color="#ffffff"/>
-              <stop offset=".62" stop-color="#cdd2d8"/><stop offset=".82" stop-color="#72777f"/>
-              <stop offset="1" stop-color="#2c2f36"/>
-            </linearGradient>
-            <linearGradient id="hBody" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#0e1016"/><stop offset=".18" stop-color="#2a2e3a"/>
-              <stop offset=".42" stop-color="#484d5c"/><stop offset=".56" stop-color="#3c4050"/>
-              <stop offset=".80" stop-color="#1c1f28"/><stop offset="1" stop-color="#0a0c12"/>
-            </linearGradient>
-            <linearGradient id="hMetal" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#2a2d34"/><stop offset=".28" stop-color="#52565f"/>
-              <stop offset=".5" stop-color="#6b6f78"/><stop offset=".72" stop-color="#3a3d44"/>
-              <stop offset="1" stop-color="#1c1e23"/>
-            </linearGradient>
-            <linearGradient id="hCoil" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#6a1400"/><stop offset=".22" stop-color="#cc3800"/>
-              <stop offset=".44" stop-color="#ff5200"/><stop offset=".58" stop-color="#ff8040"/>
-              <stop offset=".78" stop-color="#ee4000"/><stop offset="1" stop-color="#7a1600"/>
-            </linearGradient>
-            <linearGradient id="hCoilDk" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#380a00"/><stop offset=".5" stop-color="#8a2200"/>
-              <stop offset="1" stop-color="#380a00"/>
-            </linearGradient>
-            <radialGradient id="hSeat" cx=".5" cy=".4" r=".7">
-              <stop offset="0" stop-color="#6a6e78"/><stop offset=".6" stop-color="#2e3038"/>
-              <stop offset="1" stop-color="#1a1c22"/>
-            </radialGradient>
-            <linearGradient id="hRubber" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#111214"/><stop offset=".4" stop-color="#2a2c32"/>
-              <stop offset="1" stop-color="#0e0f12"/>
-            </linearGradient>
-            <filter id="hGlow" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
-              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <!-- TOP NUT -->
-          <circle cx="110" cy="36" r="13" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          <circle cx="110" cy="36" r="7" fill="#07080c" stroke="#ff4d00" stroke-width="1" opacity=".7"/>
-
-          <!-- STRUT BAR -->
-          <rect x="46" y="48" width="128" height="24" rx="10" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          <rect x="48" y="50" width="124" height="8" rx="5" fill="rgba(255,255,255,0.07)"/>
-
-          <!-- TOP MOUNT PLATE -->
-          <ellipse cx="112" cy="72" rx="76" ry="14" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          <ellipse cx="112" cy="72" rx="76" ry="14" fill="none" stroke="#ff4d00" stroke-width="1.2" opacity=".35"/>
-          <!-- mount bolts -->
-          <circle cx="60" cy="72" r="8" fill="#0a0c10" stroke="#ff4d00" stroke-width="1.5"/><circle cx="60" cy="72" r="3.5" fill="url(#hMetal)"/>
-          <circle cx="110" cy="72" r="8" fill="#0a0c10" stroke="#ff4d00" stroke-width="1.5"/><circle cx="110" cy="72" r="3.5" fill="url(#hMetal)"/>
-          <circle cx="160" cy="72" r="8" fill="#0a0c10" stroke="#ff4d00" stroke-width="1.5"/><circle cx="160" cy="72" r="3.5" fill="url(#hMetal)"/>
-
-          <!-- TOP COLLAR -->
-          <rect x="90" y="84" width="42" height="20" rx="9" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-
-          <!-- PISTON ROD -->
-          <rect x="101" y="102" width="18" height="148" rx="7" fill="url(#hRod)" stroke="#080a0e" stroke-width="1"/>
-          <rect x="107" y="107" width="3" height="136" rx="1.5" fill="rgba(255,255,255,0.78)"/>
-          <rect x="103" y="107" width="1.5" height="136" rx=".75" fill="rgba(255,255,255,0.22)"/>
-
-          <!-- DUST BOOT bellows -->
-          <ellipse cx="110" cy="152" rx="20" ry="8" fill="url(#hRubber)" stroke="#0a0b0e" stroke-width="1.2"/>
-          <ellipse cx="110" cy="168" rx="20" ry="8" fill="url(#hRubber)" stroke="#0a0b0e" stroke-width="1.2"/>
-          <ellipse cx="110" cy="184" rx="20" ry="8" fill="url(#hRubber)" stroke="#0a0b0e" stroke-width="1.2"/>
-          <ellipse cx="110" cy="200" rx="20" ry="8" fill="url(#hRubber)" stroke="#0a0b0e" stroke-width="1.2"/>
-          <!-- bump stop -->
-          <ellipse cx="110" cy="220" rx="16" ry="9" fill="#3e1800" stroke="#6e2800" stroke-width="1.2"/>
-          <ellipse cx="110" cy="227" rx="12" ry="6" fill="#2e1200"/>
-
-          <!-- UPPER SPRING SEAT -->
-          <ellipse cx="112" cy="246" rx="66" ry="13" fill="url(#hSeat)" stroke="#080a0e" stroke-width="1.5"/>
-          <ellipse cx="110" cy="243" rx="44" ry="8" fill="#12141c" stroke="#24262e" stroke-width="1"/>
-
-          <!-- COIL SPRING — 6 coils -->
-          <ellipse cx="113" cy="283" rx="50" ry="10" fill="rgba(0,0,0,0.35)"/>
-          <path d="M 178 258 A 68 16 0 0 1 42 258"  fill="none" stroke="url(#hCoilDk)" stroke-width="15" stroke-linecap="round"/>
-          <path d="M 42 258  A 68 16 0 0 0 178 258"  fill="none" stroke="url(#hCoil)"   stroke-width="15" stroke-linecap="round"/>
-          <path d="M 178 280 A 68 16 0 0 1 42 280"  fill="none" stroke="url(#hCoilDk)" stroke-width="15" stroke-linecap="round"/>
-          <path d="M 42 280  A 68 16 0 0 0 178 280"  fill="none" stroke="url(#hCoil)"   stroke-width="15" stroke-linecap="round"/>
-          <path d="M 178 302 A 68 16 0 0 1 42 302"  fill="none" stroke="url(#hCoilDk)" stroke-width="15" stroke-linecap="round"/>
-          <path d="M 42 302  A 68 16 0 0 0 178 302"  fill="none" stroke="url(#hCoil)"   stroke-width="15" stroke-linecap="round"/>
-          <path d="M 178 324 A 68 16 0 0 1 42 324"  fill="none" stroke="url(#hCoilDk)" stroke-width="15" stroke-linecap="round"/>
-          <path d="M 42 324  A 68 16 0 0 0 178 324"  fill="none" stroke="url(#hCoil)"   stroke-width="15" stroke-linecap="round"/>
-          <path d="M 178 346 A 68 16 0 0 1 42 346"  fill="none" stroke="url(#hCoilDk)" stroke-width="15" stroke-linecap="round"/>
-          <path d="M 42 346  A 68 16 0 0 0 178 346"  fill="none" stroke="url(#hCoil)"   stroke-width="15" stroke-linecap="round"/>
-          <path d="M 178 368 A 68 16 0 0 1 42 368"  fill="none" stroke="url(#hCoilDk)" stroke-width="15" stroke-linecap="round"/>
-          <path d="M 42 368  A 68 16 0 0 0 178 368"  fill="none" stroke="url(#hCoil)"   stroke-width="15" stroke-linecap="round"/>
-          <!-- spring specular -->
-          <path d="M 62 259 A 48 12 0 0 0 158 259" fill="none" stroke="rgba(255,140,60,0.55)" stroke-width="3" stroke-linecap="round"/>
-          <path d="M 62 303 A 48 12 0 0 0 158 303" fill="none" stroke="rgba(255,140,60,0.55)" stroke-width="3" stroke-linecap="round"/>
-          <path d="M 62 347 A 48 12 0 0 0 158 347" fill="none" stroke="rgba(255,140,60,0.55)" stroke-width="3" stroke-linecap="round"/>
-
-          <!-- LOWER SPRING SEAT -->
-          <ellipse cx="112" cy="380" rx="66" ry="13" fill="url(#hSeat)" stroke="#080a0e" stroke-width="1.5"/>
-
-          <!-- DAMPER BODY -->
-          <rect x="84" y="392" width="52" height="154" rx="10" fill="rgba(0,0,0,0.45)" transform="translate(4,4)"/>
-          <rect x="80" y="388" width="60" height="158" rx="11" fill="url(#hBody)" stroke="#080a0e" stroke-width="1.5"/>
-          <ellipse cx="110" cy="388" rx="30" ry="7" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.2"/>
-          <rect x="83" y="396" width="4" height="142" rx="2" fill="rgba(255,255,255,0.11)"/>
-          <!-- ALAINA badge -->
-          <rect x="83" y="410" width="54" height="36" rx="3" fill="#07080c" stroke="#ff4d00" stroke-width="1.5" filter="url(#hGlow)"/>
-          <text x="110" y="424" text-anchor="middle" fill="#ff4d00" font-family="Archivo,sans-serif" font-weight="900" font-size="9" letter-spacing="1.8">ALAINA</text>
-          <text x="110" y="437" text-anchor="middle" fill="rgba(255,77,0,0.45)" font-family="Archivo,sans-serif" font-weight="600" font-size="5.5" letter-spacing="1.4">SHOCKERS</text>
-          <!-- adjuster collars -->
-          <ellipse cx="110" cy="504" rx="36" ry="9" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          <ellipse cx="110" cy="516" rx="36" ry="9" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          <ellipse cx="110" cy="510" rx="36" ry="9" fill="none" stroke="#ff4d00" stroke-width=".8" opacity=".45" filter="url(#hGlow)"/>
-          <!-- bottom body cap -->
-          <ellipse cx="110" cy="546" rx="30" ry="7" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.2"/>
-
-          <!-- BOTTOM EYE -->
-          <ellipse cx="112" cy="568" rx="32" ry="8" fill="rgba(0,0,0,0.5)"/>
-          <ellipse cx="110" cy="558" rx="32" ry="26" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          <ellipse cx="110" cy="558" rx="32" ry="26" fill="none" stroke="rgba(200,210,220,0.2)" stroke-width="2"/>
-          <ellipse cx="110" cy="558" rx="20" ry="16" fill="#1c1105" stroke="#ff6010" stroke-width="1.5"/>
-          <ellipse cx="110" cy="558" rx="10" ry="8" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1"/>
-          <rect x="70" y="545" width="10" height="26" rx="2" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.2"/>
-          <rect x="140" y="545" width="10" height="26" rx="2" fill="url(#hMetal)" stroke="#080a0e" stroke-width="1.2"/>
-
-          <!-- annotation lines -->
-          <line x1="176" y1="102" x2="198" y2="88" stroke="rgba(255,77,0,0.22)" stroke-width="1"/>
-          <line x1="198" y1="88" x2="212" y2="88" stroke="rgba(255,77,0,0.22)" stroke-width="1"/>
-          <text x="214" y="91" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,77,0,0.45)" letter-spacing=".08em">ROD</text>
-          <line x1="176" y1="310" x2="198" y2="310" stroke="rgba(255,77,0,0.22)" stroke-width="1"/>
-          <line x1="198" y1="310" x2="212" y2="310" stroke="rgba(255,77,0,0.22)" stroke-width="1"/>
-          <text x="214" y="313" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,77,0,0.45)" letter-spacing=".08em">SPG</text>
-          <line x1="140" y1="430" x2="198" y2="430" stroke="rgba(255,77,0,0.22)" stroke-width="1"/>
-          <line x1="198" y1="430" x2="212" y2="430" stroke="rgba(255,77,0,0.22)" stroke-width="1"/>
-          <text x="214" y="433" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,77,0,0.45)" letter-spacing=".08em">BODY</text>
-        </svg>
+    </div>
+    <div class="showcase-panel" onclick="scrollToCat('Leyland')">
+      <div class="showcase-bg" style="background-image:url('images/leyland-u-truck-cabin.png')"></div>
+      <div class="showcase-overlay"></div>
+      <div class="showcase-content">
+        <div class="showcase-sub">HEAVY DUTY</div>
+        <div class="showcase-title">LEYLAND<br>CABIN DAMPERS</div>
+        <div class="showcase-cta">Shop Now →</div>
+      </div>
+    </div>
+    <div class="showcase-panel" onclick="scrollToCat('Eicher')">
+      <div class="showcase-bg" style="background-image:url('images/eicher-pro-canter-cabin.png')"></div>
+      <div class="showcase-overlay"></div>
+      <div class="showcase-content">
+        <div class="showcase-sub">HEAVY DUTY</div>
+        <div class="showcase-title">EICHER / MANN<br>CABIN DAMPERS</div>
+        <div class="showcase-cta">Shop Now →</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
-<section id="stats" style="position:relative">
-  <span class="sec-pg">02 / Performance</span>
-  <div class="stats-grid" id="statsGrid">
-    <div class="stat"><div class="stat-n"><span data-count="45">0</span><span class="orange">+</span></div><div class="stat-l">Years of Engineering</div></div>
-    <div class="stat"><div class="stat-n"><span data-count="3">0</span></div><div class="stat-l">Major Truck Brands</div></div>
-    <div class="stat"><div class="stat-n"><span data-count="63">0</span><span class="orange">+</span></div><div class="stat-l">Active SKUs</div></div>
-    <div class="stat"><div class="stat-n"><span data-count="120">0</span><span class="orange">+</span></div><div class="stat-l">Cities Served</div></div>
+<!-- ═══ USP STRIP ═══ -->
+<div class="usp-strip">
+  <div class="usp-item">
+    <svg viewBox="0 0 40 40" width="36" height="36" fill="none"><circle cx="20" cy="20" r="18" stroke="#FF4D00" stroke-width="1.5"/><path d="M12 20l5 5 11-10" stroke="#FF4D00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><strong>45+ YEARS</strong><span>Of Engineering Excellence</span></div>
   </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee" id="marquee">
-  <div class="marquee-t">
-    <span>Rare Struts</span><span>Passenger Dampers</span><span>Cabin Dampers</span><span>Eicher</span><span>Leyland</span><span>Tata</span><span>Mahindra</span><span>Navistar</span><span>Heavy Duty Engineering</span><span>Pan-India Supply</span>
-    <span>Rare Struts</span><span>Passenger Dampers</span><span>Cabin Dampers</span><span>Eicher</span><span>Leyland</span><span>Tata</span><span>Mahindra</span><span>Navistar</span><span>Heavy Duty Engineering</span><span>Pan-India Supply</span>
+  <div class="usp-divider"></div>
+  <div class="usp-item">
+    <svg viewBox="0 0 40 40" width="36" height="36" fill="none"><rect x="4" y="12" width="32" height="20" rx="3" stroke="#FF4D00" stroke-width="1.5"/><path d="M4 18h32M12 12V8a4 4 0 018 0v4" stroke="#FF4D00" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <div><strong>63+ ACTIVE SKUs</strong><span>Real Stock, Real Part Numbers</span></div>
+  </div>
+  <div class="usp-divider"></div>
+  <div class="usp-item">
+    <svg viewBox="0 0 40 40" width="36" height="36" fill="none"><path d="M20 4C13.373 4 8 9.373 8 16c0 9.333 12 20 12 20s12-10.667 12-20c0-6.627-5.373-12-12-12z" stroke="#FF4D00" stroke-width="1.5"/><circle cx="20" cy="16" r="4" stroke="#FF4D00" stroke-width="1.5"/></svg>
+    <div><strong>PAN-INDIA SUPPLY</strong><span>120+ Cities Served</span></div>
   </div>
 </div>
 
-<!-- ASSEMBLY (DARK) -->
-<section id="assembly">
-  <div class="proc-label">
-    <span class="proc-num">01</span>
-    <span class="proc-title">Strut Assembly</span>
-    <span class="proc-sub">Scroll to build ↓</span>
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Heavy Duty Cabin Dampers</span><span>Tata Trucks</span><span>Ashok Leyland</span><span>Eicher Pro</span><span>Bharat Benz</span><span>Mann Cabin</span><span>Rare Struts</span><span>Toyota Camry</span><span>Mitsubishi Lancer</span><span>Pan-India Supply</span><span>Since 1978</span><span>OEM Quality</span>
+    <span>Heavy Duty Cabin Dampers</span><span>Tata Trucks</span><span>Ashok Leyland</span><span>Eicher Pro</span><span>Bharat Benz</span><span>Mann Cabin</span><span>Rare Struts</span><span>Toyota Camry</span><span>Mitsubishi Lancer</span><span>Pan-India Supply</span><span>Since 1978</span><span>OEM Quality</span>
   </div>
-  <div class="asm-sticky">
-    <div class="asm-stage">
-      <canvas id="carCanvas"></canvas>
-      <div class="asm-glow" id="asmGlow"></div>
-      <svg id="asmSvg" viewBox="0 0 380 760" aria-hidden="true">
-        <defs>
-          <!-- 7-stop chrome rod gradient -->
-          <linearGradient id="gRodX" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"    stop-color="#3e4249"/>
-            <stop offset=".14"  stop-color="#8a9099"/>
-            <stop offset=".32"  stop-color="#dde2e8"/>
-            <stop offset=".46"  stop-color="#ffffff"/>
-            <stop offset=".62"  stop-color="#cdd2d8"/>
-            <stop offset=".82"  stop-color="#72777f"/>
-            <stop offset="1"    stop-color="#2c2f36"/>
-          </linearGradient>
-          <!-- cylindrical body gradient -->
-          <linearGradient id="gBodyX" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"    stop-color="#0e1016"/>
-            <stop offset=".18"  stop-color="#2a2e3a"/>
-            <stop offset=".42"  stop-color="#484d5c"/>
-            <stop offset=".56"  stop-color="#3c4050"/>
-            <stop offset=".80"  stop-color="#1c1f28"/>
-            <stop offset="1"    stop-color="#0a0c12"/>
-          </linearGradient>
-          <!-- metal (misc parts) -->
-          <linearGradient id="gMetal" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#2a2d34"/>
-            <stop offset=".28" stop-color="#52565f"/>
-            <stop offset=".5"  stop-color="#6b6f78"/>
-            <stop offset=".72" stop-color="#3a3d44"/>
-            <stop offset="1"   stop-color="#1c1e23"/>
-          </linearGradient>
-          <!-- chrome (misc) -->
-          <linearGradient id="gChrome" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#9aa0aa"/>
-            <stop offset=".4"  stop-color="#eef1f5"/>
-            <stop offset=".55" stop-color="#ffffff"/>
-            <stop offset=".7"  stop-color="#c4c9d1"/>
-            <stop offset="1"   stop-color="#70747d"/>
-          </linearGradient>
-          <!-- orange spring — bright face -->
-          <linearGradient id="gCoil" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"    stop-color="#6a1400"/>
-            <stop offset=".22"  stop-color="#cc3800"/>
-            <stop offset=".44"  stop-color="#ff5200"/>
-            <stop offset=".58"  stop-color="#ff8040"/>
-            <stop offset=".78"  stop-color="#ee4000"/>
-            <stop offset="1"    stop-color="#7a1600"/>
-          </linearGradient>
-          <!-- orange spring — dark back -->
-          <linearGradient id="gCoilDk" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#380a00"/>
-            <stop offset=".5"  stop-color="#8a2200"/>
-            <stop offset="1"   stop-color="#380a00"/>
-          </linearGradient>
-          <!-- seat -->
-          <radialGradient id="gSeat" cx=".5" cy=".4" r=".7">
-            <stop offset="0"   stop-color="#6a6e78"/>
-            <stop offset=".6"  stop-color="#2e3038"/>
-            <stop offset="1"   stop-color="#1a1c22"/>
-          </radialGradient>
-          <!-- rubber boot -->
-          <linearGradient id="gRubber" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#111214"/>
-            <stop offset=".4"  stop-color="#2a2c32"/>
-            <stop offset=".6"  stop-color="#222428"/>
-            <stop offset="1"   stop-color="#0e0f12"/>
-          </linearGradient>
-          <!-- wheel gradients -->
-          <radialGradient id="gRim" cx=".42" cy=".38" r=".7">
-            <stop offset="0"  stop-color="#7d828c"/>
-            <stop offset=".5" stop-color="#4a4e57"/>
-            <stop offset="1"  stop-color="#202329"/>
-          </radialGradient>
-          <radialGradient id="gTire" cx=".42" cy=".4" r=".75">
-            <stop offset="0"  stop-color="#2a2c31"/>
-            <stop offset=".7" stop-color="#141519"/>
-            <stop offset="1"  stop-color="#070809"/>
-          </radialGradient>
-          <radialGradient id="gDisc" cx=".42" cy=".4" r=".7">
-            <stop offset="0"  stop-color="#6e727a"/>
-            <stop offset="1"  stop-color="#34373d"/>
-          </radialGradient>
-          <!-- orange glow filter -->
-          <filter id="fGlow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
+</div>
 
-        <!-- ===== SUSPENSION SCENE ===== -->
-        <g id="scene" opacity="0">
-          <rect x="-40" y="726" width="470" height="40" fill="#000"/>
-          <rect x="-40" y="726" width="470" height="4" fill="#ff4d00" opacity=".5"/>
-          <g id="roadDash">
-            <rect x="-10" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
-            <rect x="70"  y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
-            <rect x="150" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
-            <rect x="230" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
-            <rect x="310" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
-            <rect x="390" y="742" width="40" height="5" rx="2" fill="#ffffff" opacity=".25"/>
-          </g>
-          <ellipse cx="195" cy="726" rx="140" ry="14" fill="#000" opacity=".55"/>
-          <g id="speed" opacity="0">
-            <rect x="20" y="540" width="70" height="3" rx="1.5" fill="#ff4d00" opacity=".7"/>
-            <rect x="6"  y="568" width="50" height="2" rx="1"   fill="#ff4d00" opacity=".5"/>
-            <rect x="28" y="596" width="62" height="3" rx="1.5" fill="#ff4d00" opacity=".6"/>
-          </g>
-          <g id="chassis">
-            <!-- wheel arch shadow -->
-            <path d="M 14 520 Q 195 255 376 520" fill="none" stroke="#0a0b0e" stroke-width="34" stroke-linecap="round"/>
-            <!-- arch body -->
-            <path d="M 14 510 Q 195 248 376 510" fill="none" stroke="#1a1c22" stroke-width="28" stroke-linecap="round"/>
-            <!-- arch highlight edge -->
-            <path d="M 14 510 Q 195 248 376 510" fill="none" stroke="#2e3040" stroke-width="2" stroke-linecap="round"/>
-            <!-- strut tower bracket -->
-            <rect x="148" y="148" width="66" height="26" rx="7" fill="url(#gBodyX)" stroke="#0a0c11" stroke-width="2"/>
-            <rect x="152" y="152" width="58" height="8" rx="4" fill="rgba(255,255,255,0.06)"/>
-            <circle cx="160" cy="163" r="5" fill="#080a0e" stroke="#3a3d48" stroke-width="1.5"/>
-            <circle cx="212" cy="163" r="5" fill="#080a0e" stroke="#3a3d48" stroke-width="1.5"/>
-          </g>
-          <g id="arm">
-            <path d="M 36 648 L 196 612 L 196 640 L 44 672 Z" fill="url(#gMetal)" stroke="#0c0d10" stroke-width="2"/>
-            <circle cx="40" cy="660" r="12" fill="#12141a" stroke="#4a4e58" stroke-width="2.5"/>
-            <circle cx="40" cy="660" r="5"  fill="url(#gChrome)"/>
-          </g>
-          <g id="wheel">
-            <!-- tyre sidewall -->
-            <circle cx="195" cy="610" r="152" fill="url(#gTire)" stroke="#000" stroke-width="2"/>
-            <circle cx="195" cy="610" r="150" fill="none" stroke="#252830" stroke-width="2" stroke-dasharray="4 8" opacity=".5"/>
-            <!-- rim -->
-            <circle cx="195" cy="610" r="104" fill="url(#gRim)" stroke="#0c0d10" stroke-width="3"/>
-            <!-- brake disc -->
-            <circle cx="195" cy="610" r="70" fill="url(#gDisc)" stroke="#26282d" stroke-width="2"/>
-            <!-- disc ventilation slots -->
-            <g id="discHoles"></g>
-            <!-- caliper -->
-            <rect x="252" y="562" width="28" height="54" rx="7" fill="#ff4d00" stroke="#7a1500" stroke-width="2"/>
-            <rect x="255" y="567" width="22" height="14" rx="3" fill="rgba(0,0,0,0.3)"/>
-            <!-- spokes (generated) -->
-            <g id="spokes"></g>
-            <!-- hub -->
-            <circle cx="195" cy="610" r="24" fill="#14161c" stroke="#ff4d00" stroke-width="3"/>
-            <circle cx="195" cy="610" r="8"  fill="#080a0e"/>
-          </g>
-        </g>
-
-        <!-- ===== COILOVER UNIT ===== -->
-        <g id="unitWrap">
-        <g id="rig">
-
-          <!-- ── BOTTOM MOUNT EYE ── -->
-          <g id="gEye">
-            <!-- cast shadow -->
-            <ellipse cx="183" cy="680" rx="40" ry="10" fill="rgba(0,0,0,0.55)"/>
-            <!-- forged body -->
-            <ellipse cx="180" cy="664" rx="38" ry="30" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-            <!-- chrome face ring -->
-            <ellipse cx="180" cy="664" rx="38" ry="30" fill="none" stroke="rgba(200,210,220,0.25)" stroke-width="3"/>
-            <!-- polyurethane bushing -->
-            <ellipse cx="180" cy="664" rx="22" ry="18" fill="#1c1105" stroke="#ff6010" stroke-width="1.5"/>
-            <!-- steel inner sleeve -->
-            <ellipse cx="180" cy="664" rx="10" ry="8" fill="url(#gChrome)" stroke="#080a0e" stroke-width="1"/>
-            <!-- flange tabs -->
-            <rect x="140" y="650" width="10" height="28" rx="2" fill="url(#gMetal)" stroke="#080a0e" stroke-width="1.5"/>
-            <rect x="230" y="650" width="10" height="28" rx="2" fill="url(#gMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          </g>
-
-          <!-- ── DAMPER BODY ── -->
-          <g id="gBody">
-            <!-- cylinder shadow -->
-            <rect x="154" y="378" width="58" height="258" rx="8" fill="rgba(0,0,0,0.5)" transform="translate(5,5)"/>
-            <!-- main cylinder -->
-            <rect x="148" y="372" width="64" height="264" rx="11" fill="url(#gBodyX)" stroke="#080a0e" stroke-width="2"/>
-            <!-- top cap ellipse -->
-            <ellipse cx="180" cy="372" rx="32" ry="8" fill="url(#gMetal)" stroke="#080a0e" stroke-width="1.5"/>
-            <!-- top collar chrome ring -->
-            <rect x="152" y="354" width="56" height="24" rx="10" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-            <rect x="154" y="356" width="52" height="8"  rx="5"  fill="rgba(255,255,255,0.07)"/>
-            <!-- specular highlight strip -->
-            <rect x="155" y="380" width="5" height="248" rx="2.5" fill="rgba(255,255,255,0.11)"/>
-            <!-- secondary sheen -->
-            <rect x="208" y="380" width="2" height="248" rx="1" fill="rgba(255,255,255,0.04)"/>
-            <!-- ALAINA badge -->
-            <rect x="155" y="396" width="50" height="38" rx="3" fill="#07080c" stroke="#ff4d00" stroke-width="1.5"/>
-            <text x="180" y="411" text-anchor="middle" fill="#ff4d00" font-family="Archivo,sans-serif" font-weight="900" font-size="9" letter-spacing="1.8">ALAINA</text>
-            <text x="180" y="425" text-anchor="middle" fill="rgba(255,77,0,0.45)" font-family="Archivo,sans-serif" font-weight="600" font-size="5.5" letter-spacing="1.4">SHOCKERS</text>
-            <!-- threaded lower body (generated by JS) -->
-            <g id="gThreads"></g>
-            <!-- adjuster collar ring pair -->
-            <ellipse cx="180" cy="584" rx="38" ry="10" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-            <ellipse cx="180" cy="598" rx="38" ry="10" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-            <!-- orange accent ring on collar -->
-            <ellipse cx="180" cy="591" rx="38" ry="10" fill="none" stroke="#ff4d00" stroke-width="1" opacity=".45" filter="url(#fGlow)"/>
-            <!-- bottom cap ellipse -->
-            <ellipse cx="180" cy="636" rx="32" ry="8" fill="url(#gMetal)" stroke="#080a0e" stroke-width="1.5"/>
-          </g>
-
-          <!-- ── LOWER SPRING SEAT ── -->
-          <g id="gSeatL">
-            <ellipse cx="183" cy="620" rx="76" ry="16" fill="rgba(0,0,0,0.45)"/>
-            <!-- outer rim -->
-            <ellipse cx="180" cy="608" rx="74" ry="16" fill="url(#gSeat)" stroke="#080a0e" stroke-width="2"/>
-            <!-- inner bowl recess -->
-            <ellipse cx="180" cy="604" rx="50" ry="10" fill="#14161e" stroke="#28292e" stroke-width="1"/>
-            <!-- rim highlight -->
-            <ellipse cx="180" cy="608" rx="74" ry="16" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
-          </g>
-
-          <!-- ── MOVING TOP ASSEMBLY ── -->
-          <g id="gTop">
-
-            <!-- PISTON ROD -->
-            <g id="gRod">
-              <!-- rod shadow -->
-              <rect x="175" y="153" width="14" height="177" rx="6" fill="rgba(0,0,0,0.45)" transform="translate(4,4)"/>
-              <!-- chrome rod body (7-stop gradient) -->
-              <rect x="171" y="150" width="18" height="180" rx="7" fill="url(#gRodX)" stroke="#080a0e" stroke-width="1"/>
-              <!-- primary specular -->
-              <rect x="177" y="156" width="3.5" height="168" rx="1.5" fill="rgba(255,255,255,0.78)"/>
-              <!-- secondary specular -->
-              <rect x="173" y="156" width="1.5" height="168" rx="0.75" fill="rgba(255,255,255,0.22)"/>
-              <!-- dust boot (generated by JS) -->
-              <g id="gBoot"></g>
-              <!-- bump stop — micro-cellular rubber -->
-              <ellipse cx="180" cy="293" rx="17" ry="10" fill="#3e1800" stroke="#6e2800" stroke-width="1.5"/>
-              <ellipse cx="180" cy="299" rx="13" ry="7"  fill="#2e1200" stroke="#4e1e00" stroke-width="1"/>
-              <!-- thread detail at rod bottom -->
-              <rect x="172" y="316" width="16" height="14" fill="#12141a"/>
-              <line x1="172" y1="319" x2="188" y2="319" stroke="#2a2c34" stroke-width="1.5"/>
-              <line x1="172" y1="323" x2="188" y2="323" stroke="#2a2c34" stroke-width="1.5"/>
-              <line x1="172" y1="327" x2="188" y2="327" stroke="#2a2c34" stroke-width="1.5"/>
-            </g>
-
-            <!-- UPPER SPRING SEAT -->
-            <g id="gSeatU">
-              <ellipse cx="183" cy="328" rx="66" ry="15" fill="rgba(0,0,0,0.4)"/>
-              <ellipse cx="180" cy="320" rx="64" ry="13" fill="url(#gSeat)" stroke="#080a0e" stroke-width="2"/>
-              <!-- inner dish -->
-              <ellipse cx="180" cy="317" rx="42" ry="8" fill="#12141c" stroke="#24262e" stroke-width="1"/>
-              <ellipse cx="180" cy="320" rx="64" ry="13" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            </g>
-
-            <!-- TOP MOUNT ASSEMBLY -->
-            <g id="gMount">
-              <!-- plate shadow -->
-              <ellipse cx="183" cy="162" rx="76" ry="17" fill="rgba(0,0,0,0.5)"/>
-              <!-- main strut plate -->
-              <ellipse cx="180" cy="150" rx="74" ry="16" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-              <!-- orange bearing accent -->
-              <ellipse cx="180" cy="150" rx="74" ry="16" fill="none" stroke="#ff4d00" stroke-width="1.5" opacity=".35"/>
-              <!-- rubber isolation pad -->
-              <ellipse cx="180" cy="146" rx="32" ry="9" fill="#1e180c" stroke="#3a2a12" stroke-width="1"/>
-              <!-- strut bar -->
-              <rect x="120" y="124" width="120" height="28" rx="10" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-              <rect x="122" y="126" width="116" height="9" rx="5" fill="rgba(255,255,255,0.07)"/>
-              <!-- center rod stub -->
-              <rect x="173" y="94" width="14" height="34" rx="5" fill="url(#gRodX)" stroke="#080a0e" stroke-width="1"/>
-              <!-- top nut -->
-              <circle cx="180" cy="89" r="12" fill="url(#gMetal)" stroke="#080a0e" stroke-width="2"/>
-              <circle cx="180" cy="89" r="6"  fill="#07080c" stroke="#ff4d00" stroke-width="1" opacity=".6"/>
-              <!-- 3 mount bolts -->
-              <circle cx="132" cy="150" r="9" fill="#0a0c10" stroke="#ff4d00" stroke-width="2"/>
-              <circle cx="132" cy="150" r="4" fill="url(#gChrome)"/>
-              <circle cx="180" cy="150" r="9" fill="#0a0c10" stroke="#ff4d00" stroke-width="2"/>
-              <circle cx="180" cy="150" r="4" fill="url(#gChrome)"/>
-              <circle cx="228" cy="150" r="9" fill="#0a0c10" stroke="#ff4d00" stroke-width="2"/>
-              <circle cx="228" cy="150" r="4" fill="url(#gChrome)"/>
-            </g>
-          </g>
-
-          <!-- ── COIL SPRING (generated by JS) ── -->
-          <g id="gSpring"></g>
-
-        </g>
-        </g>
-      </svg>
-      <div class="asm-shade2"></div>
+<!-- ═══ ABOUT STRIP ═══ -->
+<section id="about" class="about-strip">
+  <div class="about-inner">
+    <div class="about-text">
+      <div class="about-eyebrow">Who We Are</div>
+      <h2 class="about-title">India's Heaviest Hauls<br>Need The Best Dampers</h2>
+      <p class="about-desc">Alaina Shockers are engineered specifically for Indian commercial truck conditions — extreme payloads, unmaintained roads, and relentless duty cycles. Every unit is built to OEM specification and pressure-tested before dispatch.</p>
     </div>
-
-    <div class="asm-ui" id="asmUi">
-      <div class="asm-tag">The Making Of A Shocker</div>
-      <div class="asm-count">
-        <div class="asm-num" id="asmNum">01</div>
-        <div class="asm-sep">/</div>
-        <div class="asm-tot">10</div>
-      </div>
-      <div class="asm-label" id="asmLabel">Parts Ready</div>
-      <div class="asm-desc" id="asmDesc">Every precision component laid out before assembly — piston, seals, springs, mounts, and the damper body.</div>
-    </div>
-
-    <div class="asm-dots" id="asmDots">
-      <div class="asm-dot on"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div>
-      <div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div>
-    </div>
-
-    <div class="asm-prog">
-      <div class="asm-prog-track"><div class="asm-prog-fill" id="asmFill"></div></div>
+    <div class="about-stats">
+      <div class="about-stat"><span class="astat-n" data-count="45">0</span><span class="astat-plus">+</span><div class="astat-l">Years Engineering</div></div>
+      <div class="about-stat"><span class="astat-n" data-count="63">0</span><span class="astat-plus">+</span><div class="astat-l">Active SKUs</div></div>
+      <div class="about-stat"><span class="astat-n" data-count="120">0</span><span class="astat-plus">+</span><div class="astat-l">Cities Served</div></div>
+      <div class="about-stat"><span class="astat-n" data-count="3">0</span><div class="astat-l">Major Truck Brands</div></div>
     </div>
   </div>
 </section>
 
-<!-- CABIN DAMPER ASSEMBLY -->
-<section id="cab-assembly">
-  <div class="proc-label">
-    <span class="proc-num">02</span>
-    <span class="proc-title">Cabin Damper Assembly</span>
-    <span class="proc-sub">Scroll to build ↓</span>
-  </div>
-  <div class="asm-sticky">
-    <div class="asm-stage">
-      <canvas id="cabCanvas"></canvas>
-      <div class="asm-ring"></div>
-      <div class="asm-glow" id="cabGlow"></div>
-            <svg id="cabSvg" viewBox="0 0 380 760" aria-hidden="true">
-        <defs>
-          <linearGradient id="cBodyGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#0e0f12"/><stop offset=".18" stop-color="#1e2028"/>
-            <stop offset=".40" stop-color="#2a2c34"/><stop offset=".55" stop-color="#242630"/>
-            <stop offset=".78" stop-color="#16181e"/><stop offset="1"   stop-color="#0a0b0e"/>
-          </linearGradient>
-          <linearGradient id="cRodGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#0c0d10"/><stop offset=".22" stop-color="#1c1e26"/>
-            <stop offset=".44" stop-color="#282a32"/><stop offset=".58" stop-color="#202228"/>
-            <stop offset=".80" stop-color="#12141a"/><stop offset="1"   stop-color="#08090c"/>
-          </linearGradient>
-          <radialGradient id="cRubber" cx=".42" cy=".38" r=".72">
-            <stop offset="0"  stop-color="#2a2a2a"/>
-            <stop offset=".5" stop-color="#1a1a1a"/>
-            <stop offset="1"  stop-color="#0c0c0c"/>
-          </radialGradient>
-          <linearGradient id="cSleeve" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#484c54"/><stop offset=".4"  stop-color="#8a8f98"/>
-            <stop offset=".55" stop-color="#a0a5ae"/><stop offset=".7"  stop-color="#72777f"/>
-            <stop offset="1"   stop-color="#38393e"/>
-          </linearGradient>
-          <linearGradient id="cMetal" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0"   stop-color="#1e2028"/><stop offset=".4"  stop-color="#44485a"/>
-            <stop offset=".6"  stop-color="#545868"/><stop offset=".8"  stop-color="#30333e"/>
-            <stop offset="1"   stop-color="#12141a"/>
-          </linearGradient>
-          <filter id="cGlow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <!-- Clips the rod/upper-tube to only be visible ABOVE the body opening.
-               Coordinates are in cRig space: body top is at y=342, seal top at y=332.
-               We clip at y=336 so the seal pack (rendered after) covers the entry cleanly. -->
-          <clipPath id="cRodClip">
-            <rect x="-300" y="-2000" width="980" height="2336"/>
-          </clipPath>
-        </defs>
-
-        <!-- BRACKET SCENE -->
-        <g id="cScene" opacity="0">
-          <line x1="180" y1="80" x2="180" y2="710" stroke="rgba(255,77,0,0.05)" stroke-width="1" stroke-dasharray="4,8"/>
-          <g id="cTruck">
-            <rect x="60" y="108" width="260" height="20" rx="5" fill="url(#cMetal)" stroke="#06070a" stroke-width="1.5"/>
-            <rect x="62" y="110" width="256" height="6" rx="3" fill="rgba(255,255,255,0.05)"/>
-            <rect x="158" y="88" width="44" height="22" rx="4" fill="url(#cMetal)" stroke="#06070a" stroke-width="1.5"/>
-            <circle cx="172" cy="114" r="5" fill="#080a0e" stroke="#ff4d00" stroke-width="1.5"/>
-            <circle cx="188" cy="114" r="5" fill="#080a0e" stroke="#ff4d00" stroke-width="1.5"/>
-            <text x="48" y="122" fill="rgba(255,255,255,0.15)" font-family="Archivo,sans-serif" font-size="8" letter-spacing="0.8" text-anchor="end">CAB</text>
-            <rect x="60" y="636" width="260" height="20" rx="5" fill="url(#cMetal)" stroke="#06070a" stroke-width="1.5"/>
-            <rect x="62" y="638" width="256" height="6" rx="3" fill="rgba(255,255,255,0.05)"/>
-            <rect x="158" y="654" width="44" height="22" rx="4" fill="url(#cMetal)" stroke="#06070a" stroke-width="1.5"/>
-            <circle cx="172" cy="640" r="5" fill="#080a0e" stroke="#ff4d00" stroke-width="1.5"/>
-            <circle cx="188" cy="640" r="5" fill="#080a0e" stroke="#ff4d00" stroke-width="1.5"/>
-            <text x="48" y="648" fill="rgba(255,255,255,0.15)" font-family="Archivo,sans-serif" font-size="8" letter-spacing="0.8" text-anchor="end">CHASSIS</text>
-          </g>
-          <g id="cSpeed" opacity="0">
-            <rect x="28" y="340" width="38" height="2" rx="1" fill="#ff4d00" opacity=".5"/>
-            <rect x="28" y="354" width="26" height="2" rx="1" fill="#ff4d00" opacity=".35"/>
-            <rect x="28" y="368" width="32" height="2" rx="1" fill="#ff4d00" opacity=".45"/>
-            <rect x="314" y="340" width="38" height="2" rx="1" fill="#ff4d00" opacity=".5"/>
-            <rect x="326" y="354" width="26" height="2" rx="1" fill="#ff4d00" opacity=".35"/>
-            <rect x="320" y="368" width="32" height="2" rx="1" fill="#ff4d00" opacity=".45"/>
-          </g>
-          <g id="cRoadDash">
-            <rect x="40" y="730" width="48" height="4" rx="2" fill="#fff" opacity=".06"/>
-            <rect x="130" y="730" width="48" height="4" rx="2" fill="#fff" opacity=".06"/>
-            <rect x="220" y="730" width="48" height="4" rx="2" fill="#fff" opacity=".06"/>
-            <rect x="310" y="730" width="48" height="4" rx="2" fill="#fff" opacity=".06"/>
-          </g>
-        </g>
-
-         <!-- CABIN DAMPER UNIT -->
-         <g id="cUnitWrap">
-         <g id="cRig">
-
-           <!-- BOTTOM EYE — 1.5x wider -->
-           <g id="cEyeBot">
-             <ellipse cx="182" cy="688" rx="48" ry="10" fill="rgba(0,0,0,0.55)"/>
-             <ellipse cx="180" cy="668" rx="45" ry="36" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="2"/>
-             <ellipse cx="180" cy="668" rx="30" ry="24" fill="url(#cRubber)"/>
-             <ellipse cx="180" cy="668" rx="15" ry="12" fill="url(#cSleeve)" stroke="#05060a" stroke-width="1.5"/>
-             <ellipse cx="180" cy="668" rx="7"  ry="6"  fill="#080808"/>
-             <ellipse cx="180" cy="668" rx="45" ry="36" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
-             <rect x="126" y="653" width="12" height="30" rx="3" fill="url(#cMetal)" stroke="#05060a" stroke-width="1.5"/>
-             <rect x="222" y="653" width="12" height="30" rx="3" fill="url(#cMetal)" stroke="#05060a" stroke-width="1.5"/>
-           </g>
-
-           <!-- BODY — 1.5x wider -->
-           <g id="cBody">
-             <rect x="145" y="349" width="82" height="308" rx="10" fill="rgba(0,0,0,0.5)" transform="translate(6,6)"/>
-             <rect x="140" y="342" width="80" height="316" rx="12" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="2"/>
-             <ellipse cx="180" cy="342" rx="40" ry="10" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="1.5"/>
-             <ellipse cx="180" cy="658" rx="40" ry="10" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="1.5"/>
-             <rect x="143" y="350" width="7" height="300" rx="3.5" fill="rgba(255,255,255,0.09)"/>
-             <rect x="214" y="350" width="3"  height="300" rx="1.5" fill="rgba(255,255,255,0.03)"/>
-             <rect x="207" y="356" width="15" height="292" fill="#060708"/>
-             <rect x="209" y="362" width="6"  height="280" fill="#0c0d14" stroke="#181926" stroke-width="1"/>
-             <rect x="215" y="362" width="4"  height="280" fill="#07100a"/>
-             <rect x="203" y="486" width="20" height="14" rx="3" fill="#20242e" stroke="#ff4d00" stroke-width="1.2"/>
-             <rect x="206" y="489" width="14" height="4"  rx="1" fill="#ff4d00" opacity=".55"/>
-             <text x="228" y="544" fill="rgba(30,120,50,0.65)" font-family="Archivo,sans-serif" font-weight="700" font-size="5.5" letter-spacing="0.5" writing-mode="tb">VG46</text>
-             <rect x="140" y="462" width="80" height="6" rx="2" fill="url(#cSleeve)" opacity=".3"/>
-             <rect x="143" y="382" width="74" height="42" rx="3" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-             <text x="180" y="400" text-anchor="middle" fill="rgba(255,255,255,0.90)" font-family="Archivo,sans-serif" font-weight="900" font-size="12" letter-spacing="1.8">ALAINA</text>
-             <text x="180" y="415" text-anchor="middle" fill="rgba(255,77,0,0.75)"   font-family="Archivo,sans-serif" font-weight="700" font-size="6"  letter-spacing="1.4">CABIN DAMPER</text>
-             <text x="180" y="456" text-anchor="middle" fill="rgba(255,255,255,0.16)" font-family="Archivo,sans-serif" font-size="5.5" letter-spacing="0.9">AL-CD-001  1M+ CYCLES</text>
-             <rect x="140" y="352" width="80" height="3" rx="1.5" fill="rgba(255,255,255,0.05)"/>
-             <rect x="140" y="648" width="80" height="3" rx="1.5" fill="rgba(255,255,255,0.04)"/>
-           </g>
-
-           <!-- UPPER TUBE + TOP EYE — 1.5x wider.
-                clip-path hides the rod once it enters the body (y≥336 in cRig space) -->
-           <g id="cTop" clip-path="url(#cRodClip)">
-             <g id="cRod">
-               <rect x="148" y="158" width="64" height="176" rx="11" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="1.5"/>
-               <rect x="151" y="165" width="7" height="162" rx="3.5" fill="rgba(255,255,255,0.08)"/>
-               <rect x="148" y="202" width="64" height="5" rx="2" fill="url(#cSleeve)" opacity=".22"/>
-               <ellipse cx="180" cy="158" rx="32" ry="8" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="1.5"/>
-               <ellipse cx="180" cy="334" rx="32" ry="8" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="1.5"/>
-               <g id="cBoot"></g>
-             </g>
-             <g id="cEyeTop">
-               <ellipse cx="182" cy="150" rx="48" ry="10" fill="rgba(0,0,0,0.5)"/>
-               <ellipse cx="180" cy="130" rx="45" ry="36" fill="url(#cBodyGrad)" stroke="#05060a" stroke-width="2"/>
-               <ellipse cx="180" cy="130" rx="30" ry="24" fill="url(#cRubber)"/>
-               <ellipse cx="180" cy="130" rx="15" ry="12" fill="url(#cSleeve)" stroke="#05060a" stroke-width="1.5"/>
-               <ellipse cx="180" cy="130" rx="7"  ry="6"  fill="#080808"/>
-               <ellipse cx="180" cy="130" rx="45" ry="36" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
-               <rect x="126" y="116" width="12" height="28" rx="3" fill="url(#cMetal)" stroke="#05060a" stroke-width="1.5"/>
-               <rect x="222" y="116" width="12" height="28" rx="3" fill="url(#cMetal)" stroke="#05060a" stroke-width="1.5"/>
-             </g>
-           </g>
-
-           <!-- SEAL / GUIDE — rendered AFTER cTop so it paints over the rod entry point -->
-           <g id="cSealPack">
-             <ellipse cx="182" cy="350" rx="46" ry="11" fill="rgba(0,0,0,0.35)"/>
-             <rect x="140" y="332" width="80" height="18" rx="8" fill="#ff4d00" stroke="#8a1e00" stroke-width="1.5"/>
-             <ellipse cx="180" cy="341" rx="18" ry="9" fill="#06070a" stroke="rgba(255,110,0,0.6)" stroke-width="1.5"/>
-             <line x1="140" y1="337" x2="156" y2="337" stroke="rgba(200,50,0,0.6)" stroke-width="1"/>
-             <line x1="204" y1="337" x2="220" y2="337" stroke="rgba(200,50,0,0.6)" stroke-width="1"/>
-             <line x1="140" y1="344" x2="156" y2="344" stroke="rgba(200,50,0,0.6)" stroke-width="1"/>
-             <line x1="204" y1="344" x2="220" y2="344" stroke="rgba(200,50,0,0.6)" stroke-width="1"/>
-             <rect x="140" y="332" width="80" height="18" rx="8" fill="none" stroke="#ff4d00" stroke-width="1" opacity=".4" filter="url(#cGlow)"/>
-           </g>
-
-         </g>
-         </g>
-      </svg>
-      <div class="asm-shade2"></div>
-    </div>
-
-    <div class="asm-ui" id="cabUi">
-      <div class="asm-tag">Heavy Duty Cabin Damper</div>
-      <div class="asm-count">
-        <div class="asm-num" id="cabNum">01</div>
-        <div class="asm-sep">/</div>
-        <div class="asm-tot">10</div>
-      </div>
-      <div class="asm-label" id="cabLabel">Cylinder Prepared</div>
-      <div class="asm-desc"  id="cabDesc">The outer tube precision-bored and cleaned — every micron matters for consistent damping force over a million cycles.</div>
-    </div>
-
-    <div class="asm-dots" id="cabDots">
-      <div class="asm-dot on"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div>
-      <div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div><div class="asm-dot"></div>
-    </div>
-
-    <div class="asm-prog">
-      <div class="asm-prog-track"><div class="asm-prog-fill" id="cabFill"></div></div>
+<!-- ═══ CATALOGUE ═══ -->
+<section id="catalog">
+  <div class="catalog-header">
+    <div class="catalog-header-inner">
+      <div class="catalog-eyebrow">Parts Catalogue</div>
+      <h2 class="catalog-title">63 Parts. Three Brands.</h2>
+      <p class="catalog-desc">Heavy-duty commercial dampers and rare passenger struts — real part numbers, real stock. Contact us for trade pricing.</p>
     </div>
   </div>
-</section>
 
-<!-- PRODUCTS -->
-<section id="products" style="position:relative">
-  <span class="sec-pg">04 / Products</span>
-  <div class="wrap">
-    <div class="sec-head">
-      <div data-reveal="up">
-        <div class="eyebrow">Our Range</div>
-        <h2 class="h-xl">Built For<br>Every Vehicle</h2>
+  <div class="catalog-layout">
+    <!-- Sidebar -->
+    <aside class="cat-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-heading">Heavy Duty</div>
+        <ul class="sidebar-list">
+          <li><button class="sbar-btn on" onclick="ft('all',this)" data-val="all">All Parts</button></li>
+          <li><button class="sbar-btn" onclick="ft('HD',this)" data-val="HD">All Heavy Duty</button></li>
+        </ul>
       </div>
-      <p class="lead" data-reveal="up">Three core product lines covering passenger cars, rare specialty fitments, and India's heaviest commercial trucks.</p>
-    </div>
-    <div class="prods">
-      <div class="prod" data-reveal="up">
-        <div class="prod-img" style="background-image:url('images/hero-suspension.jpg')">
-          <div class="prod-num">01</div>
-        </div>
-        <div class="prod-body">
-          <div class="prod-tag">Specialty Fitments</div>
-          <div class="prod-title">Rare Struts</div>
-          <div class="prod-desc">Precision struts for discontinued and low-volume vehicle fitments that are unavailable in the standard aftermarket.</div>
-          <div class="prod-link">View Range
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </div>
-        </div>
+      <div class="sidebar-section">
+        <div class="sidebar-heading">By Brand</div>
+        <ul class="sidebar-list">
+          <li><button class="sbar-btn" onclick="ft('Tata',this)" data-val="Tata">Tata</button></li>
+          <li><button class="sbar-btn" onclick="ft('Leyland',this)" data-val="Leyland">Leyland</button></li>
+          <li><button class="sbar-btn" onclick="ft('Eicher',this)" data-val="Eicher">Eicher / Mann</button></li>
+          <li><button class="sbar-btn" onclick="ft('Mahindra',this)" data-val="Mahindra">Mahindra / Navi Star</button></li>
+        </ul>
       </div>
-      <div class="prod" data-reveal="up" style="transition-delay:.1s">
-        <div class="prod-img" style="background-image:url('images/product-damper.jpg')">
-          <div class="prod-num">02</div>
-        </div>
-        <div class="prod-body">
-          <div class="prod-tag">Passenger &amp; LCV</div>
-          <div class="prod-title">Dampers</div>
-          <div class="prod-desc">Twin-tube and mono-tube gas dampers for passenger cars, SUVs, and light commercial vehicles across all Indian models.</div>
-          <div class="prod-link">View Range
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </div>
-        </div>
+      <div class="sidebar-section">
+        <div class="sidebar-heading">Rare Struts</div>
+        <ul class="sidebar-list">
+          <li><button class="sbar-btn" onclick="ft('RS',this)" data-val="RS">All Rare Struts</button></li>
+          <li><button class="sbar-btn" onclick="ft('Toyota',this)" data-val="Toyota">Toyota</button></li>
+          <li><button class="sbar-btn" onclick="ft('Renault',this)" data-val="Renault">Renault</button></li>
+          <li><button class="sbar-btn" onclick="ft('Mitsubishi',this)" data-val="Mitsubishi">Mitsubishi</button></li>
+          <li><button class="sbar-btn" onclick="ft('Isuzu',this)" data-val="Isuzu">Isuzu</button></li>
+          <li><button class="sbar-btn" onclick="ft('Suzuki',this)" data-val="Suzuki">Suzuki / Maruti</button></li>
+          <li><button class="sbar-btn" onclick="ft('MG',this)" data-val="MG">MG</button></li>
+        </ul>
       </div>
-      <div class="prod" data-reveal="up" style="transition-delay:.2s">
-        <div class="prod-img" style="background-image:url('images/truck-cabin.jpg')">
-          <div class="prod-num">03</div>
-        </div>
-        <div class="prod-body">
-          <div class="prod-tag">Heavy Commercial</div>
-          <div class="prod-title">Cabin Dampers</div>
-          <div class="prod-desc">Heavy-duty cabin units for Eicher, Leyland, and Tata trucks — chrome-rod, high-load seals, built for long-haul duty.</div>
-          <div class="prod-link">View Range
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </aside>
 
-<!-- TECHNOLOGY -->
-<section id="tech" style="position:relative"><span class="sec-pg">05 / Technology</span>
-  <div class="wrap">
-    <div class="tech-grid">
-      <div class="tech-visual" data-reveal="left">
-        <img class="tech-visual-img" src="images/damper-closeup.jpg" alt="Chrome piston rod"
-             onerror="this.style.display='none'"/>
-        <div class="tech-badge"><b>1M+</b><span>Test Cycles</span></div>
-      </div>
-      <div data-reveal="right">
-        <div class="eyebrow">Engineering</div>
-        <h2 class="h-lg">Built For Precision</h2>
-        <div class="spec-rows">
-          <div class="spec"><div class="spec-n">01</div><div><h4>Chrome-Plated Piston Rod</h4><p>Hard-chrome coating for sustained corrosion resistance and low-friction operation under repeated load.</p></div></div>
-          <div class="spec"><div class="spec-n">02</div><div><h4>High-Cycle Dual Seals</h4><p>Double-seal construction tested beyond one million compression cycles in simulated Indian road conditions.</p></div></div>
-          <div class="spec"><div class="spec-n">03</div><div><h4>Gas-Charged Twin-Tube</h4><p>Nitrogen charge eliminates cavitation for consistent damping force across all operating temperatures.</p></div></div>
-          <div class="spec"><div class="spec-n">04</div><div><h4>Progressive Valving</h4><p>Soft at low load for comfort, firm under maximum payload — engineered for real Indian duty cycles.</p></div></div>
+    <!-- Product Grid -->
+    <div class="cat-main">
+      <div class="cat-grid" id="catGrid">
+        <div class="cat-section-divider">
+          <span class="cat-sec-label">Tata — Heavy Duty</span>
+          <span class="cat-sec-count">18 parts</span>
         </div>
-      </div>
-    </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-4018-hywa-cabin-card.png','4018 Hywa / Prima Cabin — AL-TA-HD-0241(A)')">
+            <img src="images/tata-4018-hywa-cabin.png" alt="Tata 4018 Hywa Cabin" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0241(A)</div>
+            <div class="cc-name">4018 Hywa / Prima Cabin</div>
+            <div class="cc-oe">OE: 2816 8910 0241</div>
+            <div class="cc-app">4018 Hywa / Signa / Prima Truck</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-4018-cabin-rear-card.png','4018 BS3 Cabin Rear — AL-TA-HD-0161(A)')">
+            <img src="images/tata-4018-cabin-rear.png" alt="Tata 4018 BS3 Cabin Rear" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0161(A)</div>
+            <div class="cc-name">4018 BS3 Cabin Rear</div>
+            <div class="cc-oe">OE: 2816 8911 0161</div>
+            <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-4018-cabin-front-card.png','4018 Cabin Front — AL-TA-HD-0242')">
+            <img src="images/tata-4018-cabin-front.png" alt="Tata 4018 Cabin Front" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0242</div>
+            <div class="cc-name">4018 Cabin Front</div>
+            <div class="cc-oe">OE: 2816 8910 0242</div>
+            <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-1516-cabin-card.png','1516 Cabin Non-Sleeper — AL-TA-HD-0103(A)')">
+            <img src="images/tata-1516-cabin.png" alt="Tata 1516 Cabin Non-Sleeper" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0103(A)</div>
+            <div class="cc-name">1516 Cabin, Non-Sleeper</div>
+            <div class="cc-oe">OE: 2679 8920 0103</div>
+            <div class="cc-app">Tata 1516 Truck (Non Sleeper)</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-1518-lpt-front-card.png','1518 LPT Tilt Cabin Front — AL-TA-HD-0102')">
+            <img src="images/tata-1518-lpt-front.png" alt="Tata 1518 LPT Tilt Cabin Front" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-TA-HD-0102</div>
+            <div class="cc-name">1518 LPT Tilt Cabin Front</div>
+            <div class="cc-oe">OE: 2809 3260 0102</div>
+            <div class="cc-app">Tata 1518 LPT Tilt Cabin</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0242</div>
+            <div class="cc-name">Cabin 4018 (Variant)</div>
+            <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-hywa-signa-cabin-card.png','Hywa / Signa Cabin — AL-TA-HD-0104')">
+            <img src="images/tata-hywa-signa-cabin.png" alt="Tata Hywa Signa Cabin" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0104</div>
+            <div class="cc-name">Hywa / Signa Cabin</div>
+            <div class="cc-oe">OE: 3501 3206 0104</div>
+            <div class="cc-app">Tata Hywa / Signa</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-1526-cabin-card.png','1526 Cabin Damper — AL-TA-HD-0107')">
+            <img src="images/tata-1526-cabin.png" alt="Tata 1526 Cabin Damper" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0107</div>
+            <div class="cc-name">1526 Cabin Damper</div>
+            <div class="cc-oe">OE: 2680 9810 0107</div>
+            <div class="cc-app">Tata 1526 Damper Truck</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Truck &amp; Bus</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Truck &amp; Bus</span></div>
+            <div class="cc-partno">AL-TA-HD-0106</div>
+            <div class="cc-name">B54 Bus 3718</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-709-703-rear-card.png','709 / 703 Rear — AL-TA-HD-0121')">
+            <img src="images/tata-709-703-rear.png" alt="Tata 709/703 Rear Shock" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Rear</span></div>
+            <div class="cc-partno">AL-TA-HD-0121</div>
+            <div class="cc-name">709 / 703 Rear</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-709-front-card.png','709 / 713 Front — AL-TA-HD-0114')">
+            <img src="images/tata-709-front.png" alt="Tata 709 Front" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-TA-HD-0114</div>
+            <div class="cc-name">709 / 713 / 2515 Front</div>
+            <div class="cc-app">709 / 713 / 2515 / 608 / 1109 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Rear</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Rear</span></div>
+            <div class="cc-partno">AL-TA-HD-0119</div>
+            <div class="cc-name">608 Rear</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-1109-front-card.png','Tata 1109 Front — AL-TA-HD-0108')">
+            <img src="images/tata-1109-front.png" alt="Tata 1109 Front" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-TA-HD-0108</div>
+            <div class="cc-name">1109 Front</div>
+            <div class="cc-oe">OE: 2574 3235 0108</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-709-front-0101-card.png','2515 Front / Rear — AL-TA-HD-0101')">
+            <img src="images/tata-709-front.png" alt="Tata 2515 Front Rear" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front / Rear</span></div>
+            <div class="cc-partno">AL-TA-HD-0101</div>
+            <div class="cc-name">2515 Front / Rear</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-stabilizer-9937-card.png','Shock Absorber Stabilizer — AL-TA-HD-9937')">
+            <img src="images/tata-stabilizer-9937.png" alt="Tata Shock Absorber Stabilizer" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Stabilizer</span></div>
+            <div class="cc-partno">AL-TA-HD-9937</div>
+            <div class="cc-name">Shock Absorber Stabilizer</div>
+            <div class="cc-oe">OE: 2846 3390 9937</div>
+            <div class="cc-app">Tata — Stabilizer</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-tilt-cabin-card.png','Tata Tilt Cabin — AL-TA-HD-0173')"><img src="images/tata-tilt-cabin.png" alt="Tata Tilt Cabin" class="cc-img"/><div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0173</div>
+            <div class="cc-name">Tata Tilt Cabin</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Tata" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-tilt-cabin-card.png','Tata Tilt Cabin 2515 — AL-TA-HD-0122')"><img src="images/tata-tilt-cabin.png" alt="Tata Tilt Cabin 2515" class="cc-img"/><div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-TA-HD-0122</div>
+            <div class="cc-name">Tata Tilt Cabin 2515</div>
+            <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
 
-    <!-- ASSEMBLY PROCESS -->
-    <div class="proc-section" data-reveal="up">
-      <div class="proc-section-head">
-        <div class="eyebrow">Manufacturing</div>
-        <h2 class="h-lg">How We Build It</h2>
-        <p class="lead" style="margin-top:14px;max-width:560px">Every Alaina unit goes through a ten-step controlled assembly sequence — verified at each stage before the next begins.</p>
-      </div>
-      <div class="proc-cols">
-        <!-- STRUT ASSEMBLY -->
-        <div class="proc-col">
-          <div class="proc-col-head">
-            <span class="proc-col-num">01</span>
-            <span class="proc-col-title">Strut Assembly</span>
-          </div>
-          <ol class="proc-list">
-            <li><span>Parts Ready</span><p>Every precision component laid out — piston, seals, springs, mounts, and the damper body.</p></li>
-            <li><span>Seal &amp; Oil Seal</span><p>High-performance oil seals pressed into the body, engineered for over a million cycles.</p></li>
-            <li><span>Piston Rod Inserted</span><p>Chrome-plated rod slid in with zero-tolerance alignment for consistent damping force.</p></li>
-            <li><span>Coil Spring Fitted</span><p>Precision-wound spring seated around the body, rated for the exact application load.</p></li>
-            <li><span>Top Mount Fixed</span><p>Top mount torqued to spec, completing the damper-to-chassis connection.</p></li>
-            <li><span>Shocker Assembled</span><p>Fully assembled unit ready for quality inspection before dispatch.</p></li>
-            <li><span>Shocker Installed</span><p>Unit mounted into the wheel arch, connecting knuckle, brake, and suspension geometry.</p></li>
-            <li><span>Wheel Fitted</span><p>Wheel refitted and torqued — shocker sits live in the suspension under full vehicle weight.</p></li>
-            <li><span>Smooth Performance</span><p>Damper absorbs every input — potholes, undulations, hard stops — invisibly and consistently.</p></li>
-            <li><span>Driving Smoothly</span><p>From raw components to confident driving. Kilometre after kilometre.</p></li>
-          </ol>
+        <div class="cat-section-divider">
+          <span class="cat-sec-label">Leyland — Heavy Duty</span>
+          <span class="cat-sec-count">11 parts</span>
         </div>
-        <!-- CABIN DAMPER ASSEMBLY -->
-        <div class="proc-col">
-          <div class="proc-col-head">
-            <span class="proc-col-num">02</span>
-            <span class="proc-col-title">Cabin Damper Assembly</span>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/leyland-u-truck-cabin-card.png','U Truck Cabin Assembly — AL-LE-HD-0100(A)')">
+            <img src="images/leyland-u-truck-cabin.png" alt="Leyland U Truck Cabin Assembly" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
           </div>
-          <ol class="proc-list">
-            <li><span>Cylinder Prepared</span><p>Outer tube precision-bored and cleaned — every micron matters for consistent damping over a million cycles.</p></li>
-            <li><span>Inner Tube Inserted</span><p>Twin-tube construction: inner cylinder pressed inside the outer, creating the primary working chamber.</p></li>
-            <li><span>Oil Fill</span><p>VG46 hydraulic oil filled to exact specification — volume and viscosity determine damping response.</p></li>
-            <li><span>Piston Rod Inserted</span><p>Hard-chrome rod — Ra ≤ 0.2μm — slid through the rod guide with zero-tolerance alignment.</p></li>
-            <li><span>Seal Pack Pressed</span><p>Dual-lip NBR seals torqued into position, rated for one million full-stroke cycles.</p></li>
-            <li><span>Dust Boot Fitted</span><p>TPR accordion boot snapped over the rod — blocking dust, water, and road debris from the seal face.</p></li>
-            <li><span>Top Eye Mounted</span><p>Forged mounting eye welded and pressure-tested at its rated cab-frame load capacity.</p></li>
-            <li><span>Damper Complete</span><p>Pressure-tested at 15 BAR. Zero leaks. Force curve verified. Ready for dispatch.</p></li>
-            <li><span>Cab Mounted</span><p>Unit bolted between cab floor bracket and chassis rail — isolating cab from engine vibration and road shock.</p></li>
-            <li><span>Cabin Stable</span><p>At speed, over potholes, under full payload — the Alaina cabin damper keeps the driver smooth. Every kilometre.</p></li>
-          </ol>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-LE-HD-0100(A)</div>
+            <div class="cc-name">Ashok Leyland AL G91 SLP U Series Trucks, Cabin</div>
+            <div class="cc-oe">OE: F5500100</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/leyland-g91-cabin-card.png','Ashok Leyland U Series Trucks, Cabin Rear — AL-LE-HD-6500(A)')">
+            <img src="images/leyland-g91-cabin.png" alt="Ashok Leyland U Series Cabin Rear" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-LE-HD-6500(A)</div>
+            <div class="cc-name">Ashok Leyland U Series Trucks, Cabin Rear</div>
+            <div class="cc-oe">OE: F5S06500</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-LE-HD-3300</div>
+            <div class="cc-name">U Truck (Tall)</div>
+            <div class="cc-oe">OE: F-1503300</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/leyland-2518-cabin-card.png','2518 U Truck Cabin Shocker — AL-LE-HD-3500')">
+            <img src="images/leyland-2518-cabin.png" alt="Leyland 2518 U Truck Cabin Shocker" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-LE-HD-3500</div>
+            <div class="cc-name">2518 U Truck Cabin</div>
+            <div class="cc-oe">OE: TF1503500</div>
+            <div class="cc-app">Leyland 2518 / U Truck Series</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-LE-HD-4200</div>
+            <div class="cc-name">Stalian Cabin</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-LE-HD-1310</div>
+            <div class="cc-name">U Truck Front (2 Kill)</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-LE-HD-1000</div>
+            <div class="cc-name">Leyland Front (Small)</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-LE-HD-1900</div>
+            <div class="cc-name">Cargo Econmet Front</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/leyland-cabin-0110-card.png','NGC Series Cabin — AL-LE-HD-0110')">
+            <img src="images/leyland-cabin-0110.png" alt="Ashok Leyland NGC Series Cabin" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-LE-HD-0110</div>
+            <div class="cc-name">NGC Series Cabin</div>
+            <div class="cc-oe">OE: F5S00110</div>
+            <div class="cc-app">Ashok Leyland NGC / U Truck / G91 / Stalian</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-LE-HD-50000</div>
+            <div class="cc-name">Leyland Front (Tall)</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Leyland" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-LE-HD-0200</div>
+            <div class="cc-name">Marcopolo / Bharat Benz Front</div>
+            <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
 
-<!-- TRUCKS -->
-<section id="trucks" style="position:relative"><span class="sec-pg">06 / Heavy Duty</span>
-  <div class="wrap">
-    <div class="trucks-grid">
-      <div data-reveal="left">
-        <div class="eyebrow">Heavy Commercial</div>
-        <h2 class="h-xl">India's<br>Heaviest<br>Hauls</h2>
-        <p class="lead" style="margin-top:24px;max-width:420px">Alaina cabin dampers are engineered specifically for Indian commercial truck conditions — extreme payloads, unmaintained roads, and relentless duty cycles.</p>
-        <div class="trucks-pills">
-          <div class="t-pill">Eicher</div>
-          <div class="t-pill">Leyland</div>
-          <div class="t-pill">Tata</div>
-          <div class="t-pill">Mahindra</div>
-          <div class="t-pill">Navistar</div>
+        <div class="cat-section-divider">
+          <span class="cat-sec-label">Eicher / Bharat Benz / Mann — Heavy Duty</span>
+          <span class="cat-sec-count">5 parts</span>
         </div>
-      </div>
-      <div class="trucks-img" style="background-image:url('images/truck-cabin.jpg')" data-reveal="right"></div>
-    </div>
-  </div>
-</section>
+        <div class="cat-card" data-m="Eicher" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/eicher-canter-cabin-551-card.png','Eicher Canter Cabin Assy — AL-EI-HD-5551(A)')">
+            <img src="images/eicher-canter-cabin-551.png" alt="Eicher Canter Cabin Assembly" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-EI-HD-5551(A)</div>
+            <div class="cc-name">Eicher Canter Cabin Assy</div>
+            <div class="cc-app">Eicher Canter — Cabin</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Eicher" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/eicher-pro-canter-cabin-card.png','Eicher Pro / Canter / Jumbo — AL-EI-HD-0077(A)')">
+            <img src="images/eicher-pro-canter-cabin.png" alt="Eicher Pro Canter Jumbo Cabin" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-EI-HD-0077(A)</div>
+            <div class="cc-name">Eicher Pro / Canter / Jumbo</div>
+            <div class="cc-app">Eicher Pro / Canter / Jumbo — Cabin</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Eicher" data-cat="HD">
+          <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-EI-HD-0467</div>
+            <div class="cc-name">Eicher Pro / Jumbo / AMW Front</div>
+            <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Eicher" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/bharatbenz-cabin-card.png','Bharat Benz Cabin Assembly — AL-EI-HD-0103(A)')">
+            <img src="images/bharatbenz-cabin.png" alt="Bharat Benz Cabin Assembly" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-EI-HD-0103(A)</div>
+            <div class="cc-name">Bharat Benz Cabin Assembly</div>
+            <div class="cc-oe">OE: A 400.317.01.03 / A 400.317.19.03</div>
+            <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Eicher" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/mann-cabin-6002-card.png','Mann Cabin Assembly — AL-EI-HD-6002(A)')">
+            <img src="images/mann-cabin-6002.png" alt="Mann Cabin Assembly" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
+            <div class="cc-partno">AL-EI-HD-6002(A)</div>
+            <div class="cc-name">Mann Cabin Assembly</div>
+            <div class="cc-app">Mann / Eicher / BharatBenz — Cabin</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
 
-<!-- CATALOGUE -->
-<section id="catalog" style="position:relative"><span class="sec-pg">07 / Catalogue</span>
-  <div class="wrap">
-    <div data-reveal="up">
-      <div class="eyebrow">Parts Catalogue</div>
-      <h2 class="h-xl">63 Parts.<br>Two Ranges.</h2>
-      <p class="lead" style="margin-top:16px;max-width:560px">Heavy-duty commercial vehicle dampers and rare passenger car strut assemblies — real part numbers from the Alaina register. Contact us for trade pricing.</p>
+        <div class="cat-section-divider">
+          <span class="cat-sec-label">Mahindra — Navi Star</span>
+          <span class="cat-sec-count">2 parts</span>
+        </div>
+        <div class="cat-card" data-m="Mahindra" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/navistar-front-card.png','Navi Star Front Assembly — AL-MA-HD-0591(A)')">
+            <img src="images/navistar-front.png" alt="Navi Star Front Assembly" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Mahindra</span><span class="cc-cat-tag">Front</span></div>
+            <div class="cc-partno">AL-MA-HD-0591(A)</div>
+            <div class="cc-name">Navi Star Front Assembly</div>
+            <div class="cc-oe">OE: 6119AAA00591N</div>
+            <div class="cc-app">Navi Star</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+        <div class="cat-card" data-m="Mahindra" data-cat="HD">
+          <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/navistar-rear-card.png','Navi Star Rear Assembly — AL-MA-HD-0601(A)')">
+            <img src="images/navistar-rear.png" alt="Navi Star Rear Assembly" class="cc-img"/>
+            <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
+          </div>
+          <div class="cat-card-body">
+            <div class="cc-top-row"><span class="cc-brand">Mahindra</span><span class="cc-cat-tag">Rear</span></div>
+            <div class="cc-partno">AL-MA-HD-0601(A)</div>
+            <div class="cc-name">Navi Star Rear Assembly</div>
+            <div class="cc-oe">OE: 6119AAA00601N</div>
+            <div class="cc-app">Navi Star</div>
+          </div>
+          <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
+        </div>
+
+        <div class="cat-section-divider">
+          <span class="cat-sec-label">Toyota — Rare Struts</span>
+          <span class="cat-sec-count">10 parts</span>
+        </div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">TO-CA-2001</div><div class="cc-name">Camry Front LH</div><div class="cc-app">Camry (2007–2014)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">TO-CA-2002</div><div class="cc-name">Camry Front RH</div><div class="cc-app">Camry (2007–2014)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Rear LH</span></div><div class="cc-partno">TO-CA-2003</div><div class="cc-name">Camry Rear LH</div><div class="cc-app">Camry (2007–2014)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Rear RH</span></div><div class="cc-partno">TO-CA-2004</div><div class="cc-name">Camry Rear RH</div><div class="cc-app">Camry (2007–2014)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">TO-AL-2019</div><div class="cc-name">Corolla Altis Front LH</div><div class="cc-app">Corolla Altis (2003–2008)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">TO-AL-2020</div><div class="cc-name">Corolla Altis Front RH</div><div class="cc-app">Corolla Altis (2003–2008)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">TO-AL-2029</div><div class="cc-name">Altis T-1 Front LH</div><div class="cc-app">Corolla Altis T-1 (2008–2014)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">TO-AL-2030</div><div class="cc-name">Altis T-1 Front RH</div><div class="cc-app">Corolla Altis T-1 (2008–2014)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">TO-AL-2039</div><div class="cc-name">Altis T-2 Front LH</div><div class="cc-app">Corolla Altis T-2 (2014–2020)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Toyota" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">TO-AL-2040</div><div class="cc-name">Altis T-2 Front RH</div><div class="cc-app">Corolla Altis T-2 (2014–2020)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+
+        <div class="cat-section-divider"><span class="cat-sec-label">Renault — Rare Struts</span><span class="cat-sec-count">2 parts</span></div>
+        <div class="cat-card" data-m="Renault" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Renault</span><span class="cc-cat-tag">Front</span></div><div class="cc-partno">RE-DS-3009</div><div class="cc-name">Duster Front LH / RH</div><div class="cc-app">Duster (2012–2019)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Renault" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear (4×4)</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Renault</span><span class="cc-cat-tag">Rear (4×4)</span></div><div class="cc-partno">RE-DS-3011</div><div class="cc-name">Duster Rear 4×4 LH / RH</div><div class="cc-app">Duster (2012–2019)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+
+        <div class="cat-section-divider"><span class="cat-sec-label">Mitsubishi — Rare Struts</span><span class="cat-sec-count">7 parts</span></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">AL-MT-LA-5001</div><div class="cc-name">Lancer Front LH</div><div class="cc-app">Lancer</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">AL-MT-LA-5002</div><div class="cc-name">Lancer Front RH</div><div class="cc-app">Lancer</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Rear LH</span></div><div class="cc-partno">AL-MT-LA-5003</div><div class="cc-name">Lancer Rear LH</div><div class="cc-app">Lancer</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Rear RH</span></div><div class="cc-partno">AL-MT-LA-5004</div><div class="cc-name">Lancer Rear RH</div><div class="cc-app">Lancer</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">AL-MT-LA-5005</div><div class="cc-name">Lancer Cedia Front LH</div><div class="cc-app">Lancer Cedia</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">AL-MT-LA-5006</div><div class="cc-name">Lancer Cedia Front RH</div><div class="cc-app">Lancer Cedia</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Mitsubishi" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Rear</span></div><div class="cc-partno">AL-MT-LA-5009</div><div class="cc-name">Lancer Cedia Rear</div><div class="cc-app">Lancer Cedia</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+
+        <div class="cat-section-divider"><span class="cat-sec-label">Isuzu / Suzuki / MG — Rare Struts</span><span class="cat-sec-count">8 parts</span></div>
+        <div class="cat-card" data-m="Isuzu" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Isuzu</span><span class="cc-cat-tag">Front</span></div><div class="cc-partno">IS-5021</div><div class="cc-name">Isuzu Front</div><div class="cc-app">Isuzu</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Isuzu" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Isuzu</span><span class="cc-cat-tag">Rear</span></div><div class="cc-partno">IS-5022</div><div class="cc-name">Isuzu Rear</div><div class="cc-app">Isuzu</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Suzuki" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Suzuki</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">AL-SU-BL-3001</div><div class="cc-name">Baleno Front LH</div><div class="cc-app">Baleno (2009)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Suzuki" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Suzuki</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">AL-SU-BL-3002</div><div class="cc-name">Baleno Front RH</div><div class="cc-app">Baleno (2009)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="Suzuki" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">Suzuki</span><span class="cc-cat-tag">Rear</span></div><div class="cc-partno">AL-SU-BL-3009</div><div class="cc-name">Baleno Rear</div><div class="cc-app">Baleno (2009)</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="MG" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">MG</span><span class="cc-cat-tag">Front LH</span></div><div class="cc-partno">AL-MU-HC-1001</div><div class="cc-name">Hector Front LH</div><div class="cc-app">Hector</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="MG" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">MG</span><span class="cc-cat-tag">Front RH</span></div><div class="cc-partno">AL-MU-HC-1002</div><div class="cc-name">Hector Front RH</div><div class="cc-app">Hector</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+        <div class="cat-card" data-m="MG" data-cat="RS"><div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div><div class="cat-card-body"><div class="cc-top-row"><span class="cc-brand">MG</span><span class="cc-cat-tag">Rear</span></div><div class="cc-partno">AL-MU-HC-1003</div><div class="cc-name">Hector Rear</div><div class="cc-app">Hector</div></div><div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div></div>
+      </div>
+      <p class="cat-note">Source: Mahajan Motors India — Alaina parts register 2026</p>
     </div>
-    <div class="filters" data-reveal="up">
-      <button class="filt on" onclick="ft('all',this)">All Parts</button>
-      <button class="filt" onclick="ft('HD',this)">Heavy Duty</button>
-      <button class="filt" onclick="ft('RS',this)">Rare Struts</button>
-      <button class="filt" onclick="ft('Tata',this)">Tata</button>
-      <button class="filt" onclick="ft('Leyland',this)">Leyland</button>
-      <button class="filt" onclick="ft('Eicher',this)">Eicher</button>
-      <button class="filt" onclick="ft('Mahindra',this)">Mahindra</button>
-      <button class="filt" onclick="ft('Toyota',this)">Toyota</button>
-      <button class="filt" onclick="ft('Renault',this)">Renault</button>
-      <button class="filt" onclick="ft('Mitsubishi',this)">Mitsubishi</button>
-    </div>
-    <div class="cat-grid" id="catGrid" data-reveal="up">
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Tata — Heavy Duty</span>
-            <span class="cat-sec-count">18 parts</span>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0241(A)</div>
-              <div class="cc-name">Cabin 4018 Assembly</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0107(A)</div>
-              <div class="cc-name">Cabin 1516 Assembly</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0161(A)</div>
-              <div class="cc-name">Cabin 4923 Assembly</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0103(A)</div>
-              <div class="cc-name">Cabin 1040 Assembly</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0102</div>
-              <div class="cc-name">Cabin 4018 (Cover Dits)</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0242</div>
-              <div class="cc-name">Cabin 4018 (Variant)</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0104</div>
-              <div class="cc-name">Cabin Regular 15.5" (WM)</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0107</div>
-              <div class="cc-name">Cabin 4018 (WM)</div>
-              <div class="cc-app">4018 / 1516 / 4923 / 1040</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Truck &amp; Bus</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Truck &amp; Bus</span></div>
-              <div class="cc-partno">AL-TA-HD-0106</div>
-              <div class="cc-name">B54 Bus 3718</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-709-703-rear-card.png','709 / 703 Rear — AL-TA-HD-0121')">
-              <img src="images/tata-709-703-rear.png" alt="Tata 709/703 Rear Shock" class="cc-img"/>
-              <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
-            </div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-TA-HD-0121</div>
-              <div class="cc-name">709 / 703 Rear</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-TA-HD-0114</div>
-              <div class="cc-name">709 / 713 Front</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-TA-HD-0119</div>
-              <div class="cc-name">608 Rear</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-TA-HD-0108</div>
-              <div class="cc-name">1109 Front</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front / Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Front / Rear</span></div>
-              <div class="cc-partno">AL-TA-HD-0101</div>
-              <div class="cc-name">2515 Front / Rear</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Stabilizer</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Stabilizer</span></div>
-              <div class="cc-partno">AL-TA-HD-9937</div>
-              <div class="cc-name">Tata Stabilizer</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-TA-HD-0118</div>
-              <div class="cc-name">Spacio Rear</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-tilt-cabin-card.png','Tata Tilt Cabin — AL-TA-HD-0173')"><img src="images/tata-tilt-cabin.png" alt="Tata Tilt Cabin" class="cc-img"/><div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>View Full</div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0173</div>
-              <div class="cc-name">Tata Tilt Cabin</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Tata" data-cat="HD">
-            <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/tata-tilt-cabin-card.png','Tata Tilt Cabin 2515 — AL-TA-HD-0122')"><img src="images/tata-tilt-cabin.png" alt="Tata Tilt Cabin 2515" class="cc-img"/><div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>View Full</div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Tata</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-TA-HD-0122</div>
-              <div class="cc-name">Tata Tilt Cabin 2515</div>
-              <div class="cc-app">709 / 608 / 1109 / 2515 / B54</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Leyland — Heavy Duty</span>
-            <span class="cat-sec-count">11 parts</span>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/leyland-u-truck-cabin-card.png','U Truck Cabin Assembly — AL-LE-HD-0100(A)')">
-              <img src="images/leyland-u-truck-cabin.png" alt="Leyland U Truck Cabin Assembly" class="cc-img"/>
-              <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
-            </div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-LE-HD-0100(A)</div>
-              <div class="cc-name">Ashok Leyland AL G91 SLP U Series Trucks, Cabin</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/leyland-g91-cabin-card.png','Ashok Leyland U Series Trucks, Cabin Rear — AL-LE-HD-6500(A)')">
-              <img src="images/leyland-g91-cabin.png" alt="Ashok Leyland U Series Cabin Rear" class="cc-img"/>
-              <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
-            </div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-LE-HD-6500(A)</div>
-              <div class="cc-name">Ashok Leyland U Series Trucks, Cabin Rear</div>
-              <div class="cc-oe">OE: F5S06500</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-LE-HD-3300</div>
-              <div class="cc-name">U Truck (Tall)</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-LE-HD-3500</div>
-              <div class="cc-name">U Truck 4923</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-LE-HD-4200</div>
-              <div class="cc-name">Stalian Cabin</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-LE-HD-1310</div>
-              <div class="cc-name">U Truck Front (2 Kill)</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-LE-HD-1000</div>
-              <div class="cc-name">Leyland Front (Small)</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-LE-HD-1900</div>
-              <div class="cc-name">Cargo Econmet Front</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-LE-HD-0110</div>
-              <div class="cc-name">Cabin</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-LE-HD-50000</div>
-              <div class="cc-name">Leyland Front (Tall)</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Leyland" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Leyland</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-LE-HD-0200</div>
-              <div class="cc-name">Marcopolo / Bharat Benz Front</div>
-              <div class="cc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Eicher / Bharat Benz / Mann — Heavy Duty</span>
-            <span class="cat-sec-count">5 parts</span>
-          </div>
-          <div class="cat-card" data-m="Eicher" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-EI-HD-5551(A)</div>
-              <div class="cc-name">Eicher Cabin Assembly</div>
-              <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Eicher" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-EI-HD-0077(A)</div>
-              <div class="cc-name">Eicher Cabin N/M Assembly</div>
-              <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Eicher" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-EI-HD-0467</div>
-              <div class="cc-name">Eicher Pro / Jumbo / AMW Front</div>
-              <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Eicher" data-cat="HD">
-            <div class="cat-card-img-wrap has-photo" onclick="openLightbox('images/bharatbenz-cabin-card.png','Bharat Benz Cabin Assembly — AL-EI-HD-0103(A)')">
-              <img src="images/bharatbenz-cabin.png" alt="Bharat Benz Cabin Assembly" class="cc-img"/>
-              <div class="cc-zoom-hint"><svg viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg> View Details</div>
-            </div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-EI-HD-0103(A)</div>
-              <div class="cc-name">Bharat Benz Cabin Assembly</div>
-              <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Eicher" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Cabin</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Eicher</span><span class="cc-cat-tag">Cabin</span></div>
-              <div class="cc-partno">AL-EI-HD-6002(A)</div>
-              <div class="cc-name">Mann Cabin Assembly</div>
-              <div class="cc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Mahindra — Navi Star</span>
-            <span class="cat-sec-count">2 parts</span>
-          </div>
-          <div class="cat-card" data-m="Mahindra" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mahindra</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">AL-MA-HD-0591(A)</div>
-              <div class="cc-name">Navi Star Front Assembly</div>
-              <div class="cc-app">Navi Star</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mahindra" data-cat="HD">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-HD"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mahindra</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-MA-HD-0601(A)</div>
-              <div class="cc-name">Navi Star Rear Assembly</div>
-              <div class="cc-app">Navi Star</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Toyota — Rare Struts</span>
-            <span class="cat-sec-count">10 parts</span>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">TO-CA-2001</div>
-              <div class="cc-name">Camry Front LH</div>
-              <div class="cc-app">Camry (2007–2014)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">TO-CA-2002</div>
-              <div class="cc-name">Camry Front RH</div>
-              <div class="cc-app">Camry (2007–2014)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Rear LH</span></div>
-              <div class="cc-partno">TO-CA-2003</div>
-              <div class="cc-name">Camry Rear LH</div>
-              <div class="cc-app">Camry (2007–2014)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Rear RH</span></div>
-              <div class="cc-partno">TO-CA-2004</div>
-              <div class="cc-name">Camry Rear RH</div>
-              <div class="cc-app">Camry (2007–2014)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">TO-AL-2019</div>
-              <div class="cc-name">Corolla Altis Front LH</div>
-              <div class="cc-app">Corolla Altis (2003–2008)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">TO-AL-2020</div>
-              <div class="cc-name">Corolla Altis Front RH</div>
-              <div class="cc-app">Corolla Altis (2003–2008)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">TO-AL-2029</div>
-              <div class="cc-name">Altis T-1 Front LH</div>
-              <div class="cc-app">Corolla Altis T-1 (2008–2014)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">TO-AL-2030</div>
-              <div class="cc-name">Altis T-1 Front RH</div>
-              <div class="cc-app">Corolla Altis T-1 (2008–2014)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">TO-AL-2039</div>
-              <div class="cc-name">Altis T-2 Front LH</div>
-              <div class="cc-app">Corolla Altis T-2 (2014–2020)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Toyota" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Toyota</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">TO-AL-2040</div>
-              <div class="cc-name">Altis T-2 Front RH</div>
-              <div class="cc-app">Corolla Altis T-2 (2014–2020)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Renault — Rare Struts</span>
-            <span class="cat-sec-count">2 parts</span>
-          </div>
-          <div class="cat-card" data-m="Renault" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Renault</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">RE-DS-3009</div>
-              <div class="cc-name">Duster Front LH / RH</div>
-              <div class="cc-app">Duster (2012–2019)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Renault" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear (4×4)</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Renault</span><span class="cc-cat-tag">Rear (4×4)</span></div>
-              <div class="cc-partno">RE-DS-3011</div>
-              <div class="cc-name">Duster Rear 4×4 LH / RH</div>
-              <div class="cc-app">Duster (2012–2019)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Mitsubishi — Rare Struts</span>
-            <span class="cat-sec-count">7 parts</span>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">AL-MT-LA-5001</div>
-              <div class="cc-name">Lancer Front LH</div>
-              <div class="cc-app">Lancer</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">AL-MT-LA-5002</div>
-              <div class="cc-name">Lancer Front RH</div>
-              <div class="cc-app">Lancer</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Rear LH</span></div>
-              <div class="cc-partno">AL-MT-LA-5003</div>
-              <div class="cc-name">Lancer Rear LH</div>
-              <div class="cc-app">Lancer</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Rear RH</span></div>
-              <div class="cc-partno">AL-MT-LA-5004</div>
-              <div class="cc-name">Lancer Rear RH</div>
-              <div class="cc-app">Lancer</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">AL-MT-LA-5005</div>
-              <div class="cc-name">Lancer Cedia Front LH</div>
-              <div class="cc-app">Lancer Cedia</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">AL-MT-LA-5006</div>
-              <div class="cc-name">Lancer Cedia Front RH</div>
-              <div class="cc-app">Lancer Cedia</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Mitsubishi" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Mitsubishi</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-MT-LA-5009</div>
-              <div class="cc-name">Lancer Cedia Rear</div>
-              <div class="cc-app">Lancer Cedia</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-section-divider">
-            <span class="cat-sec-label">Isuzu / Suzuki / MG — Rare Struts</span>
-            <span class="cat-sec-count">8 parts</span>
-          </div>
-          <div class="cat-card" data-m="Isuzu" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Isuzu</span><span class="cc-cat-tag">Front</span></div>
-              <div class="cc-partno">IS-5021</div>
-              <div class="cc-name">Isuzu Front</div>
-              <div class="cc-app">Isuzu</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Isuzu" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Isuzu</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">IS-5022</div>
-              <div class="cc-name">Isuzu Rear</div>
-              <div class="cc-app">Isuzu</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Suzuki" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Suzuki</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">AL-SU-BL-3001</div>
-              <div class="cc-name">Baleno Front LH</div>
-              <div class="cc-app">Baleno (2009)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Suzuki" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Suzuki</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">AL-SU-BL-3002</div>
-              <div class="cc-name">Baleno Front RH</div>
-              <div class="cc-app">Baleno (2009)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="Suzuki" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">Suzuki</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-SU-BL-3009</div>
-              <div class="cc-name">Baleno Rear</div>
-              <div class="cc-app">Baleno (2009)</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="MG" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front LH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">MG</span><span class="cc-cat-tag">Front LH</span></div>
-              <div class="cc-partno">AL-MU-HC-1001</div>
-              <div class="cc-name">Hector Front LH</div>
-              <div class="cc-app">Hector</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="MG" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Front RH</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">MG</span><span class="cc-cat-tag">Front RH</span></div>
-              <div class="cc-partno">AL-MU-HC-1002</div>
-              <div class="cc-name">Hector Front RH</div>
-              <div class="cc-app">Hector</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-          <div class="cat-card" data-m="MG" data-cat="RS">
-            <div class="cat-card-img-wrap"><div class="cc-ph"><div class="cc-ph-icon cc-ph-RS"></div><span>Rear</span></div></div>
-            <div class="cat-card-body">
-              <div class="cc-top-row"><span class="cc-brand">MG</span><span class="cc-cat-tag">Rear</span></div>
-              <div class="cc-partno">AL-MU-HC-1003</div>
-              <div class="cc-name">Hector Rear</div>
-              <div class="cc-app">Hector</div>
-            </div>
-            <div class="cc-footer"><a href="#contact" class="cc-enquire">Enquire →</a></div>
-          </div>
-    </div>
-    <p class="tbl-note" style="margin-top:32px">Source: Mahajan Motors India — Alaina parts register 2026</p>
   </div>
 </section>
 
-
-<!-- CONTACT -->
-<section id="contact" style="position:relative"><span class="sec-pg">08 / Contact</span>
-  <div class="wrap">
-    <div class="contact-grid">
-      <div data-reveal="up">
-        <div class="eyebrow">Enquiry</div>
-        <h2 class="h-xl" style="margin-bottom:34px">Get A Quote</h2>
-        <form onsubmit="sendForm(event)">
-          <label>Your Name</label><input type="text" placeholder="Rajesh Kumar" required/>
-          <label>Phone / WhatsApp</label><input type="tel" placeholder="+91 98765 43210" required/>
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <div class="contact-eyebrow">Get In Touch</div>
+      <h2 class="contact-title">Get A Quote</h2>
+      <form onsubmit="sendForm(event)" class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Rajesh Kumar" required/>
+          </div>
+          <div class="form-group">
+            <label>Phone / WhatsApp</label>
+            <input type="tel" placeholder="+91 98765 43210" required/>
+          </div>
+        </div>
+        <div class="form-group">
           <label>Product Category</label>
           <select>
             <option value="">Select…</option>
-            <option>Cabin Dampers — Eicher</option>
-            <option>Cabin Dampers — Leyland</option>
             <option>Cabin Dampers — Tata</option>
+            <option>Cabin Dampers — Leyland</option>
+            <option>Cabin Dampers — Eicher</option>
             <option>Passenger Dampers</option>
             <option>Rare Struts</option>
             <option>Bulk / Fleet Order</option>
           </select>
-          <label>Message</label><textarea placeholder="Vehicle model, quantity, fitment details…"></textarea>
-          <button type="submit" class="submit" id="sbtn">Send Enquiry</button>
-        </form>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Vehicle model, quantity, fitment details…"></textarea>
+        </div>
+        <button type="submit" id="sbtn">Send Enquiry →</button>
+      </form>
+    </div>
+    <div class="contact-right">
+      <h3 class="contact-right-title">Talk To Us</h3>
+      <p class="contact-right-sub">Reach us on WhatsApp for the fastest response. Trade buyers, fleet operators and workshop owners welcome across India.</p>
+      <div class="cdet-list">
+        <div class="cdet">
+          <div class="cdet-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="#FF4D00"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <div><div class="cdet-label">Phone / WhatsApp</div><div class="cdet-value">+91 79825 55636</div></div>
+        </div>
+        <div class="cdet">
+          <div class="cdet-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#FF4D00" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="cdet-label">Email</div><div class="cdet-value">adhyanmahajan26@gmail.com</div></div>
+        </div>
+        <div class="cdet">
+          <div class="cdet-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#FF4D00" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="#FF4D00" stroke="none"/></svg></div>
+          <div><div class="cdet-label">Coverage</div><div class="cdet-value">Pan-India · 120+ Cities</div></div>
+        </div>
       </div>
-      <div data-reveal="up" style="transition-delay:.12s">
-        <h3 class="h-lg" style="margin-bottom:18px">Talk To Us</h3>
-        <p class="lead" style="margin-bottom:30px">Reach us on WhatsApp for the fastest response. Trade buyers, fleet operators, and workshop owners welcome across India.</p>
-        <div class="cdet">
-          <div class="cdet-i"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-          <div><div class="cdet-l">Phone / WhatsApp</div><div class="cdet-v">+91 79825 55636</div></div>
-        </div>
-        <div class="cdet">
-          <div class="cdet-i"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6" fill="none" stroke="#FF4D00" stroke-width="2"/></svg></div>
-          <div><div class="cdet-l">Email</div><div class="cdet-v">adhyanmahajan26@gmail.com</div></div>
-        </div>
-        <div class="cdet">
-          <div class="cdet-i"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg></div>
-          <div><div class="cdet-l">Coverage</div><div class="cdet-v">Pan-India · 120+ Cities</div></div>
-        </div>
-        <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" class="wa">
-          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.024.502 3.932 1.386 5.605L0 24l6.585-1.367A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 01-5.031-1.386l-.36-.214-3.733.776.794-3.634-.235-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-          WhatsApp Us Now
-        </a>
-      </div>
+      <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" class="wa-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path fill="#fff" d="M12 0C5.373 0 0 5.373 0 12c0 2.024.502 3.932 1.386 5.605L0 24l6.585-1.367A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 01-5.031-1.386l-.36-.214-3.733.776.794-3.634-.235-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+        WhatsApp Us Now
+      </a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ═══ FOOTER ═══ -->
 <footer id="page-footer">
-  <div class="foot-top">
-    <div class="foot-brand">ALAINA<small>SHOCKERS</small></div>
-    <div class="foot-cols">
-      <div class="foot-col">
-        <h5>Products</h5>
-        <a href="#products">Rare Struts</a>
-        <a href="#products">Dampers</a>
-        <a href="#products">Cabin Dampers</a>
-      </div>
-      <div class="foot-col">
-        <h5>Company</h5>
-        <a href="#tech">Technology</a>
-        <a href="#trucks">Heavy Duty</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <div class="foot-col">
-        <h5>Contact</h5>
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <div class="footer-logo">ALAINA<span>SHOCKERS</span></div>
+      <p class="footer-tagline">Precision damping engineered for India's toughest roads. Distributed by Mahajan Motors India.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Contact Us</h5>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="#FF4D00"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.08 6.08l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
         <a href="tel:+917982555636">+91 79825 55636</a>
-        <a href="mailto:adhyanmahajan26@gmail.com">Email Us</a>
+      </div>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#FF4D00" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:adhyanmahajan26@gmail.com">adhyanmahajan26@gmail.com</a>
+      </div>
+      <div class="footer-contact-item">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#FF4D00" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="#FF4D00" stroke="none"/></svg>
+        <span>Pan-India · 120+ Cities</span>
       </div>
     </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <a href="#catalog">Heavy Duty Cabin Dampers</a>
+      <a href="#catalog">Rare Struts</a>
+      <a href="#catalog">Tata Heavy Duty</a>
+      <a href="#catalog">Leyland Heavy Duty</a>
+      <a href="#catalog">Eicher / Mann</a>
+    </div>
+    <div class="footer-col">
+      <h5>Information</h5>
+      <a href="#about">About Us</a>
+      <a href="#contact">Enquire</a>
+      <a href="https://wa.me/917982555636" target="_blank">WhatsApp</a>
+      <a href="#catalog">Catalogue</a>
+    </div>
   </div>
-  <div class="foot-bot">
+  <div class="footer-bottom">
     <p>© 2025 Alaina Shockers. Engineered for India's Roads.</p>
     <p>Distributed by Mahajan Motors India</p>
   </div>
 </footer>
 
 <!-- FLOATING WHATSAPP -->
-<a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" class="wa-float" id="waFloat" aria-label="WhatsApp">
+<a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" class="wa-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" width="26" height="26"><path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path fill="#fff" d="M12 0C5.373 0 0 5.373 0 12c0 2.024.502 3.932 1.386 5.605L0 24l6.585-1.367A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.803 9.803 0 01-5.031-1.386l-.36-.214-3.733.776.794-3.634-.235-.374A9.787 9.787 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
 </a>
-
 
 <!-- LIGHTBOX -->
 <div id="lightbox" onclick="closeLightbox()">
@@ -1665,6 +815,7 @@
     <div id="lbCaption"></div>
   </div>
 </div>
+
 <script src="script.js"></script>
 </body>
 </html>
