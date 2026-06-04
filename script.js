@@ -158,6 +158,61 @@ function sendForm(e) {
   setTimeout(() => { b.textContent = 'Send Enquiry →'; b.style.background = ''; e.target.reset(); }, 3500);
 }
 
+/* ── ENQUIRE PRE-FILL ── */
+function enquireCard(btn) {
+  const card = btn.closest('.cat-card');
+  const partno = card.querySelector('.cc-partno')?.textContent.trim() || '';
+  const name   = card.querySelector('.cc-name')?.textContent.trim()   || '';
+  const catalog = document.getElementById('catalog');
+  if (catalog) catalog.scrollIntoView({ behavior: 'smooth' });
+  const contact = document.getElementById('contact');
+  if (contact) contact.scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => {
+    const msg = document.getElementById('msgField');
+    if (msg) {
+      msg.value = `Part No: ${partno} — ${name}\n\nPlease share availability and pricing.`;
+      msg.focus();
+      msg.dispatchEvent(new Event('input'));
+    }
+  }, 600);
+}
+
+/* ── WHATSAPP CARD QUOTE ── */
+function waCard(btn) {
+  const card = btn.closest('.cat-card');
+  const partno = card.querySelector('.cc-partno')?.textContent.trim() || '';
+  const name   = card.querySelector('.cc-name')?.textContent.trim()   || '';
+  const text = encodeURIComponent(`Hi, I'm interested in *${partno}* — ${name}. Please share availability and pricing.`);
+  window.open(`https://wa.me/917982555636?text=${text}`, '_blank');
+}
+
+/* ── CATALOGUE SEARCH ── */
+function filterSearch(val) {
+  const q = val.trim().toLowerCase();
+  const clearBtn = document.getElementById('searchClear');
+  if (clearBtn) clearBtn.style.display = q ? '' : 'none';
+  document.querySelectorAll('.cat-card').forEach(card => {
+    const text = (card.querySelector('.cc-partno')?.textContent || '') + ' ' +
+                 (card.querySelector('.cc-name')?.textContent   || '') + ' ' +
+                 (card.querySelector('.cc-app')?.textContent    || '') + ' ' +
+                 (card.querySelector('.cc-brand')?.textContent  || '');
+    card.style.display = (!q || text.toLowerCase().includes(q)) ? '' : 'none';
+  });
+  document.querySelectorAll('.cat-section-divider').forEach(div => {
+    let next = div.nextElementSibling, anyVisible = false;
+    while (next && !next.classList.contains('cat-section-divider')) {
+      if (next.style.display !== 'none') anyVisible = true;
+      next = next.nextElementSibling;
+    }
+    div.style.display = anyVisible ? '' : 'none';
+  });
+}
+
+function clearSearch() {
+  const inp = document.getElementById('catSearch');
+  if (inp) { inp.value = ''; filterSearch(''); inp.focus(); }
+}
+
 /* ── NAV ACTIVE ON SCROLL ── */
 const sections = ['hero','catalog','about','contact'];
 const navLinks = document.querySelectorAll('.navlinks a');
