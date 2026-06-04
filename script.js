@@ -231,3 +231,138 @@ sections.forEach(id => {
   const el = document.getElementById(id);
   if (el) sectionObs.observe(el);
 });
+
+/* ══════════════════════════════════════════
+   1. SCROLL-DRIVEN VIDEO SCRUB
+══════════════════════════════════════════ */
+(function() {
+  const vid = document.getElementById('heroVid');
+  const hero = document.getElementById('hero');
+  if (!vid || !hero) return;
+
+  let scrubActive = false;
+  let rafId = null;
+  let lastScroll = 0;
+
+  function setScrub(scroll) {
+    const heroH = hero.offsetHeight;
+    const ratio = Math.min(Math.max(scroll / heroH, 0), 1);
+    if (vid.duration && vid.readyState >= 2) {
+      vid.currentTime = ratio * vid.duration;
+    }
+    // Darken overlay slightly while scrolling through hero
+    if (ratio > 0.05) {
+      hero.classList.add('scrubbing');
+    } else {
+      hero.classList.remove('scrubbing');
+    }
+  }
+
+  vid.addEventListener('loadedmetadata', () => {
+    // Once metadata loads, enable scrub on scroll
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY;
+      if (s > hero.offsetHeight) {
+        // Past hero — resume normal playback
+        if (!vid.playing) vid.play().catch(()=>{});
+        scrubActive = false;
+        hero.classList.remove('scrubbing');
+        return;
+      }
+      // In hero — scrub
+      scrubActive = true;
+      lastScroll = s;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => setScrub(lastScroll));
+    }, { passive: true });
+  });
+})();
+
+/* ══════════════════════════════════════════
+   2. CURSOR GLOW TRAIL
+══════════════════════════════════════════ */
+(function() {
+  const glow = document.getElementById('cursorGlow');
+  if (!glow) return;
+
+  let mx = -999, my = -999;
+  let cx = -999, cy = -999;
+  let raf;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    glow.style.opacity = '1';
+  }, { passive: true });
+
+  document.addEventListener('mouseleave', () => {
+    glow.style.opacity = '0';
+  });
+
+  // Smooth follow with lerp
+  function tick() {
+    cx += (mx - cx) * 0.1;
+    cy += (my - cy) * 0.1;
+    glow.style.left = cx + 'px';
+    glow.style.top  = cy + 'px';
+    raf = requestAnimationFrame(tick);
+  }
+  tick();
+
+  // Pulse bigger on interactive elements
+  document.querySelectorAll('button,.cat-card,.btn-hero-fill,.btn-hero-line,.cc-enquire,.cc-wa-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      glow.style.width  = '640px';
+      glow.style.height = '640px';
+      glow.style.background = 'radial-gradient(circle,rgba(255,77,0,.13) 0%,rgba(255,77,0,.05) 40%,transparent 70%)';
+    });
+    el.addEventListener('mouseleave', () => {
+      glow.style.width  = '480px';
+      glow.style.height = '480px';
+      glow.style.background = 'radial-gradient(circle,rgba(255,77,0,.07) 0%,rgba(255,77,0,.03) 35%,transparent 70%)';
+    });
+  });
+})();
+
+/* ══════════════════════════════════════════
+   6. STAGGERED CARD ENTRANCE
+══════════════════════════════════════════ */
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    // Group visible entries and stagger them
+    const visible = entries.filter(e => e.isIntersecting);
+    visible.forEach((entry, i) => {
+      const card = entry.target;
+      setTimeout(() => {
+        card.classList.add('card-visible');
+      }, i * 60);
+      observer.unobserve(card);
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  // Observe all cards — also re-observe when filter changes
+  function observeCards() {
+    document.querySelectorAll('.cat-card:not(.card-visible)').forEach(card => {
+      observer.observe(card);
+    });
+  }
+
+  // Initial observe on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeCards);
+  } else {
+    observeCards();
+  }
+
+  // Re-run after filter/search reveals hidden cards
+  const origFt = window.ft;
+  window.ft = function(m, btn) {
+    if (origFt) origFt(m, btn);
+    setTimeout(() => {
+      document.querySelectorAll('.cat-card').forEach(card => {
+        if (card.style.display !== 'none' && !card.classList.contains('card-visible')) {
+          card.classList.add('card-visible');
+        }
+      });
+    }, 80);
+  };
+})();
