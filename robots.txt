@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alainashockers.com/sitemap.xml
+
+User-agent: Googlebot-Image
+Allow: /images/
