@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css?v=10"/>
+<link rel="stylesheet" href="style.css?v=11"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -380,12 +380,38 @@
   </div>
 </footer>
 
-<!-- ═══ LIGHTBOX ═══ -->
+<!-- ═══ LIGHTBOX — PLAQUE CARD ═══ -->
 <div id="lb" onclick="if(event.target===this)closeLb()">
-  <div class="lb-plate">
+  <div class="lb-panel">
     <button class="lb-x" onclick="closeLb()">&#10005;</button>
-    <img id="lb-img" src="" alt="Part figure"/>
-    <div class="lb-cap"><span id="lb-cap1"><b>FIG.</b> —</span><span id="lb-cap2"></span></div>
+    <!-- Photo side -->
+    <div class="lb-vis">
+      <img id="lb-img" src="" alt="Product figure"/>
+      <div class="lb-wm">ALAINA</div>
+      <span class="lbc lbc-tl"></span><span class="lbc lbc-tr"></span>
+      <span class="lbc lbc-bl"></span><span class="lbc lbc-br"></span>
+      <div class="lb-scan"></div>
+    </div>
+    <!-- Spec sheet side -->
+    <div class="lb-info">
+      <div class="lb-kicker">Technical Specification</div>
+      <div class="lb-pn mono" id="lb-pn"></div>
+      <div class="lb-nm" id="lb-nm"></div>
+      <div class="lb-specs">
+        <div class="lb-spec"><span>Brand</span><b id="lb-br"></b></div>
+        <div class="lb-spec" id="lb-oe-row"><span>OE Ref</span><b id="lb-oe"></b></div>
+        <div class="lb-spec"><span>Application</span><b id="lb-ap"></b></div>
+        <div class="lb-spec"><span>Category</span><b id="lb-ct"></b></div>
+      </div>
+      <div class="lb-avail"><span class="lb-pulse"></span>In Catalogue — Available</div>
+      <div class="lb-acts">
+        <button class="lb-wa-btn" id="lb-wa-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
+          WhatsApp Enquiry
+        </button>
+        <button class="lb-eq-btn" id="lb-eq-btn">Enquire via Form →</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -446,12 +472,12 @@ function passes(p){
 /* ════════ TABLE ════════ */
 function cardHTML(p,i){
   const stage=p.img
-    ?`<div class="pc-stage" onclick="openLb('${p.card||p.img}','${esc(p.name)}','${esc(p.partno)}')">
+    ?`<div class="pc-stage" onclick="openLb('${esc(p.partno)}')">
         <span class="pc-tag">${p.tag||p.cat}</span>
         <img loading="lazy" src="${p.img}" alt="${esc(p.name)} — ${esc(p.brand)} shock absorber"/>
         <span class="pc-zoom"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></span>
       </div>`
-    :`<div class="pc-stage"><span class="pc-tag">${p.tag||p.cat}</span><span class="nopic">Photo<br/>on request</span></div>`;
+    :`<div class="pc-stage no-zoom"><span class="pc-tag">${p.tag||p.cat}</span><span class="nopic">Photo<br/>on request</span></div>`;
   const wamsg=encodeURIComponent(`Hi, I want to enquire about ${p.partno} — ${p.name} (${p.app}).`);
   return `<article class="pcard" style="animation-delay:${Math.min(i,12)*45}ms">
     ${stage}
@@ -483,12 +509,29 @@ function renderTable(){
 }
 $('#q').addEventListener('input',e=>{fQ=e.target.value.trim().toLowerCase();renderTable();});
 
-/* ════════ LIGHTBOX ════════ */
-let figN=1;
-function openLb(src,name,pn){
-  $('#lb-img').src=src;
-  $('#lb-cap1').innerHTML=`<b>FIG.</b> ${name}`;
-  $('#lb-cap2').textContent=pn;
+/* ════════ LIGHTBOX — PLAQUE CARD ════════ */
+function openLb(pn){
+  const p=PRODUCTS.find(x=>x.partno===pn);
+  if(!p||!p.img)return;
+
+  /* reset scan animation by cloning */
+  const scan=$('.lb-scan');
+  const clone=scan.cloneNode(true);
+  scan.parentNode.replaceChild(clone,scan);
+
+  $('#lb-img').src=p.img;
+  $('#lb-pn').textContent=p.partno;
+  $('#lb-nm').textContent=p.name;
+  $('#lb-br').textContent=p.brand;
+  $('#lb-oe').textContent=p.oe||'—';
+  $('#lb-oe-row').style.display=p.oe?'':'none';
+  $('#lb-ap').textContent=p.app;
+  $('#lb-ct').textContent=p.cat==='HD'?'Heavy Duty — Cabin / Truck':'Rare Strut — Passenger Car';
+
+  const msg=encodeURIComponent(`Hi, I want to enquire about ${p.partno} — ${p.name} (${p.app}).`);
+  $('#lb-wa-btn').onclick=()=>window.open(`https://wa.me/917982555636?text=${msg}`,'_blank');
+  $('#lb-eq-btn').onclick=()=>{closeLb();enquire(p.partno,p.name);};
+
   $('#lb').classList.add('open');
   document.body.style.overflow='hidden';
 }
