@@ -1,7 +1,4 @@
 User-agent: *
-Allow: /
+Disallow: /
 
-Sitemap: https://alainashockers.com/sitemap.xml
-
-User-agent: Googlebot-Image
-Allow: /images/
+# Catalogue sitemap is paused while the site is under maintenance.
