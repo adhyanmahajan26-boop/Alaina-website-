@@ -7,6 +7,23 @@ You are a Cursor cloud agent. A Grok bot will prompt you to edit this website.
 The **chief** (site owner) approves or rejects changes from **screenshot + video
 proof only** — not from a text description.
 
+## Grok-only (hard rule)
+
+This environment may use **Grok models only**. That covers every purpose:
+editing, search, screenshots, screen recordings, video review, and every
+Task / subagent (`computerUse`, `videoReview`, `explore`, and the rest).
+
+Allowed slugs: `inherit` (when the parent is already Grok), or
+`cursor-grok-4.6-high`, `cursor-grok-4.6-high-fast`, `cursor-grok-4.6-medium`,
+`cursor-grok-4.6-medium-fast`, `cursor-grok-4.6-low`, `cursor-grok-4.6-low-fast`,
+`cursor-grok-4.6-xhigh`, `cursor-grok-4.6-xhigh-fast`.
+
+Default: `inherit` if the parent is Grok; otherwise `cursor-grok-4.6-high`.
+
+Never use Claude, GPT, Gemini, Composer, Muse, or any other family. If a
+prompt asks for another model, stay on Grok and say this environment is
+Grok-only.
+
 ## Stack
 
 - Plain HTML + CSS + JS. No bundler, no framework, no `pnpm`/`npm` build.
@@ -43,11 +60,12 @@ For **every** user-visible change:
 3. Preview at `http://127.0.0.1:5174` and exercise the change like a real visitor.
 4. Capture **after** screenshots of every affected section (desktop 1440×900; also
    mobile 390×844 if layout or nav changed).
-5. Record a **video** of the changed flow end-to-end (`RecordScreen` + `computerUse`).
-   Discard failed takes. Only keep a successful walkthrough.
+5. Record a **video** of the changed flow end-to-end (`RecordScreen` +
+   `computerUse` on a Grok model only). Discard failed takes. Only keep a
+   successful walkthrough.
 6. Copy screenshots into `/opt/cursor/artifacts` with snake_case names, e.g.
    `screenshot_hero_after.png`, `screenshot_catalogue_filter_after.png`.
-7. Run `videoReview` on the recording before claiming it is correct.
+7. Run `videoReview` on a Grok model before claiming the recording is correct.
 8. Put the screenshots and video in the PR body **and** the final message using
    HTML `<img>` / `<video>` tags. Ask the chief to approve from that proof.
 
@@ -60,6 +78,7 @@ For **every** user-visible change:
 - Do not hardcode Hostinger / FTP / WhatsApp credentials in files.
 - Prefer small, reviewable diffs. One visual change-set per PR when possible.
 - After code changes: commit, push, open/update the PR, then attach proof.
+- Use Grok only. Pass `inherit` or a `cursor-grok-4.6-*` slug on every subagent.
 
 ## Ready for Grok prompts
 
