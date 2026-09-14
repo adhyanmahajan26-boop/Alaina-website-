@@ -1,0 +1,28 @@
+---
+description: Every website change must ship with screenshot and video proof for chief approval
+alwaysApply: true
+---
+
+# Chief visual approval
+
+This site is edited by a cloud agent prompted by Grok. The chief approves
+user-visible changes only from screenshot and video proof.
+
+## After any visible change
+
+1. Serve locally with `python3 -m http.server 5174` and open `http://127.0.0.1:5174`.
+2. Exercise the changed flow as a visitor (click, type, filter, open lightbox, submit).
+3. Capture after screenshots of every affected section. Include mobile (390px) when
+   layout or navigation changed.
+4. Record a video of the working flow with `RecordScreen` + `computerUse`. Discard
+   failed takes; do not upload a broken walkthrough.
+5. Copy screenshots to `/opt/cursor/artifacts` using snake_case names.
+6. Run `videoReview` before citing the video.
+7. Embed the artifacts in the PR and the final message. Ask the chief to approve
+   from that proof.
+
+## Never
+
+- Ask for approval from a text description alone.
+- Deploy to Hostinger / production until the chief explicitly approves.
+- Upload screenshots or videos of failing tests.
