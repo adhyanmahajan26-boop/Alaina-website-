@@ -9,6 +9,32 @@ Header always set Content-Security-Policy "default-src 'self'; script-src 'self'
 # SPA Routing Fallback
 Options -MultiViews
 RewriteEngine On
+
+AddType application/xml .xml
+AddType text/plain .txt
+AddType image/webp .webp
+AddType text/html .html
+AddType image/svg+xml .svg
+AddType image/x-icon .ico
+AddType image/vnd.microsoft.icon .ico
+AddType application/manifest+json .webmanifest
+
+<Files "sitemap.xml">
+  Header set Content-Type "application/xml; charset=UTF-8"
+</Files>
+<FilesMatch "^sitemap-.*\.xml$">
+  Header set Content-Type "application/xml; charset=UTF-8"
+</FilesMatch>
+<Files "robots.txt">
+  Header set Content-Type "text/plain; charset=UTF-8"
+</Files>
+
+# Do not SPA-fallback verification files, sitemaps, or robots
+RewriteRule ^google[0-9a-z]+\.html$ - [L]
+RewriteRule ^robots\.txt$ - [L]
+RewriteRule ^sitemap(-[a-z0-9-]+)?\.xml$ - [L]
+RewriteRule ^(favicon\.(ico|svg)|apple-touch-icon\.png|favicon-[0-9]+x[0-9]+\.png|site\.webmanifest)$ - [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [QSA,L]
@@ -18,6 +44,13 @@ RewriteRule ^ index.html [QSA,L]
   ExpiresActive On
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType application/manifest+json "access plus 1 week"
+  ExpiresByType application/xml "access plus 1 day"
+  ExpiresByType text/plain "access plus 1 day"
+  ExpiresByType text/xml "access plus 1 day"
   ExpiresByType video/mp4 "access plus 1 month"
   ExpiresByType text/css "access plus 1 week"
   ExpiresByType application/javascript "access plus 1 week"
