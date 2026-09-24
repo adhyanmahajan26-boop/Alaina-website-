@@ -1,0 +1,60 @@
+# Uploads ONLY google2874721c1e7298d6.html into the live Alaina folder.
+# Does not redeploy the website.
+#
+# Repo secrets (copy from mmi-website if they already exist there):
+#   FTP_SERVER    Hostinger IP
+#   FTP_USERNAME  SFTP user
+#   FTP_PASSWORD  SFTP password
+name: Upload GSC verification file
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - google2874721c1e7298d6.html
+      - .github/workflows/upload-gsc-file.yml
+
+jobs:
+  upload-one-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Upload google2874721c1e7298d6.html only
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -eu
+          test -n "${FTP_SERVER}"
+          test -n "${FTP_USERNAME}"
+          test -n "${FTP_PASSWORD}"
+          test -f google2874721c1e7298d6.html
+
+          upload() {
+            local remote="$1"
+            lftp -c "
+              set sftp:auto-confirm yes
+              set net:max-retries 3
+              set net:timeout 20
+              set cmd:fail-exit yes
+              open -u ${FTP_USERNAME},${FTP_PASSWORD} sftp://${FTP_SERVER}:65002
+              cd ${remote}
+              put google2874721c1e7298d6.html
+              ls -l google2874721c1e7298d6.html
+              bye
+            "
+          }
+
+          if upload domains/alainashockabsorbers.com/public_html; then
+            echo "Uploaded to domains/alainashockabsorbers.com/public_html"
+          else
+            echo "Trying public_html"
+            upload public_html
+            echo "Uploaded to public_html"
+          fi
