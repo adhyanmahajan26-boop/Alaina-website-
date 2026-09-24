@@ -1,7 +1,22 @@
 User-agent: *
 Allow: /
+Allow: /images/
+Allow: /catalogue-photos/
+Allow: /*.webp$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /sitemap.xml
+Allow: /robots.txt
+Allow: /google2874721c1e7298d6.html
+Disallow: /scripts/
+Disallow: /SEO.md
 
 Sitemap: https://alainashockers.com/sitemap.xml
 
 User-agent: Googlebot-Image
 Allow: /images/
+Allow: /catalogue-photos/
+Allow: /*.webp$
+Allow: /*.png$
+Allow: /*.jpg$
