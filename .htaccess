@@ -14,6 +14,10 @@ AddType application/xml .xml
 AddType text/plain .txt
 AddType image/webp .webp
 AddType text/html .html
+AddType image/svg+xml .svg
+AddType image/x-icon .ico
+AddType image/vnd.microsoft.icon .ico
+AddType application/manifest+json .webmanifest
 
 <Files "sitemap.xml">
   Header set Content-Type "application/xml; charset=UTF-8"
@@ -29,6 +33,7 @@ AddType text/html .html
 RewriteRule ^google[0-9a-z]+\.html$ - [L]
 RewriteRule ^robots\.txt$ - [L]
 RewriteRule ^sitemap(-[a-z0-9-]+)?\.xml$ - [L]
+RewriteRule ^(favicon\.(ico|svg)|apple-touch-icon\.png|favicon-[0-9]+x[0-9]+\.png|site\.webmanifest)$ - [L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -40,6 +45,9 @@ RewriteRule ^ index.html [QSA,L]
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType application/manifest+json "access plus 1 week"
   ExpiresByType application/xml "access plus 1 day"
   ExpiresByType text/plain "access plus 1 day"
   ExpiresByType text/xml "access plus 1 day"

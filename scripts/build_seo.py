@@ -277,7 +277,14 @@ def head_tags(
 <meta name="twitter:description" content="{esc(description)}"/>
 <meta name="twitter:image" content="{esc(img)}"/>
 <meta name="twitter:image:alt" content="{esc(ialt)}"/>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23171511'/%3E%3Ctext x='16' y='23' font-family='Arial Black' font-size='19' font-weight='900' fill='%23F2F0EA' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E"/>
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"/>
+<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="manifest" href="/site.webmanifest"/>
+<meta name="theme-color" content="#FF4A1A"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
@@ -855,7 +862,7 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
         "parentOrganization": {"@type": "Organization", "name": "Mahajan Motors India"},
         "areaServed": {"@type": "Country", "name": "India"},
         "brand": {"@type": "Brand", "name": "Alaina"},
-        "logo": SITE + "/images/tata-4018-hywa-cabin.png",
+        "logo": SITE + "/favicon-512x512.png",
     }
     website_ld = {
         "@context": "https://schema.org",
@@ -873,7 +880,23 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
         insert = json_ld(org_ld) + "\n" + json_ld(website_ld) + "\n"
         text = text.replace('<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "AutoPartsStore"', insert + '<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "AutoPartsStore"', 1)
 
-    # Range rows become crawlable links
+    text = text.replace(
+        '"logo": "https://alainashockers.com/images/tata-4018-hywa-cabin.png"',
+        '"logo": "https://alainashockers.com/favicon-512x512.png"',
+    )
+    old_icon = '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'%3E%3Crect width=\'32\' height=\'32\' fill=\'%23171511\'/%3E%3Ctext x=\'16\' y=\'23\' font-family=\'Arial Black\' font-size=\'19\' font-weight=\'900\' fill=\'%23F2F0EA\' text-anchor=\'middle\'%3EA%3C/text%3E%3C/svg%3E"/>'
+    new_icon = (
+        '<link rel="icon" href="/favicon.ico" sizes="48x48"/>\n'
+        '<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png"/>\n'
+        '<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>\n'
+        '<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png"/>\n'
+        '<link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png"/>\n'
+        '<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>\n'
+        '<link rel="manifest" href="/site.webmanifest"/>\n'
+        '<meta name="theme-color" content="#FF4A1A"/>'
+    )
+    if 'href="/favicon.ico"' not in text:
+        text = text.replace(old_icon, new_icon)
     text = text.replace(
         '<div class="range-row" data-rv onclick="jumpCat(\'HD\')">',
         '<a class="range-row" href="cabin-dampers/" data-rv>',
@@ -1085,6 +1108,29 @@ RewriteRule ^sitemap(-[a-z0-9-]+)?\\.xml$ - [L]
             "RewriteEngine On\n",
             "RewriteEngine On\n" + block + "\n",
         )
+    if "site.webmanifest" not in text:
+        text = text.replace(
+            "AddType image/webp .webp\nAddType text/html .html",
+            "AddType image/webp .webp\n"
+            "AddType text/html .html\n"
+            "AddType image/svg+xml .svg\n"
+            "AddType image/x-icon .ico\n"
+            "AddType image/vnd.microsoft.icon .ico\n"
+            "AddType application/manifest+json .webmanifest",
+        )
+        text = text.replace(
+            "RewriteRule ^sitemap(-[a-z0-9-]+)?\\.xml$ - [L]\n",
+            "RewriteRule ^sitemap(-[a-z0-9-]+)?\\.xml$ - [L]\n"
+            "RewriteRule ^(favicon\\.(ico|svg)|apple-touch-icon\\.png|favicon-[0-9]+x[0-9]+\\.png|site\\.webmanifest)$ - [L]\n",
+        )
+        if "ExpiresByType image/x-icon" not in text:
+            text = text.replace(
+                'ExpiresByType image/webp "access plus 1 month"',
+                'ExpiresByType image/webp "access plus 1 month"\n'
+                '  ExpiresByType image/svg+xml "access plus 1 month"\n'
+                '  ExpiresByType image/x-icon "access plus 1 month"\n'
+                '  ExpiresByType application/manifest+json "access plus 1 week"',
+            )
     path.write_text(text, encoding="utf-8")
 
 
@@ -1101,6 +1147,13 @@ Allow: /*.jpeg$
 Allow: /sitemap.xml
 Allow: /robots.txt
 Allow: /google2874721c1e7298d6.html
+Allow: /favicon.ico
+Allow: /favicon.svg
+Allow: /favicon-48x48.png
+Allow: /favicon-192x192.png
+Allow: /favicon-512x512.png
+Allow: /apple-touch-icon.png
+Allow: /site.webmanifest
 Disallow: /scripts/
 Disallow: /SEO.md
 
@@ -1112,12 +1165,18 @@ Allow: /catalogue-photos/
 Allow: /*.webp$
 Allow: /*.png$
 Allow: /*.jpg$
+Allow: /favicon.ico
+Allow: /favicon.svg
+Allow: /apple-touch-icon.png
+Allow: /site.webmanifest
 """,
         encoding="utf-8",
     )
 
 
 def main() -> None:
+    import runpy
+    runpy.run_path(str(ROOT / "scripts" / "build_favicon.py"), run_name="__main__")
     products = enrich(load_products())
     print("products", len(products))
     convert_images(products)
@@ -1367,7 +1426,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
 - Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
-- Internal links: homepage browse + footer + product cards → categories and SKUs.
+- Homepage: crawlable product cards + type index.
+- Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
 ## Counts
 
