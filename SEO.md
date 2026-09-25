@@ -10,7 +10,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
+- **Original catalogue photos only.** PR #5 added lossy WebP copies (resized to 1600px / quality 80, cards 800px / quality 78) and `<picture srcset>` so browsers showed those instead of the studio PNGs. Those WebP files are removed. Image sitemaps, OG, and JSON-LD `ImageObject` point at the original `p.img` PNG/JPEG paths. Homepage range figures and product cards stay the pre-SEO `<img src="${p.img}">` markup.
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
@@ -22,8 +22,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 | SKUs with photo | 73 |
 | SKUs without photo | 1 |
 | URL entries in sitemaps | 119 |
-| Image entries (unique loc per page, summed) | 595 |
-| Pages with JSON-LD Product/ItemList/Org | 119 |
+| Image entries (unique loc per page, summed) | 477 |
+| Pages with JSON-LD WebPage/ItemList/Org | 119 |
 
 Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 
@@ -54,7 +54,7 @@ Those codes are **not** printed as SKUs in `PRODUCTS`. The pages `/al-cd/`, `/al
 - **AL-RS** — every SKU with `cat: RS` (rare struts).
 - **AL-DA** — cabin + steering + shock absorber/stabilizer SKUs (dampers). Rare struts stay on AL-RS.
 
-JSON-LD Product on those URLs has **no sku/mpn** (that would invent a series part number). Individual SKU pages use the real `partno` as sku/mpn. **No Offer** blocks — the repo has no prices.
+JSON-LD on those URLs is **WebPage + ItemList + ImageObject**, never Product (Product without offers/review is invalid in Search Console). SKU pages put the real `partno` in `WebPage.identifier` and description as SKU/MPN. **No Offer** blocks — the repo has no prices.
 
 ## Products with no photo
 
