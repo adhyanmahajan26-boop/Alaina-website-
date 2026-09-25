@@ -239,6 +239,19 @@ def json_ld(obj) -> str:
     )
 
 
+def image_object(url: str, name: str, caption: str | None = None) -> dict:
+    return {
+        "@type": "ImageObject",
+        "name": name,
+        "caption": caption or name,
+        "contentUrl": url,
+        "url": url,
+        "creator": {"@type": "Organization", "name": "Alaina"},
+        "copyrightHolder": {"@type": "Organization", "name": "Alaina"},
+        "creditText": "Alaina Shockers",
+    }
+
+
 def head_tags(
     *,
     title: str,
@@ -473,12 +486,12 @@ def write(path: Path, content: str) -> None:
 
 
 def product_jsonld(p: dict) -> dict:
+    """WebPage + ImageObject — never Product (no public prices/reviews in the repo)."""
     images = []
     if p["_webp"]:
         images.append(abs_url(p["_webp"]))
     if p["_has_photo"]:
         images.append(abs_url(p["img"]))
-    # unique preserve order
     seen = set()
     imgs = []
     for u in images:
@@ -486,24 +499,28 @@ def product_jsonld(p: dict) -> dict:
             seen.add(u)
             imgs.append(u)
     desc = (
-        f"Alaina {p['_kind']['label']} {p['partno']} — {p['_name']} for {p['brand']} {p['_app']}."
+        f"Alaina {p['_kind']['label']} {p['_name']} ({p['partno']}) for {p['brand']} {p['_app']}."
+        + f" Part number (SKU / MPN): {p['partno']}."
         + (f" OE reference {p['_oe']}." if p["_oe"] else "")
-        + " OE-matched and pressure-tested. Listed in Alaina Technical Catalogue No.04. Enquire for availability."
+        + " OE-matched and pressure-tested. Listed in Alaina Technical Catalogue No.04. Price on enquiry — no list price is published."
     )
+    img_name = p["_alt"] or f"Alaina {p['_kind']['label']} {p['partno']}"
+    cap = f"Alaina {p['_kind']['label']} {p['partno']} — {p['brand']} {p['_name']} ({p['_app']})"
+    img_objs = [image_object(u, img_name, cap) for u in imgs]
     obj = {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "WebPage",
         "name": f"Alaina {p['_kind']['headline']} {p['_name']} ({p['partno']})",
         "description": desc,
-        "brand": {"@type": "Brand", "name": "Alaina"},
-        "sku": p["partno"],
-        "mpn": p["partno"],
-        "category": p["_kind"]["headline"],
         "url": p["_abs"],
+        "identifier": p["partno"],
+        "isPartOf": {"@type": "WebSite", "name": "Alaina Shockers", "url": SITE + "/"},
     }
-    if imgs:
-        obj["image"] = imgs
+    if img_objs:
+        obj["primaryImageOfPage"] = img_objs[0]
+        obj["image"] = img_objs
     extra_props = [
+        {"@type": "PropertyValue", "name": "SKU / MPN", "value": p["partno"]},
         {"@type": "PropertyValue", "name": "Vehicle application", "value": f"{p['brand']} {p['_app']}"},
         {"@type": "PropertyValue", "name": "Position / type", "value": p["_tag"]},
         {"@type": "PropertyValue", "name": "Catalogue line", "value": "Heavy Duty" if p["cat"] == "HD" else "Rare Struts"},
@@ -511,7 +528,6 @@ def product_jsonld(p: dict) -> dict:
     if p["_oe"]:
         extra_props.append({"@type": "PropertyValue", "name": "OE reference", "value": p["_oe"]})
     obj["additionalProperty"] = extra_props
-    # no offers — no prices in repo
     return obj
 
 
@@ -606,6 +622,19 @@ def category_url_for_kind(key: str) -> str:
 
 
 def item_list_ld(name: str, url: str, items: list[dict]) -> dict:
+    els = []
+    for i, p in enumerate(items, 1):
+        el = {
+            "@type": "ListItem",
+            "position": i,
+            "url": p["_abs"],
+            "name": f"Alaina {p['_name']} ({p['partno']})",
+        }
+        if p.get("_webp"):
+            el["image"] = abs_url(p["_webp"])
+        elif p.get("_has_photo"):
+            el["image"] = abs_url(p["img"])
+        els.append(el)
     return {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -613,30 +642,23 @@ def item_list_ld(name: str, url: str, items: list[dict]) -> dict:
         "itemListOrder": "https://schema.org/ItemListOrderAscending",
         "numberOfItems": len(items),
         "url": url,
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": i,
-                "url": p["_abs"],
-                "name": f"Alaina {p['_name']} ({p['partno']})",
-            }
-            for i, p in enumerate(items, 1)
-        ],
+        "itemListElement": els,
     }
 
 
-def collection_product_ld(name: str, description: str, images: list[str], url: str) -> dict:
+def collection_webpage_ld(name: str, description: str, images: list[str], url: str) -> dict:
     obj = {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "WebPage",
         "name": name,
         "description": description,
-        "brand": {"@type": "Brand", "name": "Alaina"},
         "url": url,
-        "category": "Automotive suspension parts",
+        "isPartOf": {"@type": "WebSite", "name": "Alaina Shockers", "url": SITE + "/"},
     }
     if images:
-        obj["image"] = images[:12]
+        objs = [image_object(u, name, description) for u in images[:12]]
+        obj["primaryImageOfPage"] = objs[0]
+        obj["image"] = objs
     return obj
 
 
@@ -701,7 +723,7 @@ def render_collection(
     ld = [crumb_ld]
     if items:
         ld.append(item_list_ld(h1, url, items))
-        ld.append(collection_product_ld(product_line_name or h1, description, images, url))
+        ld.append(collection_webpage_ld(product_line_name or h1, description, images, url))
     else:
         ld.append(
             {
@@ -892,6 +914,86 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
     )
     if 'href="/favicon.ico"' not in text:
         text = text.replace(old_icon, new_icon)
+
+    # GSC product snippets: never emit Product/Offer without price.
+    old_makes = """  "makesOffer": [
+    {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Heavy Duty Cabin Dampers", "category": "Truck Suspension Parts"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Rare Struts for Imported Cars", "category": "Automotive Suspension Parts"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Product", "name": "Shock Absorbers", "category": "Automotive Suspension Parts"}}
+  ]"""
+    catalog_items = [
+        {
+            "name": "Heavy Duty Cabin Dampers",
+            "url": SITE + "/cabin-dampers/",
+            "image": SITE + "/images/tata-4018-hywa-cabin.png",
+        },
+        {
+            "name": "Rare Struts for Imported Cars",
+            "url": SITE + "/rare-struts/",
+            "image": SITE + "/images/camry-front-lh.png",
+        },
+        {
+            "name": "Shock Absorbers",
+            "url": SITE + "/shock-absorbers/",
+            "image": SITE + "/images/bolero-front.png",
+        },
+    ]
+    offer_catalog = {
+        "@type": "OfferCatalog",
+        "name": "Alaina Technical Catalogue No.04",
+        "numberOfItems": len(catalog_items),
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": i,
+                "name": it["name"],
+                "url": it["url"],
+                "image": it["image"],
+            }
+            for i, it in enumerate(catalog_items, 1)
+        ],
+    }
+    text = text.replace(old_makes, '  "hasOfferCatalog": ' + json.dumps(offer_catalog, ensure_ascii=False))
+    # If already converted, leave hasOfferCatalog as-is.
+
+    if '"Alaina product range"' not in text:
+        range_list = {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Alaina product range",
+            "itemListOrder": "https://schema.org/ItemListOrderAscending",
+            "numberOfItems": 3,
+            "url": SITE + "/",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": i,
+                    "name": it["name"],
+                    "url": it["url"],
+                    "image": it["image"],
+                }
+                for i, it in enumerate(catalog_items, 1)
+            ],
+        }
+        crumb_home = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}
+            ],
+        }
+        hero_img = image_object(
+            SITE + "/images/tata-4018-hywa-cabin.png",
+            "Alaina cabin damper for Tata 4018 Hywa / Prima",
+            "Alaina cabin damper AL-TA-HD-0241(A) for Tata 4018 Hywa / Signa / Prima Truck",
+        )
+        hero_img["@context"] = "https://schema.org"
+        extra = json_ld(range_list) + "\n" + json_ld(crumb_home) + "\n" + json_ld(hero_img) + "\n"
+        text = text.replace(
+            '<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "FAQPage"',
+            extra + '<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "FAQPage"',
+            1,
+        )
 
     # Homepage body must stay pre-SEO: no static catalog FOUC, no PDF-card images,
     # no seo-browse strip, no range-row/footer visual rewires.
@@ -1341,8 +1443,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 ## What shipped
 
 - Static HTML for every SKU under `/products/<part-slug>/` (crawlable `<img>`, not JS-only cards).
-- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + Product JSON-LD.
-- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + existing AutoPartsStore/FAQ JSON-LD.
+- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + WebPage JSON-LD (no Product — there are no public prices or reviews).
+- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + AutoPartsStore (`hasOfferCatalog` ItemList of landings, not Product/Offer) + FAQ + homepage ItemList / BreadcrumbList / ImageObject.
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
@@ -1359,7 +1461,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 | SKUs without photo | {len(missing_photo)} |
 | URL entries in sitemaps | {len(pages)} |
 | Image entries (unique loc per page, summed) | {img_count} |
-| Pages with JSON-LD Product/ItemList/Org | {structured} |
+| Pages with JSON-LD WebPage/ItemList/Org | {structured} |
 
 Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 
@@ -1390,7 +1492,7 @@ Those codes are **not** printed as SKUs in `PRODUCTS`. The pages `/al-cd/`, `/al
 - **AL-RS** — every SKU with `cat: RS` (rare struts).
 - **AL-DA** — cabin + steering + shock absorber/stabilizer SKUs (dampers). Rare struts stay on AL-RS.
 
-JSON-LD Product on those URLs has **no sku/mpn** (that would invent a series part number). Individual SKU pages use the real `partno` as sku/mpn. **No Offer** blocks — the repo has no prices.
+JSON-LD on those URLs is **WebPage + ItemList + ImageObject**, never Product (Product without offers/review is invalid in Search Console). SKU pages put the real `partno` in `WebPage.identifier` and description as SKU/MPN. **No Offer** blocks — the repo has no prices.
 
 ## Products with no photo
 

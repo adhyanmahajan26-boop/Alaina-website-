@@ -5,8 +5,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 ## What shipped
 
 - Static HTML for every SKU under `/products/<part-slug>/` (crawlable `<img>`, not JS-only cards).
-- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + Product JSON-LD.
-- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + existing AutoPartsStore/FAQ JSON-LD.
+- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + WebPage JSON-LD (no Product — there are no public prices or reviews).
+- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + AutoPartsStore (`hasOfferCatalog` ItemList of landings, not Product/Offer) + FAQ + homepage ItemList / BreadcrumbList / ImageObject.
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
