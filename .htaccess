@@ -6,9 +6,14 @@ Header always set Referrer-Policy "strict-origin-when-cross-origin"
 Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none';"
 
-# SPA Routing Fallback
 Options -MultiViews
 RewriteEngine On
+
+# Canonical host: https://alainashockabsorbers.com (apex). Preserve path/query.
+RewriteCond %{HTTP_HOST} ^www\.alainashockabsorbers\.com$ [NC,OR]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} ^(www\.)?alainashockabsorbers\.com$ [NC]
+RewriteRule ^ https://alainashockabsorbers.com%{REQUEST_URI} [L,R=301]
 
 AddType application/xml .xml
 AddType text/plain .txt
@@ -29,12 +34,13 @@ AddType application/manifest+json .webmanifest
   Header set Content-Type "text/plain; charset=UTF-8"
 </Files>
 
-# Do not SPA-fallback verification files, sitemaps, or robots
+# Do not SPA-fallback verification files, sitemaps, robots, or icons
 RewriteRule ^google[0-9a-z]+\.html$ - [L]
 RewriteRule ^robots\.txt$ - [L]
 RewriteRule ^sitemap(-[a-z0-9-]+)?\.xml$ - [L]
 RewriteRule ^(favicon\.(ico|svg)|apple-touch-icon\.png|favicon-[0-9]+x[0-9]+\.png|site\.webmanifest)$ - [L]
 
+# SPA Routing Fallback (skips real files and directories)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.html [QSA,L]

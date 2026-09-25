@@ -6,7 +6,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 
 - Static HTML for every SKU under `/products/<part-slug>/` (crawlable `<img>`, not JS-only cards).
 - Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + Product JSON-LD.
-- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + existing AutoPartsStore/FAQ JSON-LD. Domain corrected to `https://alainashockers.com`.
+- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + existing AutoPartsStore/FAQ JSON-LD.
+- Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
 - Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
@@ -60,6 +61,12 @@ JSON-LD Product on those URLs has **no sku/mpn** (that would invent a series par
 Shoot these so they can enter Google Images:
 
 - `AL-LE-HD-0200` — Leyland Marcopolo / Bharat Benz Front (U Truck / G91 / Stalian / Cargo / Marcopolo)
+
+## Canonical host
+
+Live site: **`https://alainashockabsorbers.com`** (HTTPS, apex, no `www`). HTTP already 301s to HTTPS on Hostinger; `.htaccess` also 301s `www.alainashockabsorbers.com` to the apex and forces HTTPS, keeping path and query (PNG and catalogue URLs intact).
+
+`alainashockers.com` does not exist (NXDOMAIN). “Alaina shocker(s)” is a **search keyword** only — used in titles, intro copy, `Organization.alternateName` and image alts, not as a hostname.
 
 ## Regenerating
 
