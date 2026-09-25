@@ -22,8 +22,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 | SKUs with photo | 73 |
 | SKUs without photo | 1 |
 | URL entries in sitemaps | 119 |
-| Image entries (unique loc per page, summed) | 595 |
-| Pages with JSON-LD Product/ItemList/Org | 119 |
+| Image entries (unique loc per page, summed) | 477 |
+| Pages with JSON-LD WebPage/ItemList/Org | 119 |
 
 Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 
@@ -54,7 +54,7 @@ Those codes are **not** printed as SKUs in `PRODUCTS`. The pages `/al-cd/`, `/al
 - **AL-RS** — every SKU with `cat: RS` (rare struts).
 - **AL-DA** — cabin + steering + shock absorber/stabilizer SKUs (dampers). Rare struts stay on AL-RS.
 
-JSON-LD Product on those URLs has **no sku/mpn** (that would invent a series part number). Individual SKU pages use the real `partno` as sku/mpn. **No Offer** blocks — the repo has no prices.
+JSON-LD on those URLs is **WebPage + ItemList + ImageObject**, never Product (Product without offers/review is invalid in Search Console). SKU pages put the real `partno` in `WebPage.identifier` and description as SKU/MPN. **No Offer** blocks — the repo has no prices.
 
 ## Products with no photo
 

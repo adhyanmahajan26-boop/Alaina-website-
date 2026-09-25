@@ -189,18 +189,10 @@ def enrich(products: list[dict]) -> list[dict]:
 
 
 def convert_images(products: list[dict]) -> None:
-    img_dir = ROOT / "images"
+    """Do not re-encode photos. Visible pages must use the original catalogue files."""
     for p in products:
-        if not p["_has_photo"]:
-            continue
-        dest = img_dir / (keyword_name(p) + ".webp")
-        if to_webp(p["_img_path"], dest):
-            p["_webp"] = dest.relative_to(ROOT).as_posix()
-            p["_webp_size"] = img_size(dest)
-        if p["_card_path"] and p["_card_path"].exists():
-            cdest = img_dir / (keyword_name(p) + "-card.webp")
-            if to_webp(p["_card_path"], cdest, max_w=800, quality=78):
-                p["_card_webp"] = cdest.relative_to(ROOT).as_posix()
+        p["_webp"] = None
+        p["_card_webp"] = None
 
 
 def abs_url(path: str) -> str:
@@ -216,19 +208,13 @@ def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> st
         )
     w, h = p["_size"] or (800, 800)
     src_png = rel_prefix + p["img"]
-    src_webp = rel_prefix + p["_webp"] if p["_webp"] else ""
     loading = "lazy" if lazy else "eager"
     fetch = ' fetchpriority="high"' if not lazy else ""
     cls = f' class="{class_name}"' if class_name else ""
-    img = (
+    return (
         f'<img{cls} src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
         f'width="{w}" height="{h}" loading="{loading}"{fetch} decoding="async"/>'
     )
-    if src_webp:
-        return (
-            f'<picture><source type="image/webp" srcset="{esc(src_webp)}"/>{img}</picture>'
-        )
-    return img
 
 
 def json_ld(obj) -> str:
@@ -450,15 +436,10 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
     if p["_has_photo"]:
         src_png = rel + p["img"]
         w, h = p["_size"] or (400, 400)
-        img_tag = (
+        img = (
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
             f'width="{w}" height="{h}" loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        if p["_webp"]:
-            webp = rel + p["_webp"]
-            img = f'<picture><source type="image/webp" srcset="{esc(webp)}"/>{img_tag}</picture>'
-        else:
-            img = img_tag
         stage = f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
     else:
         stage = (
@@ -488,8 +469,6 @@ def write(path: Path, content: str) -> None:
 def product_jsonld(p: dict) -> dict:
     """WebPage + ImageObject — never Product (no public prices/reviews in the repo)."""
     images = []
-    if p["_webp"]:
-        images.append(abs_url(p["_webp"]))
     if p["_has_photo"]:
         images.append(abs_url(p["img"]))
     seen = set()
@@ -540,7 +519,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
         + (f" OE {p['_oe']}." if p["_oe"] else "")
         + " Pressure-tested, OE-matched. Enquire on WhatsApp for stock."
     )
-    img_abs = abs_url(p["_webp"] or p["img"]) if p["_has_photo"] else abs_url("images/damper-closeup.jpg")
+    img_abs = abs_url(p["img"]) if p["_has_photo"] else abs_url("images/damper-closeup.jpg")
     keywords = (
         f"Alaina {kind['label']}, {p['partno']}, {p['brand']} {p['_name']}, "
         f"shocker for {p['brand']} {p['_app']}, {kind['keywords']}, Alaina shockers"
@@ -630,9 +609,7 @@ def item_list_ld(name: str, url: str, items: list[dict]) -> dict:
             "url": p["_abs"],
             "name": f"Alaina {p['_name']} ({p['partno']})",
         }
-        if p.get("_webp"):
-            el["image"] = abs_url(p["_webp"])
-        elif p.get("_has_photo"):
+        if p.get("_has_photo"):
             el["image"] = abs_url(p["img"])
         els.append(el)
     return {
@@ -681,7 +658,7 @@ def render_collection(
         rel = "../" * depth
     url = SITE + path
     first = next((p for p in items if p["_has_photo"]), None)
-    og = abs_url(first["_webp"] or first["img"]) if first else abs_url("images/tata-4018-hywa-cabin.png")
+    og = abs_url(first["img"]) if first else abs_url("images/tata-4018-hywa-cabin.png")
     og_alt = first["_alt"] if first else title
     head = head_tags(
         title=title,
@@ -716,9 +693,7 @@ def render_collection(
 """
     images = []
     for p in items:
-        if p.get("_webp"):
-            images.append(abs_url(p["_webp"]))
-        elif p["_has_photo"]:
+        if p["_has_photo"]:
             images.append(abs_url(p["img"]))
     ld = [crumb_ld]
     if items:
@@ -818,8 +793,6 @@ def wrap_urlset(body: str) -> str:
 
 def images_for_product(p: dict) -> list[tuple[str, str]]:
     out = []
-    if p.get("_webp"):
-        out.append((abs_url(p["_webp"]), p["_alt"]))
     if p["_has_photo"]:
         out.append((abs_url(p["img"]), p["_alt"]))
     return out
@@ -1395,7 +1368,7 @@ def main() -> None:
     home_imgs = []
     for p in products:
         if p["_has_photo"]:
-            home_imgs.append((abs_url(p["_webp"] or p["img"]), p["_alt"]))
+            home_imgs.append((abs_url(p["img"]), p["_alt"]))
     pages.insert(0, ("/", TODAY, home_imgs, "1.0"))
 
     add_seo_css()
@@ -1448,7 +1421,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
+- **Original catalogue photos only.** PR #5 added lossy WebP copies (resized to 1600px / quality 80, cards 800px / quality 78) and `<picture srcset>` so browsers showed those instead of the studio PNGs. Those WebP files are removed. Image sitemaps, OG, and JSON-LD `ImageObject` point at the original `p.img` PNG/JPEG paths. Homepage range figures and product cards stay the pre-SEO `<img src="${p.img}">` markup.
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
