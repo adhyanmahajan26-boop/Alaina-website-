@@ -435,10 +435,9 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
     img = ""
     if p["_has_photo"]:
         src_png = rel + p["img"]
-        w, h = p["_size"] or (400, 400)
         img = (
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
-            f'width="{w}" height="{h}" loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
+            f'loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
         stage = f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
     else:
@@ -1020,7 +1019,7 @@ def add_seo_css() -> None:
         return
     css += """
 /* ════════════════ SEO inner pages ════════════════ */
-.seo-main{padding:clamp(28px,5vw,72px) 0 80px}
+.seo-main{padding-top:clamp(28px,5vw,72px);padding-bottom:80px}
 .crumbs ol{display:flex;flex-wrap:wrap;gap:8px;list-style:none;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-40);margin-bottom:22px}
 .crumbs li:not(:last-child)::after{content:'/';margin-left:8px;opacity:.5}
 .crumbs a:hover{color:var(--brass)}
@@ -1030,7 +1029,7 @@ def add_seo_css() -> None:
 .seo-count{font-family:var(--fm);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-40);margin-bottom:22px}
 .seo-split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.8fr);gap:36px;align-items:start;margin-bottom:48px}
 .seo-figure{background:var(--plate);padding:18px;margin:0}
-.seo-figure img,.seo-figure picture{width:100%;height:auto}
+.seo-figure img,.seo-figure picture{width:100%;height:auto;object-fit:contain}
 .seo-figure figcaption{font-family:var(--fm);font-size:11px;color:#333;margin-top:10px;letter-spacing:.04em}
 .seo-figure-extra{margin-top:16px}
 .seo-spec{border:1px solid var(--rule);background:var(--bg-2);padding:8px 0 18px}
@@ -1048,6 +1047,7 @@ def add_seo_css() -> None:
 .seo-browse-grid span{color:var(--text-60);font-size:13px}
 #seo-browse{padding:clamp(40px,6vw,80px) 0;border-bottom:1px solid var(--rule)}
 .pc-name a:hover{color:var(--accent)}
+.seo-main .pc-stage img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain}
 @media(max-width:900px){.seo-split{grid-template-columns:1fr}}
 """
     css_path.write_text(css, encoding="utf-8")
@@ -1421,7 +1421,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- **Original catalogue photos only.** PR #5 added lossy WebP copies (resized to 1600px / quality 80, cards 800px / quality 78) and `<picture srcset>` so browsers showed those instead of the studio PNGs. Those WebP files are removed. Image sitemaps, OG, and JSON-LD `ImageObject` point at the original `p.img` PNG/JPEG paths. Homepage range figures and product cards stay the pre-SEO `<img src="${p.img}">` markup.
+- **Original catalogue photos only.** PR #5 added lossy WebP copies (resized to 1600px / quality 80, cards 800px / quality 78) and `<picture srcset>` so browsers showed those instead of the studio PNGs. Those WebP files are removed. Image sitemaps, OG, and JSON-LD `ImageObject` point at the original `p.img` PNG/JPEG paths. Homepage range figures and product cards stay the pre-SEO `<img src="${{p.img}}">` markup.
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 

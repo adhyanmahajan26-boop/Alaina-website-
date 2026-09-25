@@ -10,7 +10,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
+- **Original catalogue photos only.** PR #5 added lossy WebP copies (resized to 1600px / quality 80, cards 800px / quality 78) and `<picture srcset>` so browsers showed those instead of the studio PNGs. Those WebP files are removed. Image sitemaps, OG, and JSON-LD `ImageObject` point at the original `p.img` PNG/JPEG paths. Homepage range figures and product cards stay the pre-SEO `<img src="${p.img}">` markup.
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
