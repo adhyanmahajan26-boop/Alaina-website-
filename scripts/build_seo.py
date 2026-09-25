@@ -435,15 +435,14 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
     wamsg = quote(f"Hi, I want to enquire about {p['partno']} — {p['_name']} ({p['_app']}).")
     img = ""
     if p["_has_photo"]:
-        src = rel + (p["_card_webp"] or p["card"] or p["img"])
-        src_png = rel + (p["card"] or p["img"])
-        w, h = p["_card_size"] or p["_size"] or (400, 400)
+        src_png = rel + p["img"]
+        w, h = p["_size"] or (400, 400)
         img_tag = (
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
             f'width="{w}" height="{h}" loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        if p["_card_webp"] or p["_webp"]:
-            webp = rel + (p["_card_webp"] or p["_webp"])
+        if p["_webp"]:
+            webp = rel + p["_webp"]
             img = f'<picture><source type="image/webp" srcset="{esc(webp)}"/>{img_tag}</picture>'
         else:
             img = img_tag
@@ -479,10 +478,6 @@ def product_jsonld(p: dict) -> dict:
         images.append(abs_url(p["_webp"]))
     if p["_has_photo"]:
         images.append(abs_url(p["img"]))
-    if p.get("card"):
-        images.append(abs_url(p["card"]))
-    for extra in p.get("_extra_photos") or []:
-        images.append(abs_url(extra.relative_to(ROOT).as_posix()))
     # unique preserve order
     seen = set()
     imgs = []
@@ -554,20 +549,11 @@ def render_product(p: dict, all_products: list[dict]) -> str:
     fig = ""
     if p["_has_photo"]:
         cap = f"Alaina {kind['label']} {p['partno']} — {p['brand']} {p['_name']} ({p['_app']})"
-        extra_html = ""
-        for i, extra in enumerate(p.get("_extra_photos") or []):
-            rel_extra = rel + extra.relative_to(ROOT).as_posix()
-            extra_html += (
-                f'<figure class="seo-figure seo-figure-extra"><img src="{esc(rel_extra)}" '
-                f'alt="{esc(p["_alt"])} catalogue photo" title="{esc(p["_alt"])}" loading="lazy" decoding="async"/>'
-                f"<figcaption>{esc(cap)} — catalogue plate</figcaption></figure>"
-            )
         fig = f"""
         <figure class="seo-figure">
           {picture(rel, p, lazy=False)}
           <figcaption>{esc(cap)}</figcaption>
         </figure>
-        {extra_html}
         """
     else:
         fig = """
@@ -814,10 +800,6 @@ def images_for_product(p: dict) -> list[tuple[str, str]]:
         out.append((abs_url(p["_webp"]), p["_alt"]))
     if p["_has_photo"]:
         out.append((abs_url(p["img"]), p["_alt"]))
-        if p.get("card"):
-            out.append((abs_url(p["card"]), p["_alt"] + " — card"))
-    for extra in p.get("_extra_photos") or []:
-        out.append((abs_url(extra.relative_to(ROOT).as_posix()), p["_alt"] + " — catalogue photo"))
     return out
 
 
@@ -910,117 +892,31 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
     )
     if 'href="/favicon.ico"' not in text:
         text = text.replace(old_icon, new_icon)
-    text = text.replace(
-        '<div class="range-row" data-rv onclick="jumpCat(\'HD\')">',
-        '<a class="range-row" href="cabin-dampers/" data-rv>',
-    )
-    text = text.replace(
-        '<div class="range-row" data-rv onclick="jumpCat(\'Mahindra\')">',
-        '<a class="range-row" href="shock-absorbers/" data-rv>',
-    )
-    text = text.replace(
-        '<div class="range-row" data-rv onclick="jumpCat(\'RS\')">',
-        '<a class="range-row" href="rare-struts/" data-rv>',
-    )
-    # close those three range rows: they currently end with </div></div></div> for list
-    # Each range-row is a div closed before next. Convert closing of those rows only by unique inner content
-    text = text.replace(
-        'alt="Tata 4018 Hywa cabin damper"/></div>\n      </div>',
-        'alt="Alaina cabin damper AL-TA-HD-0241(A) for Tata 4018 Hywa / Signa / Prima Truck" title="Alaina cabin damper AL-TA-HD-0241(A) for Tata 4018 Hywa / Signa / Prima Truck" width="1536" height="1024" loading="lazy" decoding="async"/></div>\n      </a>',
-    )
-    text = text.replace(
-        'alt="Mahindra Bolero front shock absorber"/></div>\n      </div>',
-        'alt="Alaina shock absorber MA-BO-4001 for Mahindra Bolero" title="Alaina shock absorber MA-BO-4001 for Mahindra Bolero" width="1024" height="1024" loading="lazy" decoding="async"/></div>\n      </a>',
-    )
-    text = text.replace(
-        'alt="Toyota Camry rare strut"/></div>\n      </div>',
-        'alt="Alaina rare strut TO-CA-2001 for Toyota Camry Front LH" title="Alaina rare strut TO-CA-2001 for Toyota Camry Front LH" width="768" height="1024" loading="lazy" decoding="async"/></div>\n      </a>',
-    )
 
-    # Footer category links
-    old_lines = """        <a href="#catalogue" onclick="setCat('HD')">Cabin Dampers — HD</a>
-        <a href="#catalogue" onclick="setBrand('Mahindra')">Pickup &amp; LCV</a>
-        <a href="#catalogue" onclick="setCat('RS')">Rare Struts</a>"""
-    new_lines = """        <a href="cabin-dampers/">Cabin Dampers — HD</a>
-        <a href="shock-absorbers/">Shock absorbers / shockers</a>
-        <a href="rare-struts/">Rare Struts</a>
-        <a href="al-cd/">AL-CD cabin dampers</a>
-        <a href="al-rs/">AL-RS rare struts</a>
-        <a href="al-da/">AL-DA dampers</a>
-        <a href="gas-springs/">Gas springs</a>
-        <a href="dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>"""
-    text = text.replace(old_lines, new_lines)
-
-    # Index links in footer
-    if "href=\"cabin-dampers/\"" not in text.split("fc-lab\">Index")[1][:800] if "fc-lab\">Index" in text else True:
-        text = text.replace(
-            '<a href="#enquire">05 — Enquire</a>',
-            '<a href="#enquire">05 — Enquire</a>\n        <a href="shockers/">Shockers</a>\n        <a href="cabin-dampers/">Cabin dampers</a>',
-        )
-
-    # Static crawlable catalogue (JS still re-renders on filter)
-    cards = []
-    for p in products:
-        cards.append(product_card_html("", p, lazy=True).replace('class="pcard"', 'class="pcard pcard-static"'))
-    static = "<!--SEO_CATALOG_START-->\n" + "\n".join(cards) + "\n<!--SEO_CATALOG_END-->"
+    # Homepage body must stay pre-SEO: no static catalog FOUC, no PDF-card images,
+    # no seo-browse strip, no range-row/footer visual rewires.
+    text = re.sub(
+        r"\n<section id=\"seo-browse\">.*?</section>\n",
+        "\n",
+        text,
+        count=1,
+        flags=re.S,
+    )
     if "<!--SEO_CATALOG_START-->" in text:
         text = re.sub(
-            r"<!--SEO_CATALOG_START-->.*?<!--SEO_CATALOG_END-->",
-            static,
+            r"<!--SEO_CATALOG_START-->.*?<!--SEO_CATALOG_END-->\n?",
+            "",
             text,
             count=1,
             flags=re.S,
         )
-    else:
         text = re.sub(
-            r'<div class="cat-grid" id="table"></div>',
-            '<div class="cat-grid" id="table">\n' + static + "\n</div>",
+            r'(<div class="cat-grid" id="table">)\s*(</div>)',
+            r"\1\2",
             text,
             count=1,
         )
 
-    # Browse strip
-    if 'id="seo-browse"' not in text:
-        browse = """
-<section id="seo-browse">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="kicker">Index</div>
-        <h2 class="sec-title" style="margin-top:14px">Shop by <em>type.</em></h2>
-      </div>
-    </div>
-    <div class="seo-browse-grid">
-      <a href="cabin-dampers/"><strong>Cabin dampers</strong><span>Truck cabin shockers — Tata, Leyland, Eicher, Benz</span></a>
-      <a href="shock-absorbers/"><strong>Shock absorbers</strong><span>Shockers for trucks, pickups and LCVs</span></a>
-      <a href="rare-struts/"><strong>Rare struts</strong><span>Camry, Corolla, Lancer, Duster, Hector, D-Max</span></a>
-      <a href="steering-dampers/"><strong>Steering dampers</strong><span>Bolero / Marshal steering damper</span></a>
-      <a href="al-cd/"><strong>AL-CD</strong><span>Cabin damper series index</span></a>
-      <a href="al-rs/"><strong>AL-RS</strong><span>Rare strut series index</span></a>
-      <a href="al-da/"><strong>AL-DA</strong><span>Damper / shocker series index</span></a>
-      <a href="gas-springs/"><strong>Gas springs</strong><span>Enquire — no SKUs in this catalogue</span></a>
-      <a href="dickey-bonnet-struts/"><strong>Dickey &amp; bonnet struts</strong><span>Enquire — no SKUs in this catalogue</span></a>
-    </div>
-  </div>
-</section>
-"""
-        text = text.replace('<!-- ═══ 02 · CATALOGUE ═══ -->', browse + '\n<!-- ═══ 02 · CATALOGUE ═══ -->')
-
-    # JS: link cards to product pages + search param + better alt
-    if "function partSlug" not in text:
-        text = text.replace(
-            "function cardHTML(p,i){",
-            """function partSlug(pn){return String(pn||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
-function cardHTML(p,i){""",
-        )
-    text = text.replace(
-        '<img loading="lazy" src="${p.img}" alt="${esc(p.name)} — ${esc(p.brand)} shock absorber"/>',
-        '<img loading="lazy" src="${p.img}" alt="Alaina ${esc(p.name)} ${esc(p.partno)} for ${esc(p.brand)} ${esc(p.app)}" title="Alaina ${esc(p.name)} ${esc(p.partno)} for ${esc(p.brand)} ${esc(p.app)}" width="800" height="800" decoding="async"/>',
-    )
-    text = text.replace(
-        '<h3 class="pc-name">${p.name}</h3>',
-        '<h3 class="pc-name"><a href="products/${partSlug(p.partno)}/">${p.name}</a></h3>',
-    )
     if "URLSearchParams" not in text:
         text = text.replace(
             "let fBrand='All', fQ='';",
@@ -1077,7 +973,6 @@ def add_seo_css() -> None:
 .seo-browse-grid span{color:var(--text-60);font-size:13px}
 #seo-browse{padding:clamp(40px,6vw,80px) 0;border-bottom:1px solid var(--rule)}
 .pc-name a:hover{color:var(--accent)}
-a.range-row{color:inherit}
 @media(max-width:900px){.seo-split{grid-template-columns:1fr}}
 """
     css_path.write_text(css, encoding="utf-8")
@@ -1452,7 +1347,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
 - Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
-- Homepage: crawlable product cards + type index.
+- Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
 ## Counts
