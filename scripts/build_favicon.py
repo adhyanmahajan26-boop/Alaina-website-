@@ -87,9 +87,10 @@ def write_manifest() -> None:
             {
                 "name": "Alaina Shockers",
                 "short_name": "Alaina",
-                "description": "Cabin dampers, shock absorbers and rare struts. Technical Catalogue No.04.",
-                "start_url": "/",
-                "scope": "/",
+                "description": "Alaina shockers, shock absorbers and cabin dampers. Technical Catalogue No.04.",
+                "id": "https://alainashockabsorbers.com/",
+                "start_url": "https://alainashockabsorbers.com/",
+                "scope": "https://alainashockabsorbers.com/",
                 "display": "browser",
                 "lang": "en-IN",
                 "background_color": "#0A0A0B",

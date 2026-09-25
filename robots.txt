@@ -19,7 +19,7 @@ Allow: /site.webmanifest
 Disallow: /scripts/
 Disallow: /SEO.md
 
-Sitemap: https://alainashockers.com/sitemap.xml
+Sitemap: https://alainashockabsorbers.com/sitemap.xml
 
 User-agent: Googlebot-Image
 Allow: /images/

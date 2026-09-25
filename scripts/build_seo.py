@@ -16,7 +16,7 @@ from urllib.parse import quote
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-SITE = "https://alainashockers.com"
+SITE = "https://alainashockabsorbers.com"
 TODAY = date.today().isoformat()
 WA = "https://wa.me/917982555636"
 PHONE = "+91 79825 55636"
@@ -824,7 +824,11 @@ def images_for_product(p: dict) -> list[tuple[str, str]]:
 def patch_index(products: list[dict], categories: list[dict]) -> None:
     path = ROOT / "index.html"
     text = path.read_text(encoding="utf-8")
-    text = text.replace("https://alainashockabsorbers.com", SITE)
+    # Never rewrite the live host away. Fold the defunct keyword-domain onto SITE.
+    text = text.replace("https://alainashockers.com", SITE)
+    text = text.replace("http://alainashockers.com", SITE)
+    text = text.replace("https://www.alainashockabsorbers.com", SITE)
+    text = text.replace("http://www.alainashockabsorbers.com", SITE)
     text = text.replace('<html lang="en">', '<html lang="en-IN">')
 
     if 'hreflang="en-IN"' not in text:
@@ -855,6 +859,7 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Alaina Shockers",
+        "alternateName": ["Alaina Shocker", "Alaina Shock Absorbers", "Alaina Dampers"],
         "url": SITE + "/",
         "telephone": "+91-79825-55636",
         "email": EMAIL,
@@ -881,9 +886,17 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
         text = text.replace('<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "AutoPartsStore"', insert + '<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "AutoPartsStore"', 1)
 
     text = text.replace(
-        '"logo": "https://alainashockers.com/images/tata-4018-hywa-cabin.png"',
-        '"logo": "https://alainashockers.com/favicon-512x512.png"',
+        f'"logo": "{SITE}/images/tata-4018-hywa-cabin.png"',
+        f'"logo": "{SITE}/favicon-512x512.png"',
     )
+    if '"alternateName"' not in text:
+        text = text.replace(
+            '  "name": "Alaina Shockers",\n  "url": "' + SITE + '/"',
+            '  "name": "Alaina Shockers",\n'
+            '  "alternateName": ["Alaina Shocker", "Alaina Shock Absorbers", "Alaina Dampers"],\n'
+            '  "url": "' + SITE + '/"',
+            1,
+        )
     old_icon = '<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'%3E%3Crect width=\'32\' height=\'32\' fill=\'%23171511\'/%3E%3Ctext x=\'16\' y=\'23\' font-family=\'Arial Black\' font-size=\'19\' font-weight=\'900\' fill=\'%23F2F0EA\' text-anchor=\'middle\'%3EA%3C/text%3E%3C/svg%3E"/>'
     new_icon = (
         '<link rel="icon" href="/favicon.ico" sizes="48x48"/>\n'
@@ -1071,67 +1084,79 @@ a.range-row{color:inherit}
 
 
 def write_htaccess() -> None:
-    path = ROOT / ".htaccess"
-    text = path.read_text(encoding="utf-8")
-    if "image/webp" not in text:
-        text = text.replace(
-            'ExpiresByType image/jpeg "access plus 1 month"',
-            'ExpiresByType image/jpeg "access plus 1 month"\n'
-            '  ExpiresByType image/webp "access plus 1 month"\n'
-            '  ExpiresByType application/xml "access plus 1 day"\n'
-            '  ExpiresByType text/plain "access plus 1 day"\n'
-            '  ExpiresByType text/xml "access plus 1 day"',
-        )
-    block = """
+    (ROOT / ".htaccess").write_text(
+        r"""# Security Headers
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none';"
+
+Options -MultiViews
+RewriteEngine On
+
+# Canonical host: https://alainashockabsorbers.com (apex). Preserve path/query.
+RewriteCond %{HTTP_HOST} ^www\.alainashockabsorbers\.com$ [NC,OR]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} ^(www\.)?alainashockabsorbers\.com$ [NC]
+RewriteRule ^ https://alainashockabsorbers.com%{REQUEST_URI} [L,R=301]
+
 AddType application/xml .xml
 AddType text/plain .txt
 AddType image/webp .webp
 AddType text/html .html
+AddType image/svg+xml .svg
+AddType image/x-icon .ico
+AddType image/vnd.microsoft.icon .ico
+AddType application/manifest+json .webmanifest
 
 <Files "sitemap.xml">
   Header set Content-Type "application/xml; charset=UTF-8"
 </Files>
-<FilesMatch "^sitemap-.*\\.xml$">
+<FilesMatch "^sitemap-.*\.xml$">
   Header set Content-Type "application/xml; charset=UTF-8"
 </FilesMatch>
 <Files "robots.txt">
   Header set Content-Type "text/plain; charset=UTF-8"
 </Files>
 
-# Do not SPA-fallback verification files, sitemaps, or robots
-RewriteRule ^google[0-9a-z]+\\.html$ - [L]
-RewriteRule ^robots\\.txt$ - [L]
-RewriteRule ^sitemap(-[a-z0-9-]+)?\\.xml$ - [L]
-"""
-    if "RewriteRule ^google" not in text:
-        text = text.replace(
-            "RewriteEngine On\n",
-            "RewriteEngine On\n" + block + "\n",
-        )
-    if "site.webmanifest" not in text:
-        text = text.replace(
-            "AddType image/webp .webp\nAddType text/html .html",
-            "AddType image/webp .webp\n"
-            "AddType text/html .html\n"
-            "AddType image/svg+xml .svg\n"
-            "AddType image/x-icon .ico\n"
-            "AddType image/vnd.microsoft.icon .ico\n"
-            "AddType application/manifest+json .webmanifest",
-        )
-        text = text.replace(
-            "RewriteRule ^sitemap(-[a-z0-9-]+)?\\.xml$ - [L]\n",
-            "RewriteRule ^sitemap(-[a-z0-9-]+)?\\.xml$ - [L]\n"
-            "RewriteRule ^(favicon\\.(ico|svg)|apple-touch-icon\\.png|favicon-[0-9]+x[0-9]+\\.png|site\\.webmanifest)$ - [L]\n",
-        )
-        if "ExpiresByType image/x-icon" not in text:
-            text = text.replace(
-                'ExpiresByType image/webp "access plus 1 month"',
-                'ExpiresByType image/webp "access plus 1 month"\n'
-                '  ExpiresByType image/svg+xml "access plus 1 month"\n'
-                '  ExpiresByType image/x-icon "access plus 1 month"\n'
-                '  ExpiresByType application/manifest+json "access plus 1 week"',
-            )
-    path.write_text(text, encoding="utf-8")
+# Do not SPA-fallback verification files, sitemaps, robots, or icons
+RewriteRule ^google[0-9a-z]+\.html$ - [L]
+RewriteRule ^robots\.txt$ - [L]
+RewriteRule ^sitemap(-[a-z0-9-]+)?\.xml$ - [L]
+RewriteRule ^(favicon\.(ico|svg)|apple-touch-icon\.png|favicon-[0-9]+x[0-9]+\.png|site\.webmanifest)$ - [L]
+
+# SPA Routing Fallback (skips real files and directories)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]
+
+# Cache static assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+  ExpiresByType application/manifest+json "access plus 1 week"
+  ExpiresByType application/xml "access plus 1 day"
+  ExpiresByType text/plain "access plus 1 day"
+  ExpiresByType text/xml "access plus 1 day"
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
+
+# Block access to sensitive files
+<FilesMatch "\.(env|json|md|sh|log|sql|bak)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+""",
+        encoding="utf-8",
+    )
 
 
 def write_robots() -> None:
@@ -1157,7 +1182,7 @@ Allow: /site.webmanifest
 Disallow: /scripts/
 Disallow: /SEO.md
 
-Sitemap: https://alainashockers.com/sitemap.xml
+Sitemap: https://alainashockabsorbers.com/sitemap.xml
 
 User-agent: Googlebot-Image
 Allow: /images/
@@ -1422,7 +1447,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 
 - Static HTML for every SKU under `/products/<part-slug>/` (crawlable `<img>`, not JS-only cards).
 - Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + Product JSON-LD.
-- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + existing AutoPartsStore/FAQ JSON-LD. Domain corrected to `https://alainashockers.com`.
+- Homepage Organization + WebSite (`SearchAction` on `/?q=`) + existing AutoPartsStore/FAQ JSON-LD.
+- Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
 - Keyword-rich WebP copies of product photos (`images/alaina-…webp`) while **original PNG paths stay**. Homepage range figures and product cards are real `<img>` tags with alt/title and width/height; below-fold uses `loading="lazy"`.
@@ -1481,6 +1507,12 @@ Shoot these so they can enter Google Images:
     if not missing_photo:
         seo_md += "- (none)\n"
     seo_md += """
+## Canonical host
+
+Live site: **`https://alainashockabsorbers.com`** (HTTPS, apex, no `www`). HTTP already 301s to HTTPS on Hostinger; `.htaccess` also 301s `www.alainashockabsorbers.com` to the apex and forces HTTPS, keeping path and query (PNG and catalogue URLs intact).
+
+`alainashockers.com` does not exist (NXDOMAIN). “Alaina shocker(s)” is a **search keyword** only — used in titles, intro copy, `Organization.alternateName` and image alts, not as a hostname.
+
 ## Regenerating
 
 ```bash
