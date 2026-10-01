@@ -5,7 +5,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 ## What shipped
 
 - Static HTML for every SKU under `/products/<part-slug>/` (crawlable `<img>`, not JS-only cards).
-- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + WebPage JSON-LD (no Product — there are no public prices or reviews).
+- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + WebPage JSON-LD. ImageObject `creator`/`copyrightHolder` reference a single Organization `@id`.
+- SKU pages add schema.org **Product** JSON-LD (name, sku, mpn, brand, manufacturer `@id`, image, additionalProperty for OE/fitment). **No `offers` and no price.**
 - Homepage Organization + WebSite (`SearchAction` on `/?q=`) + AutoPartsStore (`hasOfferCatalog` ItemList of landings, not Product/Offer) + FAQ + homepage ItemList / BreadcrumbList / ImageObject.
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
@@ -21,7 +22,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 | Catalogue SKUs | 74 |
 | SKUs with photo | 73 |
 | SKUs without photo | 1 |
-| URL entries in sitemaps | 119 |
+| URL entries in sitemaps | 117 |
 | Image entries (unique loc per page, summed) | 477 |
 | Pages with JSON-LD WebPage/ItemList/Org | 119 |
 
@@ -39,8 +40,8 @@ Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 | rare strut / AL-RS | `/rare-struts/`, `/al-rs/` |
 | AL-DA dampers | `/al-da/` |
 | steering damper | `/steering-dampers/` |
-| gas spring | `/gas-springs/` (enquiry only — **no SKUs in repo**) |
-| dickey shocker / bonnet gas strut | `/dickey-bonnet-struts/` (enquiry only — **no SKUs in repo**) |
+| gas spring | `/gas-springs/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
+| dickey shocker / bonnet gas strut | `/dickey-bonnet-struts/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
 | shocker for Tata 4018, Bolero, Camry, … | `/shockers/<vehicle-slug>/` |
 | SKU / part number | `/products/<slug>/` |
 
@@ -54,7 +55,7 @@ Those codes are **not** printed as SKUs in `PRODUCTS`. The pages `/al-cd/`, `/al
 - **AL-RS** — every SKU with `cat: RS` (rare struts).
 - **AL-DA** — cabin + steering + shock absorber/stabilizer SKUs (dampers). Rare struts stay on AL-RS.
 
-JSON-LD on those URLs is **WebPage + ItemList + ImageObject**, never Product (Product without offers/review is invalid in Search Console). SKU pages put the real `partno` in `WebPage.identifier` and description as SKU/MPN. **No Offer** blocks — the repo has no prices.
+JSON-LD on those URLs is **WebPage + ItemList + ImageObject** plus one Organization `@id`. SKU pages also emit a **Product** node (sku/mpn/brand/manufacturer/image/additionalProperty). **No Offer / price** blocks — the repo has no prices.
 
 ## Products with no photo
 

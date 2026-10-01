@@ -1,9 +1,117 @@
 {
-  "pages": 119,
+  "pages": 117,
   "images_in_sitemaps": 477,
   "products": 74,
   "missing_photos": [
     "AL-LE-HD-0200"
   ],
-  "structured_pages": 119
+  "structured_pages": 119,
+  "cabin_model_retitles": [
+    {
+      "path": "/shockers/tata-4018/",
+      "name": "Tata 4018",
+      "title": "Tata 4018 Cabin Shocker (Hywa/Signa/Prima) | Alaina",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "csv",
+      "skus": [
+        "AL-TA-HD-0241(A)",
+        "AL-TA-HD-0161(A)",
+        "AL-TA-HD-0242"
+      ]
+    },
+    {
+      "path": "/shockers/tata-1516/",
+      "name": "Tata 1516",
+      "title": "Tata 1516 Cabin Shocker (4018/4923/1040) | Alaina",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "data (tag=Cabin)",
+      "skus": [
+        "AL-TA-HD-0161(A)",
+        "AL-TA-HD-0242",
+        "AL-TA-HD-0103(A)"
+      ]
+    },
+    {
+      "path": "/shockers/tata-hywa/",
+      "name": "Tata Hywa",
+      "title": "Tata Hywa Cabin Shocker | Alaina Shockers",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "csv",
+      "skus": [
+        "AL-TA-HD-0241(A)",
+        "AL-TA-HD-0104"
+      ]
+    },
+    {
+      "path": "/shockers/tata-signa/",
+      "name": "Tata Signa",
+      "title": "Tata Signa Cabin Shocker | Alaina Shockers",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "csv",
+      "skus": [
+        "AL-TA-HD-0241(A)",
+        "AL-TA-HD-0104"
+      ]
+    },
+    {
+      "path": "/shockers/tata-prima/",
+      "name": "Tata Prima",
+      "title": "Tata Prima Cabin Shocker | Alaina Shockers",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "csv",
+      "skus": [
+        "AL-TA-HD-0241(A)"
+      ]
+    },
+    {
+      "path": "/shockers/tata-1526/",
+      "name": "Tata 1526",
+      "title": "Tata 1526 Cabin Shocker | Alaina",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "data (tag=Cabin)",
+      "skus": [
+        "AL-TA-HD-0107"
+      ]
+    },
+    {
+      "path": "/shockers/leyland-2518/",
+      "name": "Ashok Leyland 2518",
+      "title": "Ashok Leyland 2518 Cabin Shocker (U Truck) | Alaina",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "data (tag=Cabin)",
+      "skus": [
+        "AL-LE-HD-3500"
+      ]
+    },
+    {
+      "path": "/shockers/leyland-ngc/",
+      "name": "Ashok Leyland NGC",
+      "title": "Ashok Leyland NGC Cabin Shocker (U Truck/G91) | Alaina",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "data (tag=Cabin)",
+      "skus": [
+        "AL-LE-HD-0110"
+      ]
+    },
+    {
+      "path": "/shockers/eicher-canter/",
+      "name": "Eicher Canter",
+      "title": "Eicher Canter Cabin Shocker (Pro/Jumbo) | Alaina",
+      "field": "tag",
+      "tag_value": "Cabin",
+      "source": "data (tag=Cabin)",
+      "skus": [
+        "AL-EI-HD-5551(A)",
+        "AL-EI-HD-0077(A)"
+      ]
+    }
+  ]
 }
