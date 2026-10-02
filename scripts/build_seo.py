@@ -17,10 +17,60 @@ from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://alainashockabsorbers.com"
+ORGANIZATION_ID = f"{SITE}/#organization"
 TODAY = date.today().isoformat()
 WA = "https://wa.me/917982555636"
 PHONE = "+91 79825 55636"
 EMAIL = "adhyanmahajan26@gmail.com"
+HOME_TITLE = "Truck Cabin Damper Manufacturer in India | Alaina Shockers"
+HOME_META = (
+    "Alaina shockers: truck cabin dampers for Tata, Ashok Leyland, Eicher and "
+    "BharatBenz, plus pickup shockers and rare struts. 74 OE-matched SKUs. Since 1978."
+)
+# Page-level title/meta from title-fixes-2026-10-02.csv (group 3-alaina).
+# Homepage title is NOT taken from the CSV (overridden by HOME_TITLE).
+CSV_PAGE_SEO = {
+    "/cabin-dampers/": {
+        "title": "Truck Cabin Shocker & Cabin Dampers – Tata, Leyland | Alaina",
+        "description": (
+            "Alaina truck cabin shockers (cabin dampers) for Tata Signa, Prima and 4018, "
+            "Ashok Leyland, Eicher, BharatBenz and Mann. OE-referenced. Catalogue No.04."
+        ),
+    },
+    "/rare-struts/": {
+        "title": "Rare Struts: Camry, Corolla, Lancer, Duster, Hector | Alaina",
+    },
+    "/shockers/tata-4018/": {
+        "title": "Tata 4018 Cabin Shocker (Hywa/Signa/Prima) | Alaina",
+        "description": (
+            "Alaina cabin shockers (cabin dampers) for Tata 4018: 3 part numbers with "
+            "OE references from Technical Catalogue No.04. Enquire on WhatsApp."
+        ),
+    },
+    "/shockers/tata-signa/": {
+        "title": "Tata Signa Cabin Shocker | Alaina Shockers",
+        "description": (
+            "Alaina cabin shockers (cabin dampers) for Tata Signa: 2 part numbers with "
+            "OE references from Technical Catalogue No.04. Enquire on WhatsApp."
+        ),
+    },
+    "/shockers/tata-prima/": {
+        "title": "Tata Prima Cabin Shocker | Alaina Shockers",
+        "description": (
+            "Alaina cabin shockers (cabin dampers) for Tata Prima: 1 part number with "
+            "OE references from Technical Catalogue No.04. Enquire on WhatsApp."
+        ),
+    },
+    "/shockers/tata-hywa/": {
+        "title": "Tata Hywa Cabin Shocker | Alaina Shockers",
+        "description": (
+            "Alaina cabin shockers (cabin dampers) for Tata Hywa: 2 part numbers with "
+            "OE references from Technical Catalogue No.04. Enquire on WhatsApp."
+        ),
+    },
+}
+EMPTY_NOINDEX_PATHS = {"/gas-springs/", "/dickey-bonnet-struts/"}
+DEFAULT_ROBOTS = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
 
 sys.path.insert(0, str(ROOT))
 
@@ -225,15 +275,29 @@ def json_ld(obj) -> str:
     )
 
 
+def organization_ld() -> dict:
+    """Single Organization node. ImageObjects and Product.manufacturer reference this @id."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": ORGANIZATION_ID,
+        "name": "Alaina Shockers",
+        "alternateName": ["Alaina Shocker", "Alaina Shock Absorbers", "Alaina Dampers"],
+        "url": SITE + "/",
+        "brand": {"@type": "Brand", "name": "Alaina"},
+    }
+
+
 def image_object(url: str, name: str, caption: str | None = None) -> dict:
+    org_ref = {"@id": ORGANIZATION_ID}
     return {
         "@type": "ImageObject",
         "name": name,
         "caption": caption or name,
         "contentUrl": url,
         "url": url,
-        "creator": {"@type": "Organization", "name": "Alaina"},
-        "copyrightHolder": {"@type": "Organization", "name": "Alaina"},
+        "creator": org_ref,
+        "copyrightHolder": org_ref,
         "creditText": "Alaina Shockers",
     }
 
@@ -247,15 +311,17 @@ def head_tags(
     og_type: str,
     image: str | None,
     image_alt: str | None,
+    robots: str | None = None,
 ) -> str:
     img = image or f"{SITE}/images/tata-4018-hywa-cabin.png"
     ialt = image_alt or title
+    robots_content = robots or DEFAULT_ROBOTS
     return f"""<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}"/>
 <meta name="keywords" content="{esc(keywords)}"/>
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
+<meta name="robots" content="{esc(robots_content)}"/>
 <meta name="author" content="Alaina Shockers"/>
 <meta name="geo.region" content="IN"/>
 <meta name="geo.placename" content="India"/>
@@ -465,8 +531,55 @@ def write(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+def webpage_name(p: dict) -> str:
+    return f"Alaina {p['_kind']['headline']} {p['_name']} ({p['partno']})"
+
+
+def product_meta_description(p: dict) -> str:
+    return (
+        f"Alaina {p['_kind']['label']} {p['partno']} for {p['brand']} {p['_app']}."
+        + (f" OE {p['_oe']}." if p["_oe"] else "")
+        + " Pressure-tested, OE-matched. Enquire on WhatsApp for stock."
+    )
+
+
+def product_schema(p: dict, *, description: str, image: str) -> dict:
+    """schema.org Product from catalogue data. No offers and no price."""
+    extra = []
+    if p["_oe"]:
+        extra.append({"@type": "PropertyValue", "name": "OE reference", "value": p["_oe"]})
+    extra.extend(
+        [
+            {"@type": "PropertyValue", "name": "Vehicle brand", "value": p["brand"]},
+            {"@type": "PropertyValue", "name": "Position", "value": p["_tag"]},
+            {"@type": "PropertyValue", "name": "Application", "value": p["_app"]},
+            {
+                "@type": "PropertyValue",
+                "name": "Line",
+                "value": "Heavy Duty" if p["cat"] == "HD" else "Rare Struts",
+            },
+        ]
+    )
+    return {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "@id": p["_abs"] + "#product",
+        "name": webpage_name(p),
+        "sku": p["partno"],
+        "mpn": p["partno"],
+        "brand": {"@type": "Brand", "name": "Alaina"},
+        "manufacturer": {"@type": "Organization", "@id": ORGANIZATION_ID},
+        "category": p["_kind"]["headline"],
+        "description": description,
+        "image": image,
+        "url": p["_abs"],
+        "mainEntityOfPage": {"@id": p["_abs"]},
+        "additionalProperty": extra,
+    }
+
+
 def product_jsonld(p: dict) -> dict:
-    """WebPage + ImageObject — never Product (no public prices/reviews in the repo)."""
+    """Existing WebPage + ImageObject block (kept valid; Product is a sibling script)."""
     images = []
     if p["_has_photo"]:
         images.append(abs_url(p["img"]))
@@ -488,7 +601,8 @@ def product_jsonld(p: dict) -> dict:
     obj = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": f"Alaina {p['_kind']['headline']} {p['_name']} ({p['partno']})",
+        "@id": p["_abs"],
+        "name": webpage_name(p),
         "description": desc,
         "url": p["_abs"],
         "identifier": p["partno"],
@@ -513,11 +627,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
     rel = "../../"
     kind = p["_kind"]
     title = f"{p['_name']} ({p['partno']}) | Alaina {kind['headline']}"
-    desc = (
-        f"Alaina {kind['label']} {p['partno']} for {p['brand']} {p['_app']}."
-        + (f" OE {p['_oe']}." if p["_oe"] else "")
-        + " Pressure-tested, OE-matched. Enquire on WhatsApp for stock."
-    )
+    desc = product_meta_description(p)
     img_abs = abs_url(p["img"]) if p["_has_photo"] else abs_url("images/damper-closeup.jpg")
     keywords = (
         f"Alaina {kind['label']}, {p['partno']}, {p['brand']} {p['_name']}, "
@@ -585,7 +695,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
   {"<section><h2>More " + esc(p["brand"]) + " parts</h2><div class='cat-grid'>" + rel_grid + "</div></section>" if related else ""}
 </main>
 """
-    ld = [product_jsonld(p), crumb_ld]
+    ld = [organization_ld(), product_schema(p, description=desc, image=img_abs), product_jsonld(p), crumb_ld]
     return page_shell(rel, head, body, ld)
 
 
@@ -651,6 +761,7 @@ def render_collection(
     extra_links: list[tuple[str, str]] | None = None,
     product_line_name: str | None = None,
     rel: str | None = None,
+    robots: str | None = None,
 ) -> str:
     if rel is None:
         depth = path.strip("/").count("/") + 1 if path.strip("/") else 0
@@ -667,6 +778,7 @@ def render_collection(
         og_type="website",
         image=og,
         image_alt=og_alt,
+        robots=robots,
     )
     crumb_html, crumb_ld = crumbs([("Home", SITE + "/"), (crumb_name, url)])
     grid = "".join(product_card_html(rel, p, lazy=True) for p in items)
@@ -694,7 +806,7 @@ def render_collection(
     for p in items:
         if p["_has_photo"]:
             images.append(abs_url(p["img"]))
-    ld = [crumb_ld]
+    ld = [organization_ld(), crumb_ld]
     if items:
         ld.append(item_list_ld(h1, url, items))
         ld.append(collection_webpage_ld(product_line_name or h1, description, images, url))
@@ -755,6 +867,77 @@ def vehicle_groups(products: list[dict]) -> list[dict]:
         if items:
             groups.append({"slug": slug, "name": name, "brand": brand, "items": items})
     return groups
+
+
+def group_is_cabin(g: dict) -> bool:
+    """True only when every SKU on the model page has tag == 'Cabin'. Never infer from names."""
+    items = g.get("items") or []
+    return bool(items) and all(p.get("_tag") == "Cabin" for p in items)
+
+
+def application_labels(g: dict) -> list[str]:
+    """Sibling application names from the catalogue `app` field, excluding the current model."""
+    model_tokens = set(re.findall(r"[A-Za-z0-9]+", g["name"].lower()))
+    make_words = {"tata", "ashok", "leyland", "eicher", "mahindra", "the"}
+    trailing_generic = {"cabin", "damper", "series", "assy", "assembly"}
+    seen: list[str] = []
+    seen_key: set[str] = set()
+    for p in g["items"]:
+        parts = re.split(r"\s*(?:/|—|--|,)\s*", p["_app"])
+        for part in parts:
+            part = re.sub(r"\([^)]*\)", "", part)
+            words = [w for w in re.sub(r"\s+", " ", part).strip().split() if w.lower() not in make_words]
+            while words and words[-1].lower() in trailing_generic:
+                words.pop()
+            # Drop a trailing "Truck" only when another real word remains ("Prima Truck" → Prima).
+            # Keep "U Truck" — that is the application name in the catalogue.
+            if (
+                len(words) >= 2
+                and words[-1].lower() == "truck"
+                and any(len(re.sub(r"[^A-Za-z0-9]", "", w)) > 1 for w in words[:-1])
+            ):
+                words.pop()
+            while words:
+                lead = set(re.findall(r"[A-Za-z0-9]+", words[0].lower()))
+                if lead and lead <= model_tokens:
+                    words.pop(0)
+                else:
+                    break
+            label = " ".join(words).strip(" -")
+            if not label or label.lower() in trailing_generic | {"truck"}:
+                continue
+            tokens = set(re.findall(r"[A-Za-z0-9]+", label.lower()))
+            if not tokens or tokens <= model_tokens:
+                continue
+            key = label.lower()
+            if key not in seen_key:
+                seen_key.add(key)
+                seen.append(label)
+    return seen
+
+
+def cabin_model_title(g: dict, limit: int = 60) -> str:
+    """`<Make> <Model> Cabin Shocker (<applications>) | Alaina`, trimmed to ~60 chars."""
+    suffix = " | Alaina"
+    base = f"{g['name']} Cabin Shocker"
+    apps = application_labels(g)
+    chosen = list(apps)
+    while True:
+        if chosen:
+            title = f"{base} ({'/'.join(chosen)}){suffix}"
+        else:
+            title = f"{base}{suffix}"
+        if len(title) <= limit or not chosen:
+            return title
+        chosen = chosen[:-1]
+
+
+def apply_csv_seo(path: str, title: str, description: str) -> tuple[str, str, str]:
+    """Return (title, description, source) where source is 'csv' or 'data'."""
+    row = CSV_PAGE_SEO.get(path)
+    if not row:
+        return title, description, "data"
+    return row.get("title", title), row.get("description", description), "csv"
 
 
 def sitemap_url(loc: str, images: list[tuple[str, str]], lastmod: str = TODAY, pri: str = "0.7") -> str:
@@ -834,6 +1017,7 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
     org_ld = {
         "@context": "https://schema.org",
         "@type": "Organization",
+        "@id": ORGANIZATION_ID,
         "name": "Alaina Shockers",
         "alternateName": ["Alaina Shocker", "Alaina Shock Absorbers", "Alaina Dampers"],
         "url": SITE + "/",
@@ -860,6 +1044,57 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
     if '"@type": "WebSite"' not in text:
         insert = json_ld(org_ld) + "\n" + json_ld(website_ld) + "\n"
         text = text.replace('<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "AutoPartsStore"', insert + '<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "AutoPartsStore"', 1)
+
+    # Invisible homepage SEO (title/meta + Organization @id). Do not touch visible copy.
+    text = re.sub(
+        r"<title>.*?</title>",
+        f"<title>{esc(HOME_TITLE)}</title>",
+        text,
+        count=1,
+        flags=re.S,
+    )
+    text = re.sub(
+        r'<meta name="description" content="[^"]*"/>',
+        f'<meta name="description" content="{esc(HOME_META)}"/>',
+        text,
+        count=1,
+    )
+    text = re.sub(
+        r'<meta property="og:title" content="[^"]*"/>',
+        f'<meta property="og:title" content="{esc(HOME_TITLE)}"/>',
+        text,
+        count=1,
+    )
+    text = re.sub(
+        r'<meta property="og:description" content="[^"]*"/>',
+        f'<meta property="og:description" content="{esc(HOME_META)}"/>',
+        text,
+        count=1,
+    )
+    text = re.sub(
+        r'<meta name="twitter:title" content="[^"]*"/>',
+        f'<meta name="twitter:title" content="{esc(HOME_TITLE)}"/>',
+        text,
+        count=1,
+    )
+    text = re.sub(
+        r'<meta name="twitter:description" content="[^"]*"/>',
+        f'<meta name="twitter:description" content="{esc(HOME_META)}"/>',
+        text,
+        count=1,
+    )
+    if f'"@id": "{ORGANIZATION_ID}"' not in text:
+        text = text.replace(
+            '  "@type": "Organization",\n  "name": "Alaina Shockers",',
+            f'  "@type": "Organization",\n  "@id": "{ORGANIZATION_ID}",\n  "name": "Alaina Shockers",',
+            1,
+        )
+    text = text.replace(
+        '  "creator": {\n    "@type": "Organization",\n    "name": "Alaina"\n  },\n'
+        '  "copyrightHolder": {\n    "@type": "Organization",\n    "name": "Alaina"\n  },',
+        f'  "creator": {{\n    "@id": "{ORGANIZATION_ID}"\n  }},\n'
+        f'  "copyrightHolder": {{\n    "@id": "{ORGANIZATION_ID}"\n  }},',
+    )
 
     text = text.replace(
         f'"logo": "{SITE}/images/tata-4018-hywa-cabin.png"',
@@ -1195,9 +1430,9 @@ def main() -> None:
     collections = [
         dict(
             path="/cabin-dampers/",
-            title="Cabin Dampers & Cabin Shockers for Tata, Leyland, Eicher | Alaina",
+            title="Truck Cabin Shocker & Cabin Dampers – Tata, Leyland | Alaina",
             h1="Cabin dampers",
-            description="Alaina cabin dampers (cabin shockers) for Tata, Ashok Leyland, Eicher, Bharat Benz and Mann trucks. OE-matched, pressure-tested. Catalogue No.04.",
+            description="Alaina truck cabin shockers (cabin dampers) for Tata Signa, Prima and 4018, Ashok Leyland, Eicher, BharatBenz and Mann. OE-referenced. Catalogue No.04.",
             keywords="cabin damper, cabin shocker, truck cabin damper, Tata cabin damper, Leyland cabin damper, Eicher cabin damper, Alaina AL-CD",
             intro="Heavy-duty <strong>cabin dampers</strong> — the unit that keeps a commercial-vehicle cabin civilised. Every part number below is from the live Alaina catalogue (OE references included where the catalogue lists them).",
             items=cabin,
@@ -1231,7 +1466,7 @@ def main() -> None:
         ),
         dict(
             path="/rare-struts/",
-            title="Rare Struts for Camry, Corolla, Lancer, Duster, Hector | Alaina",
+            title="Rare Struts: Camry, Corolla, Lancer, Duster, Hector | Alaina",
             h1="Rare struts",
             description="Alaina rare struts for Toyota Camry and Corolla, Mitsubishi Lancer, Renault Duster 4x4, Isuzu D-Max, Suzuki Baleno and MG Hector. Catalogue No.04.",
             keywords="rare strut, Camry strut, Corolla shock absorber, Lancer shocker, Duster 4x4 strut, Hector strut, Alaina AL-RS",
@@ -1316,25 +1551,31 @@ def main() -> None:
     ]
 
     for c in collections:
+        title, description, _src = apply_csv_seo(c["path"], c["title"], c["description"])
+        noindex = c["path"] in EMPTY_NOINDEX_PATHS and not c["items"]
         html = render_collection(
             path=c["path"],
-            title=c["title"],
+            title=title,
             h1=c["h1"],
-            description=c["description"],
+            description=description,
             keywords=c["keywords"],
             intro=c["intro"],
             items=c["items"],
             crumb_name=c["crumb"],
             extra_links=c["extra"],
             product_line_name=c["line"],
+            robots="noindex,follow" if noindex else None,
         )
         dest = ROOT / c["path"].strip("/") / "index.html"
         write(dest, html)
+        if noindex:
+            continue
         imgs = []
         for p in c["items"]:
             imgs.extend(images_for_product(p)[:1])
         pages.append((c["path"], TODAY, imgs, "0.9"))
 
+    cabin_retitles = []
     for g in vehicle_groups(products):
         path = f"/shockers/{g['slug']}/"
         title = f"Shocker for {g['name']} | Alaina Shockers"
@@ -1342,6 +1583,25 @@ def main() -> None:
             f"Alaina shockers and related dampers/struts catalogued for {g['name']}. "
             f"{len(g['items'])} part number(s) from Technical Catalogue No.04."
         )
+        source = "unchanged"
+        if group_is_cabin(g):
+            title = cabin_model_title(g)
+            source = "data (tag=Cabin)"
+        title, desc, csv_src = apply_csv_seo(path, title, desc)
+        if csv_src == "csv":
+            source = "csv"
+        if source != "unchanged":
+            cabin_retitles.append(
+                {
+                    "path": path,
+                    "name": g["name"],
+                    "title": title,
+                    "field": "tag",
+                    "tag_value": "Cabin",
+                    "source": source,
+                    "skus": [p["partno"] for p in g["items"]],
+                }
+            )
         intro = (
             f"Parts Alaina lists for <strong>{esc(g['name'])}</strong>. "
             "Only applications written in the catalogue are shown — confirm OE number and the old unit before ordering."
@@ -1416,7 +1676,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 ## What shipped
 
 - Static HTML for every SKU under `/products/<part-slug>/` (crawlable `<img>`, not JS-only cards).
-- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + WebPage JSON-LD (no Product — there are no public prices or reviews).
+- Category / series / vehicle landings with unique title, meta description, keywords, canonical, hreflang `en-IN`, `og:*`, `twitter:*`, geo/locale `en_IN`, one H1, BreadcrumbList + ItemList + WebPage JSON-LD. ImageObject `creator`/`copyrightHolder` reference a single Organization `@id`.
+- SKU pages add schema.org **Product** JSON-LD (name, sku, mpn, brand, manufacturer `@id`, image, additionalProperty for OE/fitment). **No `offers` and no price.**
 - Homepage Organization + WebSite (`SearchAction` on `/?q=`) + AutoPartsStore (`hasOfferCatalog` ItemList of landings, not Product/Offer) + FAQ + homepage ItemList / BreadcrumbList / ImageObject.
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
@@ -1450,8 +1711,8 @@ Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 | rare strut / AL-RS | `/rare-struts/`, `/al-rs/` |
 | AL-DA dampers | `/al-da/` |
 | steering damper | `/steering-dampers/` |
-| gas spring | `/gas-springs/` (enquiry only — **no SKUs in repo**) |
-| dickey shocker / bonnet gas strut | `/dickey-bonnet-struts/` (enquiry only — **no SKUs in repo**) |
+| gas spring | `/gas-springs/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
+| dickey shocker / bonnet gas strut | `/dickey-bonnet-struts/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
 | shocker for Tata 4018, Bolero, Camry, … | `/shockers/<vehicle-slug>/` |
 | SKU / part number | `/products/<slug>/` |
 
@@ -1465,7 +1726,7 @@ Those codes are **not** printed as SKUs in `PRODUCTS`. The pages `/al-cd/`, `/al
 - **AL-RS** — every SKU with `cat: RS` (rare struts).
 - **AL-DA** — cabin + steering + shock absorber/stabilizer SKUs (dampers). Rare struts stay on AL-RS.
 
-JSON-LD on those URLs is **WebPage + ItemList + ImageObject**, never Product (Product without offers/review is invalid in Search Console). SKU pages put the real `partno` in `WebPage.identifier` and description as SKU/MPN. **No Offer** blocks — the repo has no prices.
+JSON-LD on those URLs is **WebPage + ItemList + ImageObject** plus one Organization `@id`. SKU pages also emit a **Product** node (sku/mpn/brand/manufacturer/image/additionalProperty). **No Offer / price** blocks — the repo has no prices.
 
 ## Products with no photo
 
@@ -1503,12 +1764,14 @@ Requires Pillow (`pip install pillow`) for WebP. Does not modify `google2874721c
                 "products": len(products),
                 "missing_photos": [p["partno"] for p in missing_photo],
                 "structured_pages": structured,
+                "cabin_model_retitles": cabin_retitles,
             },
             indent=2,
         )
         + "\n",
     )
     print("pages", len(pages), "images", img_count, "missing", [p["partno"] for p in missing_photo])
+    print("cabin retitles", json.dumps(cabin_retitles, ensure_ascii=False))
 
 
 if __name__ == "__main__":
