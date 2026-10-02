@@ -8,9 +8,11 @@ import os
 import re
 import shutil
 import struct
+import subprocess
 import sys
 from collections import defaultdict
 from datetime import date
+from functools import lru_cache
 from pathlib import Path
 from urllib.parse import quote
 from xml.etree import ElementTree as ET
@@ -940,6 +942,101 @@ def apply_csv_seo(path: str, title: str, description: str) -> tuple[str, str, st
     return row.get("title", title), row.get("description", description), "csv"
 
 
+def loc_to_html(loc: str) -> str:
+    """Sitemap path `/shockers/tata-4018/` → built file `shockers/tata-4018/index.html`."""
+    if loc == "/":
+        return "index.html"
+    return loc.strip("/") + "/index.html"
+
+
+def _unique_page_fingerprint(html: str) -> str:
+    """Page-specific bits only — ignore shared chrome, Organization JSON-LD, favicons.
+
+    Generator PRs rewrite every HTML file. lastmod must follow real per-URL
+    changes (title, copy, Product JSON-LD, <main>) so untouched URLs keep
+    their older dates instead of the rewrite's commit day.
+    """
+    bits: list[str] = []
+    for pat in (
+        r"<title>(.*?)</title>",
+        r'<meta name="description" content="(.*?)"',
+        r'<meta name="robots" content="(.*?)"',
+        r'<link rel="canonical" href="(.*?)"',
+        r'<meta property="og:title" content="(.*?)"',
+        r'<meta property="og:description" content="(.*?)"',
+        r"<h1[^>]*>(.*?)</h1>",
+    ):
+        m = re.search(pat, html, flags=re.S | re.I)
+        bits.append(m.group(1).strip() if m else "")
+    main = re.search(r"<main\b.*?</main>", html, flags=re.S | re.I)
+    if main:
+        bits.append(main.group(0))
+    else:
+        body = re.search(r"<body\b.*?</body>", html, flags=re.S | re.I)
+        chunk = body.group(0) if body else html
+        chunk = re.sub(r'<script type="application/ld\+json">.*?</script>', "", chunk, flags=re.S)
+        chunk = re.sub(r'<div id="topbar">.*?</header>', "", chunk, flags=re.S)
+        chunk = re.sub(r'<div id="mobnav">.*?</div>', "", chunk, flags=re.S, count=1)
+        chunk = re.sub(r"<footer>.*?</footer>", "", chunk, flags=re.S)
+        bits.append(chunk)
+    for m in re.finditer(
+        r'<script type="application/ld\+json">\s*(\{.*?\})\s*</script>',
+        html,
+        flags=re.S,
+    ):
+        if '"@type": "Product"' in m.group(1):
+            bits.append(m.group(1))
+    return "\n".join(bits)
+
+
+def _git(args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", *args],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+@lru_cache(maxsize=None)
+def _git_show(commit: str, rel: str) -> str | None:
+    r = _git(["show", f"{commit}:{rel}"])
+    if r.returncode != 0:
+        return None
+    return r.stdout
+
+
+def html_lastmod(rel: str) -> str:
+    """YYYY-MM-DD of the last git commit that changed this URL's unique content.
+
+    Uses the built HTML file's history. Shared-chrome rewrites do not bump the
+    date. Uncommitted unique edits (or a page with no git history) fall back
+    to TODAY.
+    """
+    rel = Path(rel).as_posix()
+    path = ROOT / rel
+    if not path.exists():
+        return TODAY
+    now_fp = _unique_page_fingerprint(path.read_text(encoding="utf-8"))
+    log = _git(["log", "--format=%H %cs", "--", rel])
+    if log.returncode != 0 or not log.stdout.strip():
+        return TODAY
+    streak: list[str] = []
+    for line in log.stdout.strip().splitlines():
+        sha, cs = line.split(maxsplit=1)
+        html = _git_show(sha, rel)
+        fp = _unique_page_fingerprint(html) if html is not None else None
+        if fp == now_fp:
+            streak.append(cs)
+            continue
+        if streak:
+            break
+    if streak:
+        return streak[-1]
+    return TODAY
+
+
 def sitemap_url(loc: str, images: list[tuple[str, str]], lastmod: str = TODAY, pri: str = "0.7") -> str:
     parts = [
         "  <url>",
@@ -1647,8 +1744,17 @@ def main() -> None:
         "sitemap-pages.xml": [e for e in pages if not e[0].startswith("/products/")],
         "sitemap-products.xml": [e for e in pages if e[0].startswith("/products/")],
     }
+    sm_lastmod: dict[str, str] = {}
     for fname, entries in groups.items():
-        body = "\n".join(sitemap_url(SITE + ("" if loc == "/" else loc), imgs, lm, pri) for loc, lm, imgs, pri in entries)
+        dated = []
+        for loc, _lm, imgs, pri in entries:
+            lm = html_lastmod(loc_to_html(loc))
+            dated.append((loc, lm, imgs, pri))
+        sm_lastmod[fname] = max((lm for _loc, lm, _imgs, _pri in dated), default=TODAY)
+        body = "\n".join(
+            sitemap_url(SITE + ("" if loc == "/" else loc), imgs, lm, pri)
+            for loc, lm, imgs, pri in dated
+        )
         write(ROOT / fname, wrap_urlset(body))
         sm_files.append(fname)
 
@@ -1656,7 +1762,7 @@ def main() -> None:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(
-            f"  <sitemap>\n    <loc>{SITE}/{fn}</loc>\n    <lastmod>{TODAY}</lastmod>\n  </sitemap>\n"
+            f"  <sitemap>\n    <loc>{SITE}/{fn}</loc>\n    <lastmod>{sm_lastmod.get(fn, TODAY)}</lastmod>\n  </sitemap>\n"
             for fn in sm_files
         )
         + "</sitemapindex>\n"
