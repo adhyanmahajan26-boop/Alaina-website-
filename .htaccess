@@ -9,6 +9,14 @@ Header always set Content-Security-Policy "default-src 'self'; script-src 'self'
 Options -MultiViews
 RewriteEngine On
 
+# Retired: Alaina does not sell gas springs. 301 hyphenated and concatenated
+# paths, with or without a trailing slash or any sub-path, to the homepage.
+# Covers /gassprings, /gassprings/, /gassprings/*, /gas-springs, /gas-springs/,
+# /gas-springs/* (including /gassprings/inquired/alaina-shockers).
+# Must run before the SPA fallback so these never soft-404 as index.html.
+RewriteRule ^gassprings(/.*)?$ https://alainashockabsorbers.com/ [R=301,L,NC]
+RewriteRule ^gas-springs(/.*)?$ https://alainashockabsorbers.com/ [R=301,L,NC]
+
 # Canonical host: https://alainashockabsorbers.com (apex). Preserve path/query.
 RewriteCond %{HTTP_HOST} ^www\.alainashockabsorbers\.com$ [NC,OR]
 RewriteCond %{HTTPS} !=on

@@ -24,7 +24,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 | SKUs without photo | 1 |
 | URL entries in sitemaps | 117 |
 | Image entries (unique loc per page, summed) | 477 |
-| Pages with JSON-LD WebPage/ItemList/Org | 119 |
+| Pages with JSON-LD WebPage/ItemList/Org | 118 |
 
 Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 
@@ -40,7 +40,6 @@ Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 | rare strut / AL-RS | `/rare-struts/`, `/al-rs/` |
 | AL-DA dampers | `/al-da/` |
 | steering damper | `/steering-dampers/` |
-| gas spring | `/gas-springs/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
 | dickey shocker / bonnet gas strut | `/dickey-bonnet-struts/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
 | shocker for Tata 4018, Bolero, Camry, … | `/shockers/<vehicle-slug>/` |
 | SKU / part number | `/products/<slug>/` |

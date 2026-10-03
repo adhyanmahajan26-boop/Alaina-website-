@@ -71,7 +71,9 @@ CSV_PAGE_SEO = {
         ),
     },
 }
-EMPTY_NOINDEX_PATHS = {"/gas-springs/", "/dickey-bonnet-struts/"}
+# Alaina does not sell gas springs. Never regenerate /gas-springs/.
+EMPTY_NOINDEX_PATHS = {"/dickey-bonnet-struts/"}
+RETIRED_PAGE_DIRS = ("gas-springs", "gassprings")
 DEFAULT_ROBOTS = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
 
 sys.path.insert(0, str(ROOT))
@@ -435,7 +437,6 @@ def chrome(rel: str) -> tuple[str, str]:
       </div>
       <div class="fcol">
         <div class="fc-lab">Also</div>
-        <a href="{rel}gas-springs/">Gas springs</a>
         <a href="{rel}dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>
         <a href="{rel}shockers/">Shockers index</a>
         <a href="{rel}#catalogue">Full catalogue</a>
@@ -1398,6 +1399,14 @@ Header always set Content-Security-Policy "default-src 'self'; script-src 'self'
 Options -MultiViews
 RewriteEngine On
 
+# Retired: Alaina does not sell gas springs. 301 hyphenated and concatenated
+# paths, with or without a trailing slash or any sub-path, to the homepage.
+# Covers /gassprings, /gassprings/, /gassprings/*, /gas-springs, /gas-springs/,
+# /gas-springs/* (including /gassprings/inquired/alaina-shockers).
+# Must run before the SPA fallback so these never soft-404 as index.html.
+RewriteRule ^gassprings(/.*)?$ https://alainashockabsorbers.com/ [R=301,L,NC]
+RewriteRule ^gas-springs(/.*)?$ https://alainashockabsorbers.com/ [R=301,L,NC]
+
 # Canonical host: https://alainashockabsorbers.com (apex). Preserve path/query.
 RewriteCond %{HTTP_HOST} ^www\.alainashockabsorbers\.com$ [NC,OR]
 RewriteCond %{HTTPS} !=on
@@ -1507,6 +1516,10 @@ def main() -> None:
     products = enrich(load_products())
     print("products", len(products))
     convert_images(products)
+    for retired in RETIRED_PAGE_DIRS:
+        orphan = ROOT / retired
+        if orphan.exists():
+            shutil.rmtree(orphan)
 
     cabin = [p for p in products if p["_kind"]["key"] == "cabin-damper"]
     struts = [p for p in products if p["_kind"]["key"] == "rare-strut"]
@@ -1622,18 +1635,6 @@ def main() -> None:
             line="Alaina AL-DA Dampers",
         ),
         dict(
-            path="/gas-springs/",
-            title="Gas Springs — Enquire | Alaina Shockers",
-            h1="Gas springs",
-            description="Alaina Shockers publishes cabin dampers, shock absorbers and rare struts in Catalogue No.04. Gas-spring part numbers are not listed on this site — enquire with your vehicle model.",
-            keywords="gas spring, gas strut, Alaina gas spring, bonnet gas spring",
-            intro="This website’s published catalogue lists <strong>cabin dampers, shock absorbers/shockers and rare struts</strong> with part numbers. <strong>No gas-spring SKUs, prices or fitments are in the repository</strong>, so none are shown here. If you need a gas spring, send the vehicle model (or a photo of the old unit) on WhatsApp and the trade desk can check.",
-            items=[],
-            crumb="Gas springs",
-            extra=[("Rare struts", "/rare-struts/"), ("Dickey & bonnet struts", "/dickey-bonnet-struts/"), ("Enquire", "/#enquire")],
-            line="Alaina Gas Springs (enquiry)",
-        ),
-        dict(
             path="/dickey-bonnet-struts/",
             title="Dickey & Bonnet Gas Struts — Enquire | Alaina Shockers",
             h1="Dickey & bonnet struts",
@@ -1642,7 +1643,7 @@ def main() -> None:
             intro="Searches for <strong>dickey shocker</strong> and <strong>bonnet gas strut</strong> are common. This site does not publish dickey or bonnet strut part numbers, so this page does not invent any. Use the catalogue for cabin dampers and rare struts, or enquire with the car model.",
             items=[],
             crumb="Dickey & bonnet struts",
-            extra=[("Gas springs", "/gas-springs/"), ("Rare struts", "/rare-struts/"), ("Enquire", "/#enquire")],
+            extra=[("Rare struts", "/rare-struts/"), ("Enquire", "/#enquire")],
             line="Alaina Dickey & Bonnet Struts (enquiry)",
         ),
     ]
@@ -1817,7 +1818,6 @@ Sitemaps: `sitemap.xml` (index) → `sitemap-pages.xml`, `sitemap-products.xml`.
 | rare strut / AL-RS | `/rare-struts/`, `/al-rs/` |
 | AL-DA dampers | `/al-da/` |
 | steering damper | `/steering-dampers/` |
-| gas spring | `/gas-springs/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
 | dickey shocker / bonnet gas strut | `/dickey-bonnet-struts/` (enquiry only — **no SKUs in repo**; `noindex,follow` and omitted from the sitemap while empty) |
 | shocker for Tata 4018, Bolero, Camry, … | `/shockers/<vehicle-slug>/` |
 | SKU / part number | `/products/<slug>/` |
