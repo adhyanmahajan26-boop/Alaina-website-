@@ -38,7 +38,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../../style.css?v=seo2"/>
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('themeToggle');if(!b)return;function sync(){var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'☀':'☾'}sync();b.addEventListener('click',function(){var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('alaina-theme',n)}catch(e){}sync()})})})();</script>
+<link rel="stylesheet" href="../../style.css?v=seo3"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -225,7 +226,7 @@
       <a href="../../rare-struts/">Rare Struts</a>
       <a href="../../#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
-    <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
   </div>
 </header>
 <div id="mobnav">
