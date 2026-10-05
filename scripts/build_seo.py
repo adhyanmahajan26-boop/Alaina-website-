@@ -356,8 +356,8 @@ def head_tags(
 <meta name="theme-color" content="#FF4A1A"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="{esc('REL')}style.css?v=seo1"/>"""
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{esc('REL')}style.css?v=seo2"/>"""
 
 
 CHROME_NAV = """
@@ -374,11 +374,11 @@ CHROME_NAV = """
   <div class="wrap">
     <a href="{home}" class="brand">
       <div class="brand-mark">A</div>
-      <div class="brand-word">ALAINA<sup>®</sup><small>PRECISION DAMPING</small></div>
+      <div class="brand-word">ALAINA<sup>®</sup><small>Precision damping</small></div>
     </a>
     <nav class="navlinks">
-      <a href="{home}#range"><i>01</i> Range</a>
-      <a href="{home}#catalogue"><i>02</i> Catalogue</a>
+      <a href="{home}#range">Range</a>
+      <a href="{home}#catalogue">Catalogue</a>
       <a href="{cd}">Cabin Dampers</a>
       <a href="{sa}">Shockers</a>
       <a href="{rs}">Rare Struts</a>
@@ -389,16 +389,16 @@ CHROME_NAV = """
 </header>
 <div id="mobnav">
   <div class="mn-top">
-    <div class="brand-word" style="color:var(--paper)">ALAINA<sup>®</sup></div>
+    <div class="brand-word">ALAINA<sup>®</sup></div>
     <button class="mn-x" id="mnClose">&#10005;</button>
   </div>
   <nav>
-    <a href="{home}#range"><span>01</span> Range</a>
-    <a href="{home}#catalogue"><span>02</span> Catalogue</a>
-    <a href="{cd}"><span>03</span> Cabin Dampers</a>
-    <a href="{sa}"><span>04</span> Shockers</a>
-    <a href="{rs}"><span>05</span> Rare Struts</a>
-    <a href="{home}#enquire"><span>06</span> Enquire</a>
+    <a href="{home}#range">Range</a>
+    <a href="{home}#catalogue">Catalogue</a>
+    <a href="{cd}">Cabin Dampers</a>
+    <a href="{sa}">Shockers</a>
+    <a href="{rs}">Rare Struts</a>
+    <a href="{home}#enquire">Enquire</a>
   </nav>
 </div>
 """
@@ -422,7 +422,7 @@ def chrome(rel: str) -> tuple[str, str]:
     </div>
     <div class="foot-mid">
       <div class="fcol">
-        <div class="fc-lab">Colophon</div>
+        <div class="fc-lab">Alaina Shockers</div>
         <p>Precision damping engineered for India's toughest roads. Distributed by Mahajan Motors India.</p>
       </div>
       <div class="fcol">
@@ -443,8 +443,8 @@ def chrome(rel: str) -> tuple[str, str]:
       </div>
       <div class="fcol">
         <div class="fc-lab">Contact</div>
-        <a href="tel:+917982555636" class="mono">{PHONE}</a>
-        <a href="mailto:{EMAIL}" class="mono">{EMAIL}</a>
+        <a href="tel:+917982555636">{PHONE}</a>
+        <a href="mailto:{EMAIL}">{EMAIL}</a>
         <a href="{WA}?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp ↗</a>
       </div>
     </div>
