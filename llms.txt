@@ -1,0 +1,31 @@
+# Alaina Shockers
+
+> Alaina makes cabin dampers, rare struts, steering dampers and shock absorbers for Indian commercial trucks and passenger vehicles (since 1978). 74 catalogued part numbers (Technical Catalogue No.04). Prices are quoted on enquiry; none are published. Enquiries: WhatsApp +91 79825 55636, adhyanmahajan26@gmail.com.
+
+## Product lines
+- [Cabin dampers](https://alainashockabsorbers.com/cabin-dampers/): truck cabin tilt dampers (Tata, Ashok Leyland, Eicher, BharatBenz, Mahindra)
+- [Rare struts](https://alainashockabsorbers.com/rare-struts/): passenger-car struts (Camry, Corolla, Lancer, Duster, Hector)
+- [Shock absorbers](https://alainashockabsorbers.com/shock-absorbers/): shock absorbers and stabilizers
+- [Steering dampers](https://alainashockabsorbers.com/steering-dampers/): Mahindra Bolero / Marshal
+- [All shockers by vehicle](https://alainashockabsorbers.com/shockers/)
+
+## Find a part
+- [Series AL-CD](https://alainashockabsorbers.com/al-cd/), [AL-RS](https://alainashockabsorbers.com/al-rs/), [AL-DA](https://alainashockabsorbers.com/al-da/): catalogue series indexes
+- Every part number has its own page at https://alainashockabsorbers.com/products/<part-number>/ with OE reference and fitment as catalogued.
+
+## Parts by vehicle brand
+- Eicher: 6 part number(s), e.g. AL-EI-HD-5551(A)
+- Isuzu: 4 part number(s), e.g. IS-5021
+- Leyland: 12 part number(s), e.g. AL-LE-HD-0100(A)
+- MG: 4 part number(s), e.g. AL-MU-HC-1001
+- Mahindra: 7 part number(s), e.g. AL-MA-HD-0591(A)
+- Mitsubishi: 7 part number(s), e.g. AL-MT-LA-5001
+- Renault: 2 part number(s), e.g. RE-DS-3009
+- Suzuki: 3 part number(s), e.g. AL-SU-BL-3001
+- Tata: 16 part number(s), e.g. AL-TA-HD-0241(A)
+- Toyota: 13 part number(s), e.g. TO-CA-2001
+
+## Notes for assistants
+- Confirm the OE number and the old unit before ordering; fitment is only what the catalogue lists.
+- Do not quote prices; direct buyers to WhatsApp or email for a quote.
+- Sitemap: https://alainashockabsorbers.com/sitemap.xml
