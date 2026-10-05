@@ -169,6 +169,39 @@ def kind_for(p: dict) -> dict:
     }
 
 
+def join_brand(brand: str, text: str) -> str:
+    """Prefix brand unless the text already names it (avoids 'Eicher Eicher Pro')."""
+    if brand and brand.lower() in text.lower():
+        return text
+    return f"{brand} {text}".strip()
+
+
+def clamp_words(text: str, limit: int) -> str:
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0].rstrip(" ,;:/-—(")
+    return cut
+
+
+def fit_title(title: str, limit: int = 60) -> str:
+    """Keep titles inside Google's display width: drop the ' | suffix' first, then trim at a word."""
+    if len(title) <= limit:
+        return title
+    if " | " in title:
+        head, suffix = title.rsplit(" | ", 1)
+        if len(head) <= limit:
+            return head
+        title = head
+    return clamp_words(title, limit)
+
+
+def fit_description(desc: str, limit: int = 160) -> str:
+    if len(desc) <= limit:
+        return desc
+    cut = clamp_words(desc, limit - 1)
+    return cut.rstrip(".") + "."
+
+
 def normalize_pn(pn: str) -> str:
     return re.sub(r"[^A-Z0-9]+", "", (pn or "").upper())
 
@@ -226,8 +259,10 @@ def enrich(products: list[dict]) -> list[dict]:
         p["_has_photo"] = bool(img and p["_img_path"] and p["_img_path"].exists())
         p["_size"] = img_size(p["_img_path"]) if p["_has_photo"] else None
         p["_card_size"] = img_size(p["_card_path"]) if card and p["_card_path"] and p["_card_path"].exists() else None
+        p["_bapp"] = join_brand(p["brand"], p["_app"])
+        p["_bname"] = join_brand(p["brand"], p["_name"])
         p["_alt"] = (
-            f"Alaina {p['_kind']['label']} {p['partno']} for {p['brand']} {p['_app']}"
+            f"Alaina {p['_kind']['label']} {p['partno']} for {p['_bapp']}"
             if p["_has_photo"]
             else ""
         )
@@ -242,11 +277,31 @@ def enrich(products: list[dict]) -> list[dict]:
     return out
 
 
+WEB_DIR = "images/web"
+
+
+def web_rel(img: str, small: bool) -> str:
+    stem = Path(img).stem
+    return f"{WEB_DIR}/{stem}{'-sm' if small else ''}.webp"
+
+
 def convert_images(products: list[dict]) -> None:
-    """Do not re-encode photos. Visible pages must use the original catalogue files."""
+    """Write compressed WebP display copies to images/web/.
+
+    Originals stay untouched and remain what the image sitemaps, og:image and
+    JSON-LD point at. Pages show the WebP through <picture> with the PNG as fallback.
+    """
     for p in products:
         p["_webp"] = None
         p["_card_webp"] = None
+        if not p["_has_photo"]:
+            continue
+        big = web_rel(p["img"], False)
+        small = web_rel(p["img"], True)
+        if to_webp(p["_img_path"], ROOT / big, max_w=1200, quality=80):
+            p["_webp"] = big
+        if to_webp(p["_img_path"], ROOT / small, max_w=600, quality=78):
+            p["_card_webp"] = small
 
 
 def abs_url(path: str) -> str:
@@ -265,10 +320,13 @@ def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> st
     loading = "lazy" if lazy else "eager"
     fetch = ' fetchpriority="high"' if not lazy else ""
     cls = f' class="{class_name}"' if class_name else ""
-    return (
+    img = (
         f'<img{cls} src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
         f'width="{w}" height="{h}" loading="{loading}"{fetch} decoding="async"/>'
     )
+    if p.get("_webp"):
+        return f'<picture><source type="image/webp" srcset="{esc(rel_prefix + p["_webp"])}"/>{img}</picture>'
+    return img
 
 
 def json_ld(obj) -> str:
@@ -288,6 +346,7 @@ def organization_ld() -> dict:
         "name": "Alaina Shockers",
         "alternateName": ["Alaina Shocker", "Alaina Shock Absorbers", "Alaina Dampers"],
         "url": SITE + "/",
+        "logo": SITE + "/favicon-512x512.png",
         "brand": {"@type": "Brand", "name": "Alaina"},
     }
 
@@ -317,6 +376,8 @@ def head_tags(
     image_alt: str | None,
     robots: str | None = None,
 ) -> str:
+    title = fit_title(title)
+    description = fit_description(description)
     img = image or f"{SITE}/images/tata-4018-hywa-cabin.png"
     ialt = image_alt or title
     robots_content = robots or DEFAULT_ROBOTS
@@ -509,7 +570,9 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
             f'loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        stage = f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
+        if p.get("_card_webp"):
+            img = f'<picture><source type="image/webp" srcset="{esc(rel + p["_card_webp"])}"/>{img}</picture>'
+        stage =f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
     else:
         stage = (
             f'<a class="pc-stage no-zoom" href="{rel}products/{p["_slug"]}/">'
@@ -539,9 +602,19 @@ def webpage_name(p: dict) -> str:
     return f"Alaina {p['_kind']['headline']} {p['_name']} ({p['partno']})"
 
 
+def product_title(p: dict) -> str:
+    kind = p["_kind"]
+    for suffix in (f" | Alaina {kind['headline']}", " | Alaina"):
+        t = f"{p['_name']} ({p['partno']}){suffix}"
+        if len(t) <= 60:
+            return t
+    room = 60 - len(f" ({p['partno']}) | Alaina")
+    return f"{clamp_words(p['_name'], room)} ({p['partno']}) | Alaina"
+
+
 def product_meta_description(p: dict) -> str:
-    return (
-        f"Alaina {p['_kind']['label']} {p['partno']} for {p['brand']} {p['_app']}."
+    return fit_description(
+        f"Alaina {p['_kind']['label']} {p['partno']} for {p['_bapp']}."
         + (f" OE {p['_oe']}." if p["_oe"] else "")
         + " Pressure-tested, OE-matched. Enquire on WhatsApp for stock."
     )
@@ -594,13 +667,13 @@ def product_jsonld(p: dict) -> dict:
             seen.add(u)
             imgs.append(u)
     desc = (
-        f"Alaina {p['_kind']['label']} {p['_name']} ({p['partno']}) for {p['brand']} {p['_app']}."
+        f"Alaina {p['_kind']['label']} {p['_name']} ({p['partno']}) for {p['_bapp']}."
         + f" Part number (SKU / MPN): {p['partno']}."
         + (f" OE reference {p['_oe']}." if p["_oe"] else "")
         + " OE-matched and pressure-tested. Listed in Alaina Technical Catalogue No.04. Price on enquiry — no list price is published."
     )
     img_name = p["_alt"] or f"Alaina {p['_kind']['label']} {p['partno']}"
-    cap = f"Alaina {p['_kind']['label']} {p['partno']} — {p['brand']} {p['_name']} ({p['_app']})"
+    cap = f"Alaina {p['_kind']['label']} {p['partno']} — {p['_bname']} ({p['_app']})"
     img_objs = [image_object(u, img_name, cap) for u in imgs]
     obj = {
         "@context": "https://schema.org",
@@ -617,7 +690,7 @@ def product_jsonld(p: dict) -> dict:
         obj["image"] = img_objs
     extra_props = [
         {"@type": "PropertyValue", "name": "SKU / MPN", "value": p["partno"]},
-        {"@type": "PropertyValue", "name": "Vehicle application", "value": f"{p['brand']} {p['_app']}"},
+        {"@type": "PropertyValue", "name": "Vehicle application", "value": f"{p['_bapp']}"},
         {"@type": "PropertyValue", "name": "Position / type", "value": p["_tag"]},
         {"@type": "PropertyValue", "name": "Catalogue line", "value": "Heavy Duty" if p["cat"] == "HD" else "Rare Struts"},
     ]
@@ -630,12 +703,12 @@ def product_jsonld(p: dict) -> dict:
 def render_product(p: dict, all_products: list[dict]) -> str:
     rel = "../../"
     kind = p["_kind"]
-    title = f"{p['_name']} ({p['partno']}) | Alaina {kind['headline']}"
+    title = product_title(p)
     desc = product_meta_description(p)
     img_abs = abs_url(p["img"]) if p["_has_photo"] else abs_url("images/damper-closeup.jpg")
     keywords = (
         f"Alaina {kind['label']}, {p['partno']}, {p['brand']} {p['_name']}, "
-        f"shocker for {p['brand']} {p['_app']}, {kind['keywords']}, Alaina shockers"
+        f"shocker for {p['_bapp']}, {kind['keywords']}, Alaina shockers"
     )
     head = head_tags(
         title=title,
@@ -656,7 +729,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
     related = [x for x in all_products if x["brand"] == p["brand"] and x["_slug"] != p["_slug"]][:8]
     fig = ""
     if p["_has_photo"]:
-        cap = f"Alaina {kind['label']} {p['partno']} — {p['brand']} {p['_name']} ({p['_app']})"
+        cap = f"Alaina {kind['label']} {p['partno']} — {p['_bname']} ({p['_app']})"
         fig = f"""
         <figure class="seo-figure">
           {picture(rel, p, lazy=False)}
@@ -677,7 +750,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
   {crumb_html}
   <p class="kicker">{esc(p['brand'])} · {esc(kind['headline'])}</p>
   <h1>{esc(p['_name'])} <span class="seo-h1-sub">{esc(p['partno'])}</span></h1>
-  <p class="seo-lead">Alaina {esc(kind['label'])} for {esc(p['brand'])} {esc(p['_app'])}. Listed in Technical Catalogue No.04. Built to OE reference dimensions and pressure-tested before dispatch.</p>
+  <p class="seo-lead">Alaina {esc(kind['label'])} for {esc(p['_bapp'])}. Listed in Technical Catalogue No.04. Built to OE reference dimensions and pressure-tested before dispatch.</p>
   <div class="seo-split">
     {fig}
     <aside class="seo-spec">
@@ -694,7 +767,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
   </div>
   <section>
     <h2>Fitment</h2>
-    <p>This {esc(kind['label'])} is catalogued for <strong>{esc(p['brand'])} {esc(p['_app'])}</strong>. Confirm the OE number{" (" + esc(p['_oe']) + ")" if p["_oe"] else ""} and the old unit before ordering. For the same vehicle see other Alaina {esc(p['brand'])} parts below.</p>
+    <p>This {esc(kind['label'])} is catalogued for <strong>{esc(p['_bapp'])}</strong>. Confirm the OE number{" (" + esc(p['_oe']) + ")" if p["_oe"] else ""} and the old unit before ordering. For the same vehicle see other Alaina {esc(p['brand'])} parts below.</p>
   </section>
   {"<section><h2>More " + esc(p["brand"]) + " parts</h2><div class='cat-grid'>" + rel_grid + "</div></section>" if related else ""}
 </main>
@@ -1471,6 +1544,45 @@ RewriteRule ^ index.html [QSA,L]
     )
 
 
+def write_llms(products: list[dict]) -> None:
+    """llms.txt: plain-text map of the site for AI search and assistants. Catalogue facts only."""
+    by_brand: dict[str, list[dict]] = defaultdict(list)
+    for p in products:
+        by_brand[p["brand"]].append(p)
+    lines = [
+        "# Alaina Shockers",
+        "",
+        "> Alaina makes cabin dampers, rare struts, steering dampers and shock absorbers for Indian "
+        f"commercial trucks and passenger vehicles (since 1978). {len(products)} catalogued part numbers "
+        "(Technical Catalogue No.04). Prices are quoted on enquiry; none are published. "
+        f"Enquiries: WhatsApp {PHONE}, {EMAIL}.",
+        "",
+        "## Product lines",
+        f"- [Cabin dampers]({SITE}/cabin-dampers/): truck cabin tilt dampers (Tata, Ashok Leyland, Eicher, BharatBenz, Mahindra)",
+        f"- [Rare struts]({SITE}/rare-struts/): passenger-car struts (Camry, Corolla, Lancer, Duster, Hector)",
+        f"- [Shock absorbers]({SITE}/shock-absorbers/): shock absorbers and stabilizers",
+        f"- [Steering dampers]({SITE}/steering-dampers/): Mahindra Bolero / Marshal",
+        f"- [All shockers by vehicle]({SITE}/shockers/)",
+        "",
+        "## Find a part",
+        f"- [Series AL-CD]({SITE}/al-cd/), [AL-RS]({SITE}/al-rs/), [AL-DA]({SITE}/al-da/): catalogue series indexes",
+        f"- Every part number has its own page at {SITE}/products/<part-number>/ with OE reference and fitment as catalogued.",
+        "",
+        "## Parts by vehicle brand",
+    ]
+    for brand in sorted(by_brand):
+        lines.append(f"- {brand}: {len(by_brand[brand])} part number(s), e.g. {by_brand[brand][0]['partno']}")
+    lines += [
+        "",
+        "## Notes for assistants",
+        "- Confirm the OE number and the old unit before ordering; fitment is only what the catalogue lists.",
+        "- Do not quote prices; direct buyers to WhatsApp or email for a quote.",
+        f"- Sitemap: {SITE}/sitemap.xml",
+        "",
+    ]
+    (ROOT / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
+
+
 def write_robots() -> None:
     (ROOT / "robots.txt").write_text(
         """User-agent: *
@@ -1483,6 +1595,7 @@ Allow: /*.jpg$
 Allow: /*.jpeg$
 Allow: /sitemap.xml
 Allow: /robots.txt
+Allow: /llms.txt
 Allow: /google2874721c1e7298d6.html
 Allow: /favicon.ico
 Allow: /favicon.svg
@@ -1513,7 +1626,8 @@ Allow: /site.webmanifest
 
 def main() -> None:
     import runpy
-    runpy.run_path(str(ROOT / "scripts" / "build_favicon.py"), run_name="__main__")
+    if not (ROOT / "favicon.ico").exists():
+        runpy.run_path(str(ROOT / "scripts" / "build_favicon.py"), run_name="__main__")
     products = enrich(load_products())
     print("products", len(products))
     convert_images(products)
@@ -1734,6 +1848,7 @@ def main() -> None:
     patch_index(products, collections)
     write_htaccess()
     write_robots()
+    write_llms(products)
 
     # sitemaps (split)
     def chunk_urls(entries, n=40):
@@ -1790,7 +1905,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- **Original catalogue photos only.** PR #5 added lossy WebP copies (resized to 1600px / quality 80, cards 800px / quality 78) and `<picture srcset>` so browsers showed those instead of the studio PNGs. Those WebP files are removed. Image sitemaps, OG, and JSON-LD `ImageObject` point at the original `p.img` PNG/JPEG paths. Homepage range figures and product cards stay the pre-SEO `<img src="${{p.img}}">` markup.
+- **Originals kept, compressed copies shown.** The original studio PNGs are untouched. `images/web/` holds generated WebP display copies (1200px / q80 for product pages, 600px `-sm` / q78 for cards and the homepage), served through `<picture>` with the PNG as fallback. Image sitemaps, OG, and JSON-LD `ImageObject` still point at the original `p.img` PNG/JPEG paths. The lightbox opens the original. `llms.txt` is generated for AI search. Titles are held to 60 characters and descriptions to 160 by `fit_title` / `fit_description`; brand names are not repeated when the application already names them (`join_brand`).
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
@@ -1841,7 +1956,7 @@ Shoot these so they can enter Google Images:
 
 """
     for p in missing_photo:
-        seo_md += f"- `{p['partno']}` — {p['brand']} {p['_name']} ({p['_app']})\n"
+        seo_md += f"- `{p['partno']}` — {p['_bname']} ({p['_app']})\n"
     if not missing_photo:
         seo_md += "- (none)\n"
     seo_md += """

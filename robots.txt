@@ -8,6 +8,7 @@ Allow: /*.jpg$
 Allow: /*.jpeg$
 Allow: /sitemap.xml
 Allow: /robots.txt
+Allow: /llms.txt
 Allow: /google2874721c1e7298d6.html
 Allow: /favicon.ico
 Allow: /favicon.svg
