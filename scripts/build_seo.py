@@ -294,6 +294,7 @@ def convert_images(products: list[dict]) -> None:
     for p in products:
         p["_webp"] = None
         p["_card_webp"] = None
+        continue  # originals only: never generate/serve lossy WebP copies
         if not p["_has_photo"]:
             continue
         big = web_rel(p["img"], False)
@@ -324,7 +325,7 @@ def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> st
         f'<img{cls} src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
         f'width="{w}" height="{h}" loading="{loading}"{fetch} decoding="async"/>'
     )
-    if p.get("_webp"):
+    if False and p.get("_webp"):  # originals only: lossy WebP flattened transparent PNGs onto grey (see fix 2026-10-13)
         return f'<picture><source type="image/webp" srcset="{esc(rel_prefix + p["_webp"])}"/>{img}</picture>'
     return img
 
@@ -570,7 +571,7 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
             f'loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        if p.get("_card_webp"):
+        if False and p.get("_card_webp"):  # originals only
             img = f'<picture><source type="image/webp" srcset="{esc(rel + p["_card_webp"])}"/>{img}</picture>'
         stage =f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
     else:
