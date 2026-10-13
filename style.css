@@ -436,3 +436,11 @@ footer{background:var(--deep);color:#d6d6d2}
 @media(max-width:900px){.seo-split{grid-template-columns:1fr}}
 
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* ── Watermark on grid cards (restored from pre-#13 design) ── */
+.pc-stage::after{
+  content:'ALAINA';
+  position:absolute;right:10px;bottom:9px;z-index:3;
+  font-family:var(--ft);font-weight:800;font-size:13px;letter-spacing:.1em;
+  color:var(--accent);opacity:.38;pointer-events:none;user-select:none;
+}
