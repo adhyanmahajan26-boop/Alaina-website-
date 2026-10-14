@@ -1,0 +1,35 @@
+diff --git a/sitemap-pages.xml b/sitemap-pages.xml
+index 7ab7e79..7e8c057 100644
+--- a/sitemap-pages.xml
++++ b/sitemap-pages.xml
+@@ -2,7 +2,7 @@
+ <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+   <url>
+-    <loc>https://alainashockabsorbers.com</loc>
++    <loc>https://alainashockabsorbers.com/</loc>
+     <lastmod>2026-10-05</lastmod>
+     <changefreq>weekly</changefreq>
+     <priority>1.0</priority>
+@@ -344,7 +344,7 @@
+   </url>
+   <url>
+     <loc>https://alainashockabsorbers.com/cabin-dampers/</loc>
+-    <lastmod>2026-10-05</lastmod>
++    <lastmod>2026-10-14</lastmod>
+     <changefreq>weekly</changefreq>
+     <priority>0.9</priority>
+     <image:image>
+diff --git a/sitemap.xml b/sitemap.xml
+index 676bc36..848d620 100644
+--- a/sitemap.xml
++++ b/sitemap.xml
+@@ -2,7 +2,7 @@
+ <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <sitemap>
+     <loc>https://alainashockabsorbers.com/sitemap-pages.xml</loc>
+-    <lastmod>2026-10-05</lastmod>
++    <lastmod>2026-10-14</lastmod>
+   </sitemap>
+   <sitemap>
+     <loc>https://alainashockabsorbers.com/sitemap-products.xml</loc>

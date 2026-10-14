@@ -33,7 +33,7 @@ HOME_META = (
 # Homepage title is NOT taken from the CSV (overridden by HOME_TITLE).
 CSV_PAGE_SEO = {
     "/cabin-dampers/": {
-        "title": "Truck Cabin Shocker & Cabin Dampers – Tata, Leyland | Alaina",
+        "title": "Truck Cabin Damper Manufacturer India – Tata, Leyland, Eicher | Alaina",
         "description": (
             "Alaina truck cabin shockers (cabin dampers) for Tata Signa, Prima and 4018, "
             "Ashok Leyland, Eicher, BharatBenz and Mann. OE-referenced. Catalogue No.04."
@@ -184,7 +184,13 @@ def clamp_words(text: str, limit: int) -> str:
 
 
 def fit_title(title: str, limit: int = 60) -> str:
-    """Keep titles inside Google's display width: drop the ' | suffix' first, then trim at a word."""
+    """Keep titles inside Google's display width: drop the ' | suffix' first, then trim at a word.
+
+    Author-specified CSV_PAGE_SEO titles are used as-is so they can exceed the default cap.
+    """
+    csv_titles = {row["title"] for row in CSV_PAGE_SEO.values() if row.get("title")}
+    if title in csv_titles:
+        return title
     if len(title) <= limit:
         return title
     if " | " in title:
@@ -1656,7 +1662,7 @@ def main() -> None:
     collections = [
         dict(
             path="/cabin-dampers/",
-            title="Truck Cabin Shocker & Cabin Dampers – Tata, Leyland | Alaina",
+            title="Truck Cabin Damper Manufacturer India – Tata, Leyland, Eicher | Alaina",
             h1="Cabin dampers",
             description="Alaina truck cabin shockers (cabin dampers) for Tata Signa, Prima and 4018, Ashok Leyland, Eicher, BharatBenz and Mann. OE-referenced. Catalogue No.04.",
             keywords="cabin damper, cabin shocker, truck cabin damper, Tata cabin damper, Leyland cabin damper, Eicher cabin damper, Alaina AL-CD",
@@ -1870,7 +1876,7 @@ def main() -> None:
             dated.append((loc, lm, imgs, pri))
         sm_lastmod[fname] = max((lm for _loc, lm, _imgs, _pri in dated), default=TODAY)
         body = "\n".join(
-            sitemap_url(SITE + ("" if loc == "/" else loc), imgs, lm, pri)
+            sitemap_url(SITE + ("/" if loc == "/" else loc), imgs, lm, pri)
             for loc, lm, imgs, pri in dated
         )
         write(ROOT / fname, wrap_urlset(body))
