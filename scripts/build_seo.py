@@ -1484,7 +1484,7 @@ RewriteEngine On
 # paths, with or without a trailing slash or any sub-path, to the homepage.
 # Covers /gassprings, /gassprings/, /gassprings/*, /gas-springs, /gas-springs/,
 # /gas-springs/* (including /gassprings/inquired/alaina-shockers).
-# Must run before the SPA fallback so these never soft-404 as index.html.
+# Must run before ErrorDocument 404 so these 301 to the homepage instead of 404.
 RewriteRule ^gassprings(/.*)?$ https://alainashockabsorbers.com/ [R=301,L,NC]
 RewriteRule ^gas-springs(/.*)?$ https://alainashockabsorbers.com/ [R=301,L,NC]
 
@@ -1513,16 +1513,21 @@ AddType application/manifest+json .webmanifest
   Header set Content-Type "text/plain; charset=UTF-8"
 </Files>
 
-# Do not SPA-fallback verification files, sitemaps, robots, or icons
+# Serve verification files, sitemaps, robots, icons, and the 404 body as real files
 RewriteRule ^google[0-9a-z]+\.html$ - [L]
 RewriteRule ^robots\.txt$ - [L]
 RewriteRule ^sitemap(-[a-z0-9-]+)?\.xml$ - [L]
 RewriteRule ^(favicon\.(ico|svg)|apple-touch-icon\.png|favicon-[0-9]+x[0-9]+\.png|site\.webmanifest)$ - [L]
+RewriteRule ^404\.html$ - [L]
 
-# SPA Routing Fallback (skips real files and directories)
+# Missing files and directories: real HTTP 404 with /404.html.
+# Replaces the former SPA fallback that rewrote unknown URLs to index.html.
+ErrorDocument 404 /404.html
+RewriteCond %{ENV:REDIRECT_STATUS} =404
+RewriteRule ^ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.html [QSA,L]
+RewriteRule ^ - [R=404,L]
 
 # Cache static assets
 <IfModule mod_expires.c>
@@ -1549,6 +1554,64 @@ RewriteRule ^ index.html [QSA,L]
 """,
         encoding="utf-8",
     )
+
+
+def write_404() -> None:
+    """ErrorDocument body. Root-absolute links so nested missing URLs still resolve."""
+    nav = CHROME_NAV.format(
+        home="/",
+        cd="/cabin-dampers/",
+        sa="/shock-absorbers/",
+        rs="/rare-struts/",
+    )
+    _, footer = chrome("/")
+    head = head_tags(
+        title="Page not found | Alaina Shockers",
+        description=(
+            "This URL is not in the Alaina Shockers catalogue. "
+            "Browse cabin dampers, shockers and rare struts, or enquire on WhatsApp."
+        ),
+        canonical=SITE + "/",
+        keywords="Alaina Shockers, 404",
+        og_type="website",
+        image=f"{SITE}/images/tata-4018-hywa-cabin.png",
+        image_alt="Alaina cabin damper for Tata 4018 Hywa / Prima",
+        robots="noindex, follow",
+    ).replace("REL", "/")
+    # Do not claim the missing URL (or /404.html) as a canonical page.
+    head = re.sub(r'<link rel="canonical" href="[^"]*"/>\n?', "", head)
+    head = re.sub(r'<link rel="alternate" hreflang="[^"]+" href="[^"]*"/>\n?', "", head)
+    head = re.sub(r'<meta property="og:url" content="[^"]*"/>\n?', "", head)
+    body = """
+<main class="seo-main wrap">
+  <p class="kicker">Error 404</p>
+  <h1>Page not found</h1>
+  <p class="seo-lead">This address is not in the Alaina Shockers catalogue. No part number, vehicle landing or category lives here.</p>
+  <p class="seo-also">
+    <a href="/">Home</a>
+    <a href="/cabin-dampers/">Cabin dampers</a>
+    <a href="/shock-absorbers/">Shockers</a>
+    <a href="/rare-struts/">Rare struts</a>
+    <a href="/#enquire">Enquire</a>
+  </p>
+</main>
+"""
+    html = (
+        "<!DOCTYPE html>\n"
+        '<html lang="en-IN">\n'
+        "<head>\n"
+        f"{head}\n"
+        f"{json_ld(organization_ld())}\n"
+        "</head>\n"
+        "<body>\n"
+        '<a id="top"></a>\n'
+        f"{nav}\n"
+        f"{body}\n"
+        f"{footer}\n"
+        "</body>\n"
+        "</html>\n"
+    )
+    write(ROOT / "404.html", html)
 
 
 def write_llms(products: list[dict]) -> None:
@@ -1854,6 +1917,7 @@ def main() -> None:
     add_seo_css()
     patch_index(products, collections)
     write_htaccess()
+    write_404()
     write_robots()
     write_llms(products)
 
