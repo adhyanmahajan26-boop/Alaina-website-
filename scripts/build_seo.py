@@ -867,6 +867,7 @@ def render_collection(
     items: list[dict],
     crumb_name: str,
     extra_links: list[tuple[str, str]] | None = None,
+    model_links: tuple[str, list[tuple[str, str]]] | None = None,
     product_line_name: str | None = None,
     rel: str | None = None,
     robots: str | None = None,
@@ -897,6 +898,13 @@ def render_collection(
             + " ".join(f'<a href="{rel}{href.lstrip("/")}">{esc(lab)}</a>' for lab, href in extra_links)
             + "</p>"
         )
+    models = ""
+    if model_links and model_links[1]:
+        models = (
+            f"\n  <h2>{esc(model_links[0])}</h2>\n  <p class='seo-also'>"
+            + " ".join(f'<a href="{rel}{href.lstrip("/")}">{esc(lab)}</a>' for lab, href in model_links[1])
+            + "</p>"
+        )
     body = f"""
 <main class="seo-main wrap">
   {crumb_html}
@@ -907,7 +915,7 @@ def render_collection(
   <p class="seo-count">{len(items)} catalogued part{"s" if len(items)!=1 else ""} — every SKU below is from Technical Catalogue No.04.</p>
   <div class="cat-grid">
     {grid if items else "<p>No SKUs for this line are published in the current catalogue. <a href='../#enquire'>Enquire with your vehicle model</a>.</p>"}
-  </div>
+  </div>{models}
 </main>
 """
     images = []
@@ -1746,6 +1754,15 @@ def main() -> None:
         write(dest, html)
         pages.append((p["_url"], TODAY, images_for_product(p), "0.8"))
 
+    # Model landings are only reachable through these links (and the sitemap).
+    groups = vehicle_groups(products)
+    cabin_model_links = [
+        (f"{re.sub(r' cabin$', '', g['name'])} cabin dampers", f"/shockers/{g['slug']}/")
+        for g in groups
+        if any(p.get("_tag") == "Cabin" for p in g["items"])
+    ]
+    model_links = [(f"Shocker for {g['name']}", f"/shockers/{g['slug']}/") for g in groups]
+
     collections = [
         dict(
             path="/cabin-dampers/",
@@ -1757,6 +1774,7 @@ def main() -> None:
             items=cabin,
             crumb="Cabin dampers",
             extra=[("AL-CD series", "/al-cd/"), ("Shock absorbers", "/shock-absorbers/"), ("Rare struts", "/rare-struts/")],
+            models=("Cabin dampers by truck model", cabin_model_links),
             line="Alaina AL-CD Cabin Dampers",
         ),
         dict(
@@ -1781,6 +1799,7 @@ def main() -> None:
             items=products,
             crumb="Shockers",
             extra=[("Shock absorbers", "/shock-absorbers/"), ("Cabin dampers", "/cabin-dampers/")],
+            models=("Shockers by vehicle", model_links),
             line="Alaina Shockers",
         ),
         dict(
@@ -1870,6 +1889,7 @@ def main() -> None:
             items=c["items"],
             crumb_name=c["crumb"],
             extra_links=c["extra"],
+            model_links=c.get("models"),
             product_line_name=c["line"],
             robots="noindex,follow" if noindex else None,
         )
@@ -1883,7 +1903,7 @@ def main() -> None:
         pages.append((c["path"], TODAY, imgs, "0.9"))
 
     cabin_retitles = []
-    for g in vehicle_groups(products):
+    for g in groups:
         path = f"/shockers/{g['slug']}/"
         title = f"Shocker for {g['name']} | Alaina Shockers"
         desc = (

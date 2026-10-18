@@ -404,6 +404,7 @@ footer{background:var(--deep);color:#d6d6d2}
 .seo-count{font-size:14px;color:var(--text-40);margin-bottom:18px}
 .seo-main section{padding:0;margin-top:40px}
 .seo-main section h2{font-size:22px;margin-bottom:10px}
+.seo-main > h2{font-size:22px;margin:40px 0 12px}
 .seo-main section p{color:var(--text-60);max-width:760px}
 .seo-split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.8fr);gap:32px;align-items:start;margin-bottom:24px}
 .seo-figure{background:#fff;margin:0;border:1px solid var(--rule);border-radius:6px;padding:20px}
