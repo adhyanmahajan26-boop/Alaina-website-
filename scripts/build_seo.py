@@ -24,19 +24,19 @@ TODAY = date.today().isoformat()
 WA = "https://wa.me/917982555636"
 PHONE = "+91 79825 55636"
 EMAIL = "adhyanmahajan26@gmail.com"
-HOME_TITLE = "Truck Cabin Damper Manufacturer in India | Alaina Shockers"
+HOME_TITLE = "Cabin Dampers Manufacturer in India | Alaina Shockers"
 HOME_META = (
-    "Alaina shockers: truck cabin dampers for Tata, Ashok Leyland, Eicher and "
-    "BharatBenz, plus pickup shockers and rare struts. 74 OE-matched SKUs. Since 1978."
+    "Alaina makes cabin dampers for trucks: Tata, Ashok Leyland, Eicher, BharatBenz "
+    "and Mann, plus pickup shockers and rare struts. 74 OE-matched SKUs. Since 1978."
 )
 # Page-level title/meta from title-fixes-2026-10-02.csv (group 3-alaina).
 # Homepage title is NOT taken from the CSV (overridden by HOME_TITLE).
 CSV_PAGE_SEO = {
     "/cabin-dampers/": {
-        "title": "Truck Cabin Damper Manufacturer India – Tata, Leyland, Eicher | Alaina",
+        "title": "Truck Cabin Dampers for Tata, Leyland, Eicher | Alaina",
         "description": (
-            "Alaina truck cabin shockers (cabin dampers) for Tata Signa, Prima and 4018, "
-            "Ashok Leyland, Eicher, BharatBenz and Mann. OE-referenced. Catalogue No.04."
+            "Cabin dampers (cabin shockers) for trucks: Alaina part numbers for Tata Signa, "
+            "Prima and 4018, Ashok Leyland, Eicher, BharatBenz and Mann, with OE references."
         ),
     },
     "/rare-struts/": {
@@ -613,8 +613,28 @@ def webpage_name(p: dict) -> str:
     return f"Alaina {p['_kind']['headline']} {p['_name']} ({p['partno']})"
 
 
+def cabin_product_title(p: dict) -> str:
+    """`<Make> <name> Cabin Damper (<PN>) | Alaina` so every cabin SKU names the search term."""
+    # Catalogue files Bharat Benz and Mann rows under brand "Eicher"; don't prefix it there.
+    name = p["_name"] if re.search(r"Benz|Mann", p["_name"]) else p["_bname"]
+    name = re.sub(r"\s+(Cabin\s+)?(Damper|Assy|Assembly)$", "", name, flags=re.I)
+    name = re.sub(r"\s+Cabin$", "", name)
+    name, n = re.subn(r"\bCabin\b(?!\s+(Front|Rear))", "Cabin Damper", name, count=1)
+    if not n:
+        name += " Damper" if re.search(r"\bCabin\b", name) else " Cabin Damper"
+    for suffix in (" | Alaina", ""):
+        t = f"{name} ({p['partno']}){suffix}"
+        if len(t) <= 60:
+            return t
+    room = 60 - len(f" Cabin Damper ({p['partno']})")
+    short = clamp_words(re.sub(r"\s+(Cabin )?Damper$", "", name), room).rstrip(" ,/")
+    return f"{short} Cabin Damper ({p['partno']})"
+
+
 def product_title(p: dict) -> str:
     kind = p["_kind"]
+    if kind["key"] == "cabin-damper":
+        return cabin_product_title(p)
     for suffix in (f" | Alaina {kind['headline']}", " | Alaina"):
         t = f"{p['_name']} ({p['partno']}){suffix}"
         if len(t) <= 60:
@@ -1729,10 +1749,10 @@ def main() -> None:
     collections = [
         dict(
             path="/cabin-dampers/",
-            title="Truck Cabin Damper Manufacturer India – Tata, Leyland, Eicher | Alaina",
+            title="Truck Cabin Dampers for Tata, Leyland, Eicher | Alaina",
             h1="Cabin dampers",
-            description="Alaina truck cabin shockers (cabin dampers) for Tata Signa, Prima and 4018, Ashok Leyland, Eicher, BharatBenz and Mann. OE-referenced. Catalogue No.04.",
-            keywords="cabin damper, cabin shocker, truck cabin damper, Tata cabin damper, Leyland cabin damper, Eicher cabin damper, Alaina AL-CD",
+            description="Cabin dampers (cabin shockers) for trucks: Alaina part numbers for Tata Signa, Prima and 4018, Ashok Leyland, Eicher, BharatBenz and Mann, with OE references.",
+            keywords="cabin dampers, cabin damper, truck cabin dampers, truck cabin damper, cabin shocker, cab damper, cabin shock absorber, Tata cabin damper, Leyland cabin damper, Eicher cabin damper, BharatBenz cabin damper, Alaina AL-CD",
             intro="Heavy-duty <strong>cabin dampers</strong> — the unit that keeps a commercial-vehicle cabin civilised. Every part number below is from the live Alaina catalogue (OE references included where the catalogue lists them).",
             items=cabin,
             crumb="Cabin dampers",
@@ -1789,7 +1809,7 @@ def main() -> None:
         ),
         dict(
             path="/al-cd/",
-            title="Alaina AL-CD Cabin Dampers | Truck Cabin Shockers",
+            title="AL-CD Series – Alaina Cabin Damper Part Numbers",
             h1="AL-CD cabin dampers",
             description="Alaina AL-CD cabin damper line: every cabin-tagged SKU in Catalogue No.04 for Tata, Ashok Leyland, Eicher, Bharat Benz and Mann.",
             keywords="AL-CD, Alaina AL-CD, cabin damper, cabin shocker, truck cabin damper",
