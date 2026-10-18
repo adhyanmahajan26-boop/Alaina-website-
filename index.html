@@ -41,7 +41,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <script>(function(){var d=document.documentElement;try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('themeToggle');if(!b)return;function sync(){var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'\u2600':'\u263E'}sync();b.addEventListener('click',function(){var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('alaina-theme',n)}catch(e){}sync()})})})();</script>
-<link rel="stylesheet" href="style.css?v=15"/>
+<link rel="stylesheet" href="style.css?v=16"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -201,7 +201,7 @@
       <a href="#about">About</a>
       <a href="#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
-    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
   </div>
 </header>
 
@@ -209,7 +209,7 @@
 <div id="mobnav">
   <div class="mn-top">
     <div class="brand-word">ALAINA<sup>®</sup></div>
-    <button class="mn-x" id="mnClose">&#10005;</button>
+    <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
   </div>
   <nav>
     <a href="#range">Range</a>
@@ -497,11 +497,21 @@ function chipCount(b){
   return PRODUCTS.filter(p=>p.brand===b).length;
 }
 function renderChips(){
-  $('#chips').innerHTML=BRANDS.map(b=>
+  const row=$('#chips');
+  row.innerHTML=BRANDS.map(b=>
     `<button class="chip${fBrand===b?' on':''}" onclick="setBrand('${b}')">${LBL[b]||b}<i>${chipCount(b)}</i></button>`
   ).join('');
+  // Phones: keep the active chip visible in the sideways-scrolling row
+  const on=row.querySelector('.chip.on'),r=row.getBoundingClientRect(),c=on.getBoundingClientRect();
+  if(c.left<r.left||c.right>r.right)row.scrollLeft+=c.left-r.left-8;
 }
-function setBrand(b){fBrand=b;renderChips();renderTable();}
+// A shorter result list must not leave the reader scrolled past the catalogue
+function keepResultsInView(){
+  const tools=$('.cat-tools'),bar=parseFloat(getComputedStyle(tools).top)+tools.offsetHeight;
+  const top=$('#table').getBoundingClientRect().top;
+  if(top<bar)window.scrollTo({top:scrollY+top-bar-12,behavior:'instant'});
+}
+function setBrand(b){fBrand=b;renderChips();renderTable();keepResultsInView();}
 function setCat(c){setBrand(c);}
 function jumpCat(c){setBrand(c);document.getElementById('catalogue').scrollIntoView({behavior:'smooth'});}
 
@@ -557,7 +567,7 @@ function renderTable(){
   $('#table').innerHTML=html;
   $('#shown').textContent=shown;
 }
-$('#q').addEventListener('input',e=>{fQ=e.target.value.trim().toLowerCase();renderTable();});
+$('#q').addEventListener('input',e=>{fQ=e.target.value.trim().toLowerCase();renderTable();keepResultsInView();});
 
 /* ════════ LIGHTBOX — PLAQUE CARD ════════ */
 function openLb(pn){
@@ -581,7 +591,7 @@ function openLb(pn){
   document.body.style.overflow='hidden';
 }
 function closeLb(){$('#lb').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLb();closeMenu();}});
 
 /* ════════ ENQUIRE PRE-FILL ════════ */
 function enquire(pn,name){
@@ -608,9 +618,11 @@ $$('.hf-item').forEach(a=>{
 });
 
 /* ════════ MOBILE NAV ════════ */
-$('#burger').onclick=()=>$('#mobnav').classList.add('open');
-$('#mnClose').onclick=()=>$('#mobnav').classList.remove('open');
-$$('#mobnav nav a').forEach(a=>a.onclick=()=>$('#mobnav').classList.remove('open'));
+function openMenu(){$('#mobnav').classList.add('open');$('#burger').setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
+function closeMenu(){if(!$('#mobnav').classList.contains('open'))return;$('#mobnav').classList.remove('open');$('#burger').setAttribute('aria-expanded','false');document.body.style.overflow='';}
+$('#burger').onclick=openMenu;
+$('#mnClose').onclick=closeMenu;
+$$('#mobnav a').forEach(a=>a.addEventListener('click',closeMenu));
 
 /* ════════ INIT ════════ */
 $('#total').textContent=PRODUCTS.length;

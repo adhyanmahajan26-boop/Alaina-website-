@@ -426,7 +426,7 @@ def head_tags(
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <script>(function(){{var d=document.documentElement;try{{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}}catch(e){{}}document.addEventListener('DOMContentLoaded',function(){{var b=document.getElementById('themeToggle');if(!b)return;function sync(){{var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'\u2600':'\u263E'}}sync();b.addEventListener('click',function(){{var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{{localStorage.setItem('alaina-theme',n)}}catch(e){{}}sync()}})}})}})();</script>
-<link rel="stylesheet" href="{esc('REL')}style.css?v=seo3"/>"""
+<link rel="stylesheet" href="{esc('REL')}style.css?v=seo4"/>"""
 
 
 CHROME_NAV = """
@@ -453,13 +453,13 @@ CHROME_NAV = """
       <a href="{rs}">Rare Struts</a>
       <a href="{home}#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
-    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button></div>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
   </div>
 </header>
 <div id="mobnav">
   <div class="mn-top">
     <div class="brand-word">ALAINA<sup>®</sup></div>
-    <button class="mn-x" id="mnClose">&#10005;</button>
+    <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
   </div>
   <nav>
     <a href="{home}#range">Range</a>
@@ -527,8 +527,12 @@ def chrome(rel: str) -> tuple[str, str]:
 <script>
 (function(){{
   var b=document.getElementById('burger'), m=document.getElementById('mobnav'), x=document.getElementById('mnClose');
-  if(b) b.onclick=function(){{m.classList.add('open');}};
-  if(x) x.onclick=function(){{m.classList.remove('open');}};
+  if(!b||!m) return;
+  function shut(){{m.classList.remove('open');b.setAttribute('aria-expanded','false');document.body.style.overflow='';}}
+  b.onclick=function(){{m.classList.add('open');b.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}};
+  if(x) x.onclick=shut;
+  m.querySelectorAll('a').forEach(function(a){{a.addEventListener('click',shut);}});
+  document.addEventListener('keydown',function(e){{if(e.key==='Escape'&&m.classList.contains('open'))shut();}});
 }})();
 </script>
 """
