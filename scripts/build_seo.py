@@ -17,6 +17,8 @@ from pathlib import Path
 from urllib.parse import quote
 from xml.etree import ElementTree as ET
 
+import legal_pages as legal  # scripts/ is on sys.path when this file is run directly
+
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://alainashockabsorbers.com"
 ORGANIZATION_ID = f"{SITE}/#organization"
@@ -482,6 +484,7 @@ def chrome(rel: str) -> tuple[str, str]:
         sa=rel + "shock-absorbers/",
         rs=rel + "rare-struts/",
     )
+    legal_links = " ".join(f'<a href="{rel}{href.lstrip("/")}">{esc(lab)}</a>' for lab, href in legal.LEGAL_LINKS)
     footer = f"""
 <footer>
   <div class="wrap">
@@ -519,6 +522,7 @@ def chrome(rel: str) -> tuple[str, str]:
     </div>
     <div class="foot-base">
       <span>© 2026 Alaina Shockers — All parts catalogued</span>
+      <span class="foot-legal">{legal_links}</span>
       <span>Technical Catalogue No.04</span>
     </div>
   </div>
@@ -1588,6 +1592,55 @@ RewriteRule ^ - [R=404,L]
     )
 
 
+def write_legal_pages() -> list[tuple[str, str, list, str]]:
+    """Privacy, shipping, returns and terms pages. Text lives in scripts/legal_pages.py."""
+    entries = []
+    for pg in legal.PAGES:
+        rel = "../"
+        url = SITE + pg["path"]
+        head = head_tags(
+            title=pg["title"],
+            description=pg["description"],
+            canonical=url,
+            keywords=f"Alaina Shockers {pg['h1'].lower()}, Mahajan Motors India",
+            og_type="website",
+            image=None,
+            image_alt=None,
+        )
+        crumb_html, crumb_ld = crumbs([("Home", SITE + "/"), (pg["h1"], url)])
+        sections = "\n".join(f"  <section>\n    <h2>{esc(h)}</h2>\n    {html}\n  </section>" for h, html in pg["sections"])
+        others = " ".join(
+            f'<a href="{rel}{href.lstrip("/")}">{esc(lab)}</a>' for lab, href in legal.LEGAL_LINKS if href != pg["path"]
+        )
+        body = f"""
+<main class="seo-main wrap legal-page">
+  {crumb_html}
+  <p class="kicker">Store policy · Last updated {legal.UPDATED}</p>
+  <h1>{esc(pg["h1"])}</h1>
+  <p class="seo-lead">{esc(pg["lead"])}</p>
+{sections}
+  <p class="seo-also">{others}</p>
+</main>
+"""
+        ld = [
+            organization_ld(),
+            crumb_ld,
+            {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                "name": pg["h1"],
+                "description": pg["description"],
+                "url": url,
+                "inLanguage": "en-IN",
+                "isPartOf": {"@type": "WebSite", "url": SITE + "/", "name": "Alaina Shockers"},
+                "publisher": {"@id": ORGANIZATION_ID},
+            },
+        ]
+        write(ROOT / pg["path"].strip("/") / "index.html", page_shell(rel, head, body, ld))
+        entries.append((pg["path"], TODAY, [], "0.3"))
+    return entries
+
+
 def write_404() -> None:
     """ErrorDocument body. Root-absolute links so nested missing URLs still resolve."""
     nav = CHROME_NAV.format(
@@ -1957,6 +2010,8 @@ def main() -> None:
         if p["_has_photo"]:
             home_imgs.append((abs_url(p["img"]), p["_alt"]))
     pages.insert(0, ("/", TODAY, home_imgs, "1.0"))
+
+    pages.extend(write_legal_pages())
 
     add_seo_css()
     patch_index(products, collections)
