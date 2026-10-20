@@ -448,3 +448,41 @@ footer{background:var(--deep);color:#d6d6d2}
   font-family:var(--ft);font-weight:800;font-size:13px;letter-spacing:.1em;
   color:var(--accent);opacity:.38;pointer-events:none;user-select:none;
 }
+
+/* ── SEO round 3: WebP pictures, buy-online, FAQ, buyer's guides ── */
+.pc-stage picture,.range-fig picture{display:contents}
+.seo-figure picture{display:block}
+.range-more{display:inline-block;margin-top:6px;font-weight:600;color:var(--accent);white-space:nowrap}
+.range-more:hover{color:var(--accent-deep)}
+.fcol p a{display:inline;padding:0;text-decoration:underline;text-underline-offset:2px}
+.buy-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,64px);align-items:start}
+.buy-steps,.seo-steps{counter-reset:step;list-style:none;margin:0;padding:0}
+.buy-steps li,.seo-steps li{counter-increment:step;position:relative;padding:16px 0 16px 46px;border-top:1px solid var(--rule);font-size:15px;line-height:1.65;color:var(--text-60)}
+.buy-steps li::before,.seo-steps li::before{content:counter(step);position:absolute;left:0;top:15px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:14px;display:grid;place-items:center}
+.buy-steps strong,.seo-steps strong{color:var(--text)}
+.buy-steps a,.seo-steps a,.faq-item a,.seo-faq a,.seo-guide a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.buy-links h3{font-size:15px;font-weight:600;margin:0 0 10px}
+.buy-links p{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.buy-links a{border:1px solid var(--rule);border-radius:4px;padding:7px 11px;font-size:14px;color:var(--text-60);background:var(--card)}
+.buy-links a:hover{border-color:var(--accent);color:var(--text)}
+#faq{background:var(--bg-2)}
+.faq-list,.seo-faq{max-width:860px}
+.faq-item,.seo-faq-item{border-top:1px solid var(--rule)}
+.faq-item:last-child,.seo-faq-item:last-child{border-bottom:1px solid var(--rule)}
+.faq-item summary,.seo-faq-item summary{cursor:pointer;list-style:none;padding:18px 36px 18px 0;font-size:17px;font-weight:600;position:relative}
+.faq-item summary::-webkit-details-marker,.seo-faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after,.seo-faq-item summary::after{content:'+';position:absolute;right:4px;top:14px;font-size:22px;font-weight:400;color:var(--accent)}
+.faq-item[open] summary::after,.seo-faq-item[open] summary::after{content:'\2212'}
+.faq-item p,.seo-faq-item p{padding:0 0 18px;font-size:15px;line-height:1.7;color:var(--text-60);max-width:760px}
+.seo-guide{max-width:860px}
+.seo-guide h2,.seo-faq h2{font-size:clamp(20px,2.4vw,26px);margin:36px 0 12px}
+.seo-guide p,.seo-guide li{font-size:15px;line-height:1.75;color:var(--text-60)}
+.seo-guide ul{margin:0 0 8px 20px}
+.seo-guide li{margin:4px 0}
+.seo-guide strong{color:var(--text)}
+.seo-xref{border-collapse:collapse;width:100%;max-width:760px;margin:0 0 12px;font-size:14px}
+.seo-xref th,.seo-xref td{text-align:left;padding:10px 12px;border:1px solid var(--rule)}
+.seo-xref th{background:var(--bg-2);font-weight:600;color:var(--text-60)}
+.seo-main section p{line-height:1.7}
+@media(max-width:900px){.buy-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.seo-xref th,.seo-xref td{padding:8px}.faq-item summary,.seo-faq-item summary{font-size:16px}}

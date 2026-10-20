@@ -1,0 +1,28 @@
+name: IndexNow
+
+# Tells Bing (which also feeds ChatGPT and Copilot search), Yandex and other
+# IndexNow engines about changed pages right after each deploy to main.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Submit every sitemap URL, not just changed pages"
+        type: boolean
+        default: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Wait for Hostinger to deploy main
+        run: sleep 180
+      - name: Submit URLs
+        env:
+          ALL: ${{ inputs.all }}
+          BEFORE: ${{ github.event.before }}
+        run: python3 scripts/indexnow.py

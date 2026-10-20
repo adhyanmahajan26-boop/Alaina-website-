@@ -27,10 +27,10 @@ TODAY = date.today().isoformat()
 WA = "https://wa.me/917982555636"
 PHONE = "+91 79825 55636"
 EMAIL = "adhyanmahajan26@gmail.com"
-HOME_TITLE = "Cabin Dampers Manufacturer in India | Alaina Shockers"
+HOME_TITLE = "Cabin Dampers & Shock Absorbers India | Alaina Shockers"
 HOME_META = (
-    "Alaina makes cabin dampers for trucks: Tata, Ashok Leyland, Eicher, BharatBenz "
-    "and Mann, plus pickup shockers and rare struts. 74 OE-matched SKUs. Since 1978."
+    "Buy Alaina cabin dampers, shockers and rare struts online: 74 OE-matched parts for Tata, "
+    "Leyland, Eicher, BharatBenz and Mahindra. WhatsApp orders. Since 1978."
 )
 # Page-level title/meta from title-fixes-2026-10-02.csv (group 3-alaina).
 # Homepage title is NOT taken from the CSV (overridden by HOME_TITLE).
@@ -38,7 +38,7 @@ CSV_PAGE_SEO = {
     "/cabin-dampers/": {
         "title": "Truck Cabin Dampers for Tata, Leyland, Eicher | Alaina",
         "description": (
-            "Cabin dampers (cabin shockers) for trucks: Alaina part numbers for Tata Signa, "
+            "Buy cabin dampers (cabin shockers) online: Alaina part numbers for Tata Signa, "
             "Prima and 4018, Ashok Leyland, Eicher, BharatBenz and Mann, with OE references."
         ),
     },
@@ -319,6 +319,20 @@ def abs_url(path: str) -> str:
     return SITE + "/" + quote(path, safe="/()-_.~")
 
 
+def webp_rel(img: str) -> str | None:
+    """Lossless WebP copy from scripts/build_webp.py, if one exists for this photo."""
+    rel = f"images/webp/{Path(img).stem}.webp"
+    return rel if (ROOT / rel).exists() else None
+
+
+def with_webp(rel_prefix: str, img_src: str, img_tag: str) -> str:
+    """Wrap an <img> in <picture> with the pixel-identical WebP; the PNG stays the fallback."""
+    webp = webp_rel(img_src)
+    if not webp:
+        return img_tag
+    return f'<picture><source type="image/webp" srcset="{esc(rel_prefix + webp)}"/>{img_tag}</picture>'
+
+
 def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> str:
     if not p["_has_photo"]:
         return (
@@ -334,9 +348,8 @@ def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> st
         f'<img{cls} src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
         f'width="{w}" height="{h}" loading="{loading}"{fetch} decoding="async"/>'
     )
-    if False and p.get("_webp"):  # originals only: lossy WebP flattened transparent PNGs onto grey (see fix 2026-10-13)
-        return f'<picture><source type="image/webp" srcset="{esc(rel_prefix + p["_webp"])}"/>{img}</picture>'
-    return img
+    # Lossless only: the 2026-10-13 lossy copies flattened transparent PNGs onto grey.
+    return with_webp(rel_prefix, p["img"], img)
 
 
 def json_ld(obj) -> str:
@@ -345,6 +358,38 @@ def json_ld(obj) -> str:
         + json.dumps(obj, ensure_ascii=False, indent=2)
         + "\n</script>"
     )
+
+
+# Mahajan Motors India distributes Alaina and answers the same trade line.
+# Address as published on mahajanmotorsindia.com; no street address is public yet.
+MMI_ORG = {
+    "@type": "Organization",
+    "@id": "https://mahajanmotorsindia.com/#organization",
+    "name": "Mahajan Motors India",
+    "url": "https://mahajanmotorsindia.com/",
+}
+MMI_ALAINA_URL = "https://mahajanmotorsindia.com/alaina/catalogue"
+ADDRESS = {
+    "@type": "PostalAddress",
+    "streetAddress": "Kashmere Gate",
+    "addressLocality": "Delhi",
+    "addressRegion": "Delhi",
+    "addressCountry": "IN",
+}
+CONTACT_POINT = {
+    "@type": "ContactPoint",
+    "telephone": "+91-79825-55636",
+    "email": EMAIL,
+    "contactType": "sales",
+    "areaServed": "IN",
+}
+# Hours as printed in the homepage enquiry panel (Mon–Sat, 10:00–19:00 IST).
+OPENING_HOURS = {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "10:00",
+    "closes": "19:00",
+}
 
 
 def organization_ld() -> dict:
@@ -358,7 +403,47 @@ def organization_ld() -> dict:
         "url": SITE + "/",
         "logo": SITE + "/favicon-512x512.png",
         "brand": {"@type": "Brand", "name": "Alaina"},
+        "telephone": "+91-79825-55636",
+        "email": EMAIL,
+        "foundingDate": "1978",
+        "address": ADDRESS,
+        "contactPoint": CONTACT_POINT,
+        "parentOrganization": MMI_ORG,
+        "areaServed": {"@type": "Country", "name": "India"},
     }
+
+
+def faq_ld(faqs: list[tuple[str, str]]) -> dict:
+    """FAQPage from the same (question, answer) pairs the page shows."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": q,
+                "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", a)},
+            }
+            for q, a in faqs
+        ],
+    }
+
+
+def faq_html(faqs: list[tuple[str, str]], heading: str = "Questions buyers ask") -> str:
+    items = "".join(
+        f'<details class="seo-faq-item"><summary>{esc(q)}</summary><p>{a}</p></details>'
+        for q, a in faqs
+    )
+    return f'<section class="seo-faq"><h2>{esc(heading)}</h2>{items}</section>'
+
+
+ORDER_STEPS = (
+    "<ol class='seo-steps'>"
+    "<li><strong>Find the part.</strong> Use the Alaina part number, the OE number on your old unit, or your vehicle model.</li>"
+    f"<li><strong>Send it on WhatsApp</strong> to <a href='{WA}' target='_blank' rel='noopener'>{PHONE}</a> with the quantity. A photo of the old unit helps.</li>"
+    "<li><strong>Get a quote and dispatch.</strong> We confirm price and stock, then dispatch across India through Mahajan Motors India, Kashmere Gate, Delhi.</li>"
+    "</ol>"
+)
 
 
 def image_object(url: str, name: str, caption: str | None = None) -> dict:
@@ -429,7 +514,7 @@ def head_tags(
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <script>(function(){{var d=document.documentElement;try{{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}}catch(e){{}}document.addEventListener('DOMContentLoaded',function(){{var b=document.getElementById('themeToggle');if(!b)return;function sync(){{var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'\u2600':'\u263E'}}sync();b.addEventListener('click',function(){{var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{{localStorage.setItem('alaina-theme',n)}}catch(e){{}}sync()}})}})}})();</script>
-<link rel="stylesheet" href="{esc('REL')}style.css?v=seo4"/>"""
+<link rel="stylesheet" href="{esc('REL')}style.css?v=seo5"/>"""
 
 
 CHROME_NAV = """
@@ -496,7 +581,7 @@ def chrome(rel: str) -> tuple[str, str]:
     <div class="foot-mid">
       <div class="fcol">
         <div class="fc-lab">Alaina Shockers</div>
-        <p>Precision damping engineered for India's toughest roads. Distributed by Mahajan Motors India.</p>
+        <p>Precision damping engineered for India's toughest roads. Distributed by <a href="{MMI_ALAINA_URL}" rel="noopener">Mahajan Motors India</a>, Kashmere Gate, Delhi.</p>
       </div>
       <div class="fcol">
         <div class="fc-lab">Catalogue</div>
@@ -510,9 +595,13 @@ def chrome(rel: str) -> tuple[str, str]:
       </div>
       <div class="fcol">
         <div class="fc-lab">Also</div>
-        <a href="{rel}dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>
-        <a href="{rel}shockers/">Shockers index</a>
+        <a href="{rel}shockers/">Shockers by vehicle</a>
+        <a href="{rel}shockers/tata-signa/">Tata Signa cabin dampers</a>
+        <a href="{rel}shockers/tata-4018/">Tata 4018 cabin dampers</a>
+        <a href="{rel}shockers/leyland-u-truck/">Leyland U Truck parts</a>
+        <a href="{rel}shockers/mahindra-bolero/">Bolero shockers</a>
         <a href="{rel}#catalogue">Full catalogue</a>
+        <a href="{rel}dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>
       </div>
       <div class="fcol">
         <div class="fc-lab">Contact</div>
@@ -582,12 +671,12 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
     img = ""
     if p["_has_photo"]:
         src_png = rel + p["img"]
+        w, h = p["_size"] or (800, 800)
         img = (
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
-            f'loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
+            f'width="{w}" height="{h}" loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        if False and p.get("_card_webp"):  # originals only
-            img = f'<picture><source type="image/webp" srcset="{esc(rel + p["_card_webp"])}"/>{img}</picture>'
+        img = with_webp(rel, p["img"], img)
         stage =f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
     else:
         stage = (
@@ -652,8 +741,43 @@ def product_meta_description(p: dict) -> str:
     return fit_description(
         f"Alaina {p['_kind']['label']} {p['partno']} for {p['_bapp']}."
         + (f" OE {p['_oe']}." if p["_oe"] else "")
-        + " Pressure-tested, OE-matched. Enquire on WhatsApp for stock."
+        + " Pressure-tested, OE-matched. Order on WhatsApp; ships across India."
     )
+
+
+VEHICLE_MAKES = ("Tata", "Ashok Leyland", "Leyland", "Eicher", "Bharat Benz", "BharatBenz", "Mann", "AMW",
+                 "Mahindra", "Toyota", "Mitsubishi", "Renault", "Isuzu", "Suzuki", "MG")
+MAKE_PREFIX = {"Leyland": "Ashok Leyland"}
+
+
+def vehicle_names(p: dict) -> list[str]:
+    """Vehicles named in the catalogue `app` field, each with its make once ("Tata Signa", "Bharat Benz").
+
+    Drops "— Cabin" style suffixes, generic trailing words and pieces that name only a make.
+    """
+    names: list[str] = []
+    for piece in p["_app"].split("/"):
+        piece = re.sub(r"\s*[—–-]{1,2}\s*(Cabin|Stabilizer)$", "", piece.strip())
+        piece = re.sub(r"\s*\([^)0-9]*\)", "", piece)  # "(Non Sleeper)"; keep "(2007–2014)"
+        piece = re.sub(r"\s+Tilt Cabin$", "", piece)
+        words = piece.split()
+        while len(words) > 1:
+            if words[-1] in ("Cabin", "Damper", "Series"):
+                words.pop()
+            elif words[-1] == "Truck" and len(words[-2]) > 1:  # "Prima Truck" -> Prima; keep "U Truck"
+                words.pop()
+            else:
+                break
+        piece = re.sub(r"^BharatBenz$", "Bharat Benz", " ".join(words))
+        # A bare make is kept only when it is not this row's own brand ("Bharat Benz" on an Eicher row).
+        if not piece or piece in (p["brand"], MAKE_PREFIX.get(p["brand"])):
+            continue
+        if not piece.startswith(VEHICLE_MAKES):
+            piece = f"{MAKE_PREFIX.get(p['brand'], p['brand'])} {piece}"
+        piece = re.sub(r"^Leyland ", "Ashok Leyland ", piece)
+        if piece not in names:
+            names.append(piece)
+    return names
 
 
 def product_schema(p: dict, *, description: str, image: str) -> dict:
@@ -673,7 +797,7 @@ def product_schema(p: dict, *, description: str, image: str) -> dict:
             },
         ]
     )
-    return {
+    obj = {
         "@context": "https://schema.org",
         "@type": "Product",
         "@id": p["_abs"] + "#product",
@@ -689,6 +813,10 @@ def product_schema(p: dict, *, description: str, image: str) -> dict:
         "mainEntityOfPage": {"@id": p["_abs"]},
         "additionalProperty": extra,
     }
+    vehicles = vehicle_names(p)
+    if vehicles:
+        obj["isAccessoryOrSparePartFor"] = [{"@type": "Product", "name": v} for v in vehicles]
+    return obj
 
 
 def product_jsonld(p: dict) -> dict:
@@ -779,6 +907,23 @@ def render_product(p: dict, all_products: list[dict]) -> str:
         </div>
         """
     oe_row = f'<div class="seo-kv"><span>OE reference</span><b>{esc(p["_oe"])}</b></div>' if p["_oe"] else ""
+    model_links = "".join(
+        f'<a href="{rel}shockers/{slug}/">{esc(re.sub(r" cabin$", "", name))} {esc(kind["plural"])}</a>'
+        for name, slug in p.get("_groups", [])
+    )
+    fits = (
+        f"<p class='seo-also'>{model_links}<a href='{rel}{category_url_for_kind(kind['key']).lstrip('/')}'>All {esc(kind['plural'])}</a></p>"
+    )
+    oe_section = (
+        f"""<section>
+    <h2>OE cross-reference</h2>
+    <table class="seo-xref"><thead><tr><th>OE part number</th><th>Alaina part number</th><th>Fits</th></tr></thead>
+    <tbody><tr><td class="mono">{esc(p['_oe'])}</td><td class="mono">{esc(p['partno'])}</td><td>{esc(p['_bapp'])}</td></tr></tbody></table>
+    <p>Searching for OE {esc(p['_oe'])}? Alaina {esc(p['partno'])} is catalogued against that number. Check it against the number stamped on your old unit.</p>
+  </section>"""
+        if p["_oe"]
+        else ""
+    )
     rel_grid = "".join(product_card_html(rel, x) for x in related)
     wa = quote(f"Hi, I want to enquire about {p['partno']} — {p['_name']} ({p['_app']}).")
     body = f"""
@@ -804,12 +949,93 @@ def render_product(p: dict, all_products: list[dict]) -> str:
   <section>
     <h2>Fitment</h2>
     <p>This {esc(kind['label'])} is catalogued for <strong>{esc(p['_bapp'])}</strong>. Confirm the OE number{" (" + esc(p['_oe']) + ")" if p["_oe"] else ""} and the old unit before ordering. For the same vehicle see other Alaina {esc(p['brand'])} parts below.</p>
+    {fits}
+  </section>
+  {oe_section}
+  <section>
+    <h2>Order {esc(p['partno'])} online</h2>
+    {ORDER_STEPS}
   </section>
   {"<section><h2>More " + esc(p["brand"]) + " parts</h2><div class='cat-grid'>" + rel_grid + "</div></section>" if related else ""}
 </main>
 """
     ld = [organization_ld(), product_schema(p, description=desc, image=img_abs), product_jsonld(p), crumb_ld]
     return page_shell(rel, head, body, ld)
+
+
+# Visible buyer's guide + FAQ per category page. General product knowledge and
+# facts already on the site only: no prices, warranties or specs are invented.
+CABIN_GUIDE = f"""
+  <section class="seo-guide">
+    <h2>What a cabin damper does</h2>
+    <p>A <strong>cabin damper</strong> (also called a cabin shocker, cab damper or cabin shock absorber) controls how a truck's cabin moves on its mounts. On tilt-cab trucks such as the Tata Signa, Prima and 4018, Ashok Leyland U Truck and Eicher Pro, the cabin rides on its own suspension. The dampers stop it bouncing, pitching under braking and rolling in corners, which cuts driver fatigue and protects the cabin mounts and tilt mechanism.</p>
+    <h2>Signs your cabin dampers need replacing</h2>
+    <ul>
+      <li>Oil on the damper body or a wet, dusty film around the seal.</li>
+      <li>The cabin keeps bouncing after a bump, or knocks over potholes.</li>
+      <li>The cabin dives forward under braking or rocks at idle.</li>
+      <li>Cracked or worn rubber bushes at the mounting eyes.</li>
+    </ul>
+    <h2>How to find the right cabin damper</h2>
+    <p>Start from your truck model: <a href="/shockers/tata-signa/">Tata Signa</a>, <a href="/shockers/tata-prima/">Tata Prima</a>, <a href="/shockers/tata-4018/">Tata 4018</a>, <a href="/shockers/leyland-u-truck/">Ashok Leyland U Truck</a>, <a href="/shockers/leyland-g91/">Leyland G91</a>, <a href="/shockers/eicher-pro/">Eicher Pro</a>, <a href="/shockers/eicher-canter/">Eicher Canter</a> or <a href="/shockers/bharat-benz/">Bharat Benz</a>. Every product page lists the OE reference number, the position (front, rear or cabin) and the applications it is catalogued for. You can also <a href="/#catalogue">search the catalogue</a> by the OE number printed on your old damper.</p>
+    <h2>Buy cabin dampers online</h2>
+    <p>Alaina cabin dampers are sold direct on WhatsApp. Dealers, workshops and fleet owners can order single units or bulk quantities.</p>
+    {ORDER_STEPS}
+  </section>"""
+CABIN_FAQS = [
+    ("What is the difference between a cabin damper and a shock absorber?",
+     "Both are hydraulic dampers. A shock absorber controls the wheels and axle; a cabin damper controls the driver's cabin on its own mounts, so it is shorter, carries less load and is valved for cabin movement."),
+    ("Are front and rear cabin dampers the same part?",
+     "Not always. Many trucks use different front and rear cabin dampers. Check the position and OE number on each product page before ordering."),
+    ("Should cabin dampers be replaced in pairs?",
+     "We recommend replacing both dampers at the same end of the cabin together, so the cabin sits level and damps evenly."),
+    ("Can I buy Alaina cabin dampers online?",
+     f"Yes. Send the Alaina part number or OE number and quantity on WhatsApp to {PHONE}. We quote price and stock, then dispatch across India through Mahajan Motors India, Kashmere Gate, Delhi."),
+    ("Which trucks do Alaina cabin dampers fit?",
+     "Tata (Signa, Prima, Hywa, 4018, 1516, 1526, and the 709 / 2515 tilt cabin), Ashok Leyland (U Truck, G91, Stalian, 2518, NGC), Eicher Pro, Canter and Jumbo, Bharat Benz, Mann and AMW, as listed in Technical Catalogue No.04."),
+]
+SHOCK_GUIDE = f"""
+  <section class="seo-guide">
+    <h2>Shock absorbers for trucks and pickups</h2>
+    <p>Alaina shock absorbers (shockers) cover front and rear axle applications for Mahindra Bolero, Bolero Pickup and Navi Star, plus truck and bus fitments for Tata and Ashok Leyland. Each unit is built to the OE reference length, stroke and valving of the part it replaces and is pressure-tested before dispatch.</p>
+    <h2>When to replace a shocker</h2>
+    <ul>
+      <li>Oil leaking down the body.</li>
+      <li>The vehicle keeps bouncing after a speed breaker, or the tyres wear in patches.</li>
+      <li>Knocking from the axle, or a vehicle that sways and dives more than it used to.</li>
+    </ul>
+    <h2>How to order</h2>
+    {ORDER_STEPS}
+  </section>"""
+SHOCK_FAQS = [
+    ("What does shocker mean?", "In Indian trade, a shocker is a shock absorber. Alaina shockers include truck, pickup and car shock absorbers as well as cabin dampers."),
+    ("Which Mahindra pickups do Alaina shockers fit?", "Mahindra Bolero, Bolero Pickup and Navi Star, front and rear, plus the Bolero / Marshal steering damper."),
+    ("How do I order Alaina shock absorbers?", f"WhatsApp the part number or your vehicle model and quantity to {PHONE}. We dispatch across India."),
+]
+STRUT_GUIDE = f"""
+  <section class="seo-guide">
+    <h2>Struts for discontinued and hard-to-find cars</h2>
+    <p>Alaina rare struts cover imported and older models where the OE strut is discontinued or hard to source in India: Toyota Camry and Corolla, Mitsubishi Lancer and Lancer Cedia, Renault Duster 4x4, Isuzu D-Max, Suzuki Baleno and MG Hector. Fitments, sides (LH / RH) and year ranges are exactly as listed in the catalogue.</p>
+    <h2>How to order a rare strut</h2>
+    {ORDER_STEPS}
+  </section>"""
+STRUT_FAQS = [
+    ("Do left and right struts differ?", "On several models, yes. Front struts are often handed (LH and RH). Each product page shows the side where the catalogue lists it."),
+    ("Can you supply struts for a model not listed here?", f"Send the car model, year and a photo of the old strut on WhatsApp to {PHONE}. We will tell you if a matching Alaina unit is available."),
+]
+SHOCKERS_GUIDE = f"""
+  <section class="seo-guide">
+    <h2>Alaina shockers by vehicle</h2>
+    <p>Pick your vehicle above to see every Alaina part catalogued for it, or browse by line: <a href="/cabin-dampers/">cabin dampers</a>, <a href="/shock-absorbers/">shock absorbers</a>, <a href="/rare-struts/">rare struts</a> and <a href="/steering-dampers/">steering dampers</a>.</p>
+    <h2>How to order</h2>
+    {ORDER_STEPS}
+  </section>"""
+GUIDES = {
+    "/cabin-dampers/": (CABIN_GUIDE, CABIN_FAQS),
+    "/shock-absorbers/": (SHOCK_GUIDE, SHOCK_FAQS),
+    "/rare-struts/": (STRUT_GUIDE, STRUT_FAQS),
+    "/shockers/": (SHOCKERS_GUIDE, None),
+}
 
 
 def category_url_for_kind(key: str) -> str:
@@ -876,6 +1102,8 @@ def render_collection(
     product_line_name: str | None = None,
     rel: str | None = None,
     robots: str | None = None,
+    guide: str = "",
+    faqs: list[tuple[str, str]] | None = None,
 ) -> str:
     if rel is None:
         depth = path.strip("/").count("/") + 1 if path.strip("/") else 0
@@ -921,6 +1149,8 @@ def render_collection(
   <div class="cat-grid">
     {grid if items else "<p>No SKUs for this line are published in the current catalogue. <a href='../#enquire'>Enquire with your vehicle model</a>.</p>"}
   </div>{models}
+  {guide}
+  {faq_html(faqs) if faqs else ""}
 </main>
 """
     images = []
@@ -928,6 +1158,8 @@ def render_collection(
         if p["_has_photo"]:
             images.append(abs_url(p["img"]))
     ld = [organization_ld(), crumb_ld]
+    if faqs:
+        ld.append(faq_ld(faqs))
     if items:
         ld.append(item_list_ld(h1, url, items))
         ld.append(collection_webpage_ld(product_line_name or h1, description, images, url))
@@ -1196,6 +1428,38 @@ def images_for_product(p: dict) -> list[tuple[str, str]]:
     return out
 
 
+HOME_FAQS = [
+    ("Can I buy Alaina cabin dampers and shockers online?",
+     f"Yes. Find your part in the catalogue, then send the part number and quantity on WhatsApp to <a href='{WA}' target='_blank' rel='noopener'>{PHONE}</a> or email {EMAIL}. We confirm price and stock and dispatch across India through Mahajan Motors India, Kashmere Gate, Delhi."),
+    ("Which trucks do Alaina cabin dampers fit?",
+     "Tata (Signa, Prima, Hywa, 4018, 1516, 1526, and the 709 / 2515 tilt cabin), Ashok Leyland (U Truck, G91, Stalian, 2518, NGC), Eicher Pro, Canter and Jumbo, Bharat Benz, Mann and AMW, with OE-matched part numbers listed in Technical Catalogue No.04."),
+    ("How do I find the right part for my vehicle?",
+     "Search the catalogue by your vehicle model, the Alaina part number, or the OE number printed on your old unit. Every part has its own page with the OE reference, position and applications. If you are unsure, WhatsApp a photo of the old unit."),
+    ("Does Alaina make rare struts for imported cars?",
+     "Yes. Alaina catalogues rare struts for Toyota Camry and Corolla, Mitsubishi Lancer and Lancer Cedia, Renault Duster 4x4, Isuzu D-Max, Suzuki Baleno and MG Hector, models where OE struts are discontinued or hard to find in India."),
+    ("Are Alaina shock absorbers OE quality?",
+     "Every Alaina unit is built to OE reference dimensions and pressure-tested before dispatch. The catalogue lists OE cross-reference numbers so you can check the fit."),
+    ("Where is Alaina based and who sells it?",
+     "Alaina has supplied dampers to Indian transporters since 1978. It is distributed across India by Mahajan Motors India, Kashmere Gate, Delhi. The trade desk is open Monday to Saturday, 10:00 to 19:00 IST."),
+    ("Do you supply dealers, workshops and fleets?",
+     "Yes. Send your part numbers and quantities on WhatsApp for a trade or fleet quote."),
+]
+
+
+def replace_ld_block(text: str, type_name: str, obj: dict) -> str:
+    """Swap the homepage JSON-LD script whose top-level @type is type_name for obj."""
+    pat = re.compile(
+        r'<script type="application/ld\+json">\s*\{\s*"@context": "https://schema.org",\s*"@type": "'
+        + re.escape(type_name)
+        + r'".*?</script>',
+        re.S,
+    )
+    new, n = pat.subn(lambda _m: json_ld(obj), text, count=1)
+    if n != 1:
+        raise SystemExit(f"homepage JSON-LD block {type_name} not found")
+    return new
+
+
 def patch_index(products: list[dict], categories: list[dict]) -> None:
     path = ROOT / "index.html"
     text = path.read_text(encoding="utf-8")
@@ -1441,6 +1705,52 @@ def patch_index(products: list[dict], categories: list[dict]) -> None:
             text,
             count=1,
         )
+
+    # Structured data that matches what the homepage shows.
+    text = replace_ld_block(text, "Organization", organization_ld())
+    store_ld = {
+        "@context": "https://schema.org",
+        "@type": "AutoPartsStore",
+        "@id": SITE + "/#store",
+        "name": "Alaina Shockers",
+        "description": (
+            "Alaina shockers, shock absorbers, cabin dampers and rare struts for Tata, Ashok Leyland, Eicher, "
+            "Bharat Benz, Mahindra and imported cars. Order on WhatsApp; dispatched across India. Since 1978."
+        ),
+        "url": SITE + "/",
+        "image": SITE + "/images/tata-4018-hywa-cabin.png",
+        "logo": SITE + "/favicon-512x512.png",
+        "telephone": "+91-79825-55636",
+        "email": EMAIL,
+        "foundingDate": "1978",
+        "address": ADDRESS,
+        "openingHoursSpecification": OPENING_HOURS,
+        "areaServed": {"@type": "Country", "name": "India"},
+        "currenciesAccepted": "INR",
+        "brand": {"@type": "Brand", "name": "Alaina"},
+        "parentOrganization": MMI_ORG,
+        "hasOfferCatalog": offer_catalog,
+    }
+    text = replace_ld_block(text, "AutoPartsStore", store_ld)
+    text = replace_ld_block(text, "FAQPage", faq_ld(HOME_FAQS))
+    faq_items = "\n".join(
+        f'      <details class="faq-item"><summary>{esc(q)}</summary><p>{a}</p></details>' for q, a in HOME_FAQS
+    )
+    text = re.sub(
+        r"<!--FAQ_START-->.*?<!--FAQ_END-->",
+        lambda _m: f"<!--FAQ_START-->\n{faq_items}\n      <!--FAQ_END-->",
+        text,
+        count=1,
+        flags=re.S,
+    )
+    webp_map = {p["img"]: webp_rel(p["img"]) for p in products if p["_has_photo"] and webp_rel(p["img"])}
+    text = re.sub(
+        r"/\*WEBP_START\*/.*?/\*WEBP_END\*/",
+        lambda _m: "/*WEBP_START*/" + json.dumps(webp_map, sort_keys=True, separators=(",", ":")) + "/*WEBP_END*/",
+        text,
+        count=1,
+        flags=re.S,
+    )
 
     if "URLSearchParams" not in text:
         text = text.replace(
@@ -1710,8 +2020,9 @@ def write_llms(products: list[dict]) -> None:
         "",
         "> Alaina makes cabin dampers, rare struts, steering dampers and shock absorbers for Indian "
         f"commercial trucks and passenger vehicles (since 1978). {len(products)} catalogued part numbers "
-        "(Technical Catalogue No.04). Prices are quoted on enquiry; none are published. "
-        f"Enquiries: WhatsApp {PHONE}, {EMAIL}.",
+        "(Technical Catalogue No.04). Distributed across India by Mahajan Motors India, Kashmere Gate, Delhi "
+        f"({MMI_ALAINA_URL}). Prices are quoted on enquiry; none are published. "
+        f"Order online on WhatsApp {PHONE} or by email {EMAIL}, Mon–Sat 10:00–19:00 IST.",
         "",
         "## Product lines",
         f"- [Cabin dampers]({SITE}/cabin-dampers/): truck cabin tilt dampers (Tata, Ashok Leyland, Eicher, BharatBenz, Mahindra)",
@@ -1729,6 +2040,11 @@ def write_llms(products: list[dict]) -> None:
     for brand in sorted(by_brand):
         lines.append(f"- {brand}: {len(by_brand[brand])} part number(s), e.g. {by_brand[brand][0]['partno']}")
     lines += [
+        "",
+        "## How to buy",
+        "- Find the part number (or the OE number on the old unit) on this site.",
+        f"- Send it with the quantity on WhatsApp ({WA}). Price and stock are confirmed, then the part is dispatched across India.",
+        "- Dealers, workshops and fleets can order in bulk.",
         "",
         "## Notes for assistants",
         "- Confirm the OE number and the old unit before ordering; fitment is only what the catalogue lists.",
@@ -1801,7 +2117,10 @@ def main() -> None:
 
     pages = []  # (path, lastmod, images, priority)
 
-    # product pages
+    # product pages link up to every vehicle landing that lists them
+    for g in vehicle_groups(products):
+        for p in g["items"]:
+            p.setdefault("_groups", []).append((g["name"], g["slug"]))
     for p in products:
         html = render_product(p, products)
         dest = ROOT / "products" / p["_slug"] / "index.html"
@@ -1922,7 +2241,7 @@ def main() -> None:
             h1="Dickey & bonnet struts",
             description="Dickey shocker and bonnet gas strut enquiries for Alaina. Catalogue No.04 on this site lists cabin dampers, shock absorbers and rare struts — dickey/bonnet SKUs are not published here.",
             keywords="dickey shocker, bonnet gas strut, dickey strut, boot gas strut, Alaina",
-            intro="Searches for <strong>dickey shocker</strong> and <strong>bonnet gas strut</strong> are common. This site does not publish dickey or bonnet strut part numbers, so this page does not invent any. Use the catalogue for cabin dampers and rare struts, or enquire with the car model.",
+            intro="Searches for <strong>dickey shocker</strong> and <strong>bonnet gas strut</strong> are common. Alaina does not make or sell dickey shockers or bonnet gas struts, so this page lists no part numbers. Mahajan Motors India, which distributes Alaina, separately sells Superlift (not Alaina) dicky and bonnet gas springs: see <a href='https://mahajanmotorsindia.com/superlift' rel='noopener'>Superlift gas springs at Mahajan Motors India</a>.",
             items=[],
             crumb="Dickey & bonnet struts",
             extra=[("Rare struts", "/rare-struts/"), ("Enquire", "/#enquire")],
@@ -1946,6 +2265,8 @@ def main() -> None:
             model_links=c.get("models"),
             product_line_name=c["line"],
             robots="noindex,follow" if noindex else None,
+            guide=GUIDES.get(c["path"], ("", None))[0],
+            faqs=GUIDES.get(c["path"], ("", None))[1],
         )
         dest = ROOT / c["path"].strip("/") / "index.html"
         write(dest, html)
@@ -1983,16 +2304,24 @@ def main() -> None:
                     "skus": [p["partno"] for p in g["items"]],
                 }
             )
+        is_cabin = group_is_cabin(g)
+        h1 = f"{g['name']} cabin dampers" if is_cabin else f"Shocker for {g['name']}"
+        listing = "; ".join(
+            f"{esc(x['partno'])} ({esc(x['_tag'].lower())}" + (f", OE {esc(x['_oe'])})" if x["_oe"] else ")")
+            for x in g["items"]
+        )
         intro = (
-            f"Parts Alaina lists for <strong>{esc(g['name'])}</strong>. "
-            "Only applications written in the catalogue are shown — confirm OE number and the old unit before ordering."
+            f"Alaina catalogues {len(g['items'])} part number{'s' if len(g['items']) != 1 else ''} for "
+            f"<strong>{esc(g['name'])}</strong>{' cabins' if is_cabin else ''}: {listing}. "
+            "Only applications written in the catalogue are shown. Confirm the OE number and the old unit before ordering, "
+            f"then order on <a href='{WA}' target='_blank' rel='noopener'>WhatsApp</a> for dispatch across India."
         )
         html = render_collection(
             path=path,
             title=title,
-            h1=f"Shocker for {g['name']}",
+            h1=h1,
             description=desc,
-            keywords=f"shocker for {g['name']}, {g['name']} shock absorber, {g['name']} cabin damper, Alaina {g['brand']}",
+            keywords=f"shocker for {g['name']}, {g['name']} shock absorber, {re.sub(r' cabin$', '', g['name'])} cabin damper, Alaina {g['brand']}",
             intro=intro,
             items=g["items"],
             crumb_name=g["name"],
@@ -2076,7 +2405,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- **Originals kept, compressed copies shown.** The original studio PNGs are untouched. `images/web/` holds generated WebP display copies (1200px / q80 for product pages, 600px `-sm` / q78 for cards and the homepage), served through `<picture>` with the PNG as fallback. Image sitemaps, OG, and JSON-LD `ImageObject` still point at the original `p.img` PNG/JPEG paths. The lightbox opens the original. `llms.txt` is generated for AI search. Titles are held to 60 characters and descriptions to 160 by `fit_title` / `fit_description`; brand names are not repeated when the application already names them (`join_brand`).
+- **Originals kept, lossless WebP shown.** The original studio PNGs are untouched. `images/webp/` holds pixel-identical lossless WebP copies from `scripts/build_webp.py` (same alpha, same visible pixels, about 5x smaller), served through `<picture>` with the PNG as fallback on every page and in the homepage catalogue. Image sitemaps, OG, and JSON-LD `ImageObject` still point at the original PNG paths. The lightbox opens the original. `llms.txt` is generated for AI search. Titles are held to 60 characters and descriptions to 160 by `fit_title` / `fit_description`; brand names are not repeated when the application already names them (`join_brand`).
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
@@ -2137,13 +2466,23 @@ Live site: **`https://alainashockabsorbers.com`** (HTTPS, apex, no `www`). HTTP 
 
 `alainashockers.com` does not exist (NXDOMAIN). “Alaina shocker(s)” is a **search keyword** only — used in titles, intro copy, `Organization.alternateName` and image alts, not as a hostname.
 
-## Regenerating
+## Visible SEO content
+
+- Homepage: category links on the range rows, "Buy cabin dampers and shockers online" (how to order + shop by truck / car links), a visible FAQ that matches the FAQPage JSON-LD, and footer links to every line and to Mahajan Motors India.
+- `/cabin-dampers/`, `/shock-absorbers/`, `/rare-struts/`, `/shockers/`: buyer's guide and FAQ (`GUIDES` in `build_seo.py`), with FAQPage JSON-LD.
+- Cabin truck model pages use an H1 like "Tata Signa cabin dampers" and list each part number with its position and OE number.
+- Product pages: OE cross-reference table, links up to every vehicle landing that lists the part, and how to order online.
+- Organization / AutoPartsStore JSON-LD carry the Kashmere Gate, Delhi address, trade hours, contact point and Mahajan Motors India as parent organisation.
+
+## Regenerating and checks
 
 ```bash
+python3 scripts/build_webp.py   # only when photos change (slow; verifies every pixel)
 python3 scripts/build_seo.py
+python3 scripts/check_seo.py    # titles, JSON-LD, FAQ visibility, links, images, sitemap
 ```
 
-Requires Pillow (`pip install pillow`) for WebP. Does not modify `google2874721c1e7298d6.html`.
+Requires Pillow and numpy. Does not modify `google2874721c1e7298d6.html`. GitHub Actions run the build and check on every PR (`.github/workflows/seo-check.yml`) and submit changed pages to IndexNow after each push to main (`.github/workflows/indexnow.yml`, key file at the site root).
 """
     write(ROOT / "SEO.md", seo_md)
 

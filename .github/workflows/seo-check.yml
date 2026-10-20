@@ -1,0 +1,33 @@
+name: SEO check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Sitemap lastmod comes from each page's git history.
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow numpy
+      - name: Rebuild pages from the catalogue
+        run: python3 scripts/build_seo.py
+      # Sitemap lastmod follows commit dates, which change when a PR is squash-merged
+      # on a later day, so the sitemaps are left out of this comparison.
+      - name: Built pages are committed
+        run: |
+          if ! git diff --quiet -- . ':(exclude)sitemap*.xml'; then
+            git status --short -- . ':(exclude)sitemap*.xml'
+            echo "::error::Run python3 scripts/build_seo.py and commit the result."
+            exit 1
+          fi
+      - name: Check titles, structured data, links and images
+        run: python3 scripts/check_seo.py
