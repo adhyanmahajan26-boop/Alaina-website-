@@ -100,18 +100,17 @@ PAGES = [
         path="/shipping-policy/",
         title="Shipping & Delivery Policy | Alaina Shockers",
         h1="Shipping & delivery",
-        description="Alaina cabin dampers, shockers and struts ship across India from Delhi. Dispatch in 2 working days for stock items, delivery in 2 to 7 working days.",
+        description="Alaina cabin dampers, shockers and struts ship across India from Delhi. Stock items usually dispatch in 2 working days; delivery typically 2 to 7 days.",
         lead=f"How Alaina Shockers orders are dispatched and delivered by {SELLER}.",
         sections=[
             ("Where we deliver",
              "<p>We ship across India from Kashmere Gate, Delhi, by courier or road transport depending on the size and weight of the "
-             "order. Bulk and fleet orders can go by transport to your nearest booking point.</p>"),
+             "order.</p>"),
             ("Order confirmation",
              "<p>When you send an enquiry on WhatsApp, we confirm the part numbers in stock, the final price including GST, the shipping "
-             "charge and the expected dispatch date. Your order is confirmed once you accept that quote and we receive payment, or once "
-             "credit terms are agreed for approved trade accounts.</p>"),
+             "charge and the expected dispatch date. Your order is confirmed once you accept that quote and payment is made.</p>"),
             ("Dispatch time",
-             "<p>In-stock parts are normally dispatched within 2 working days of order confirmation. Working days are Monday to Saturday, "
+             "<p>In-stock parts are usually dispatched within 2 working days of order confirmation. Working days are Monday to Saturday, "
              "excluding public holidays. If a part needs to be sourced, we tell you the expected time before you pay.</p>"),
             ("Delivery time",
              "<p>After dispatch, delivery usually takes 2 to 7 working days depending on your location and the carrier. Remote areas and "
@@ -119,7 +118,7 @@ PAGES = [
              "tracking or LR (lorry receipt) number once the parcel is dispatched.</p>"),
             ("Shipping charges",
              "<p>Shipping is charged at actual cost based on weight, size and destination, and is shown in your quote before you pay. "
-             "Any free-shipping offer will be stated clearly in that quote. Collection from Kashmere Gate, Delhi can be arranged on request.</p>"),
+             "Any free-shipping offer will be stated clearly in that quote.</p>"),
             ("Receiving your parcel",
              '<p>Please check the parcel when it arrives. If the packing is torn, wet or tampered with, note it on the delivery receipt '
              'and send us photos on WhatsApp within 48 hours of delivery. See our <a href="/returns-policy/">returns &amp; refunds policy</a>.</p>'),
@@ -134,7 +133,7 @@ PAGES = [
         path="/returns-policy/",
         title="Returns & Refunds Policy | Alaina Shockers",
         h1="Returns & refunds",
-        description="7-day returns on unused Alaina parts in original packaging, free replacement for wrong or damaged items, refunds within 7 working days.",
+        description="7-day returns on unused Alaina parts in original packaging, free replacement for wrong or damaged items, refunds usually within 7 working days.",
         lead=f"Return, replacement, cancellation and refund policy for Alaina Shockers parts bought from {SELLER}.",
         sections=[
             ("Return window",
@@ -153,6 +152,7 @@ PAGES = [
              "<li>Parts that have been fitted, used, tampered with or damaged after delivery.</li>"
              "<li>Parts without their original packaging, or with the box written on or damaged.</li>"
              "<li>Parts sourced specially for your order, when we told you before you paid that they are non-returnable.</li>"
+             "<li>Part of a set. Parts sold as a set, such as dicky shockers or bonnet shockers, can only be returned as the full set.</li>"
              "<li>Requests made after the 7-day window.</li>"
              "</ul>"
              "<p>Please confirm the OE number or send a photo of the old unit before ordering. We are happy to check fitment on WhatsApp.</p>"),
@@ -163,7 +163,7 @@ PAGES = [
              "<p>You can cancel an order at no charge any time before it is dispatched, and we refund any amount paid in full. Once "
              "dispatched, the return rules above apply. If we cannot supply a part after you have paid, we tell you straight away and refund it in full.</p>"),
             ("Refunds",
-             "<p>Once the returned part reaches us and passes inspection, we issue the refund within 7 working days to the original payment "
+             "<p>Once the returned part reaches us and passes inspection, we usually issue the refund within 7 working days to the original payment "
              "method or to your bank account by bank transfer or UPI. For GST-registered buyers we issue a credit note against the original invoice.</p>"),
             ("Complaints", GRIEVANCE_HTML),
             ("Contact", CONTACT_HTML),
@@ -179,13 +179,13 @@ PAGES = [
             ("About the site",
              f"<p>This site is the catalogue of Alaina Shockers, sold and distributed by {SELLER} (GSTIN {GSTIN}), {ADDRESS}. "
              "The website itself does not take payments. You enquire on WhatsApp, phone or email, and an order becomes binding once we "
-             'confirm it and you pay, as set out in our <a href="/shipping-policy/">shipping &amp; delivery policy</a>.</p>'),
+             'confirm it and payment is made, as set out in our <a href="/shipping-policy/">shipping &amp; delivery policy</a>.</p>'),
             ("Prices and availability",
              "<p>Prices are quoted in Indian rupees and include GST unless stated otherwise. Prices, availability and specifications can "
              "change without notice, and a catalogue listing is not a guarantee of stock. Every order comes with a GST invoice.</p>"),
             ("Payment",
              f"<p>We share payment details when we confirm your order. Only pay to account details sent from our official number {PHONE} "
-             "or email. Credit terms are available only to approved trade accounts.</p>"),
+             "or email.</p>"),
             ("Fitment and OE references",
              "<p>Applications and OE references in the catalogue are a guide. Check your vehicle model and variant, or the OE number on the "
              "old unit, with us before purchase.</p>"),

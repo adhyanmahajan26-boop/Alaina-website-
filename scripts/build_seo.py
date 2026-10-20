@@ -17,7 +17,8 @@ from pathlib import Path
 from urllib.parse import quote
 from xml.etree import ElementTree as ET
 
-import legal_pages as legal  # scripts/ is on sys.path when this file is run directly
+sys.path.insert(0, str(Path(__file__).parent))
+import legal_pages as legal  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://alainashockabsorbers.com"
