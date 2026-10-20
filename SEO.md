@@ -11,7 +11,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
-- **Originals kept, compressed copies shown.** The original studio PNGs are untouched. `images/web/` holds generated WebP display copies (1200px / q80 for product pages, 600px `-sm` / q78 for cards and the homepage), served through `<picture>` with the PNG as fallback. Image sitemaps, OG, and JSON-LD `ImageObject` still point at the original `p.img` PNG/JPEG paths. The lightbox opens the original. `llms.txt` is generated for AI search. Titles are held to 60 characters and descriptions to 160 by `fit_title` / `fit_description`; brand names are not repeated when the application already names them (`join_brand`).
+- **Originals kept, lossless WebP shown.** The original studio PNGs are untouched. `images/webp/` holds pixel-identical lossless WebP copies from `scripts/build_webp.py` (same alpha, same visible pixels, about 5x smaller), served through `<picture>` with the PNG as fallback on every page and in the homepage catalogue. Image sitemaps, OG, and JSON-LD `ImageObject` still point at the original PNG paths. The lightbox opens the original. `llms.txt` is generated for AI search. Titles are held to 60 characters and descriptions to 160 by `fit_title` / `fit_description`; brand names are not repeated when the application already names them (`join_brand`).
 - Homepage visible layout matches the pre-SEO site. Crawlable SKU HTML lives on `/products/<slug>/` and category landings, using studio `p.img` photos only (not two-column catalogue-card plates or `catalogue-photos/` PDF renders).
 - Favicon set at the site root (square Alaina `A` mark): `favicon.ico` (16/32/48), `favicon.svg`, 48/192/512 PNGs, `apple-touch-icon.png` (180), `site.webmanifest`. Linked in every page `<head>`. `robots.txt` allows them; `.htaccess` serves them as real files.
 
@@ -68,10 +68,20 @@ Live site: **`https://alainashockabsorbers.com`** (HTTPS, apex, no `www`). HTTP 
 
 `alainashockers.com` does not exist (NXDOMAIN). “Alaina shocker(s)” is a **search keyword** only — used in titles, intro copy, `Organization.alternateName` and image alts, not as a hostname.
 
-## Regenerating
+## Visible SEO content
+
+- Homepage: category links on the range rows, "Buy cabin dampers and shockers online" (how to order + shop by truck / car links), a visible FAQ that matches the FAQPage JSON-LD, and footer links to every line and to Mahajan Motors India.
+- `/cabin-dampers/`, `/shock-absorbers/`, `/rare-struts/`, `/shockers/`: buyer's guide and FAQ (`GUIDES` in `build_seo.py`), with FAQPage JSON-LD.
+- Cabin truck model pages use an H1 like "Tata Signa cabin dampers" and list each part number with its position and OE number.
+- Product pages: OE cross-reference table, links up to every vehicle landing that lists the part, and how to order online.
+- Organization / AutoPartsStore JSON-LD carry the Kashmere Gate, Delhi address, trade hours, contact point and Mahajan Motors India as parent organisation.
+
+## Regenerating and checks
 
 ```bash
+python3 scripts/build_webp.py   # only when photos change (slow; verifies every pixel)
 python3 scripts/build_seo.py
+python3 scripts/check_seo.py    # titles, JSON-LD, FAQ visibility, links, images, sitemap
 ```
 
-Requires Pillow (`pip install pillow`) for WebP. Does not modify `google2874721c1e7298d6.html`.
+Requires Pillow and numpy. Does not modify `google2874721c1e7298d6.html`. GitHub Actions run the build and check on every PR (`.github/workflows/seo-check.yml`) and submit changed pages to IndexNow after each push to main (`.github/workflows/indexnow.yml`, key file at the site root).
