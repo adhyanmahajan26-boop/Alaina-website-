@@ -2279,4 +2279,28 @@
       <image:caption>Alaina rare strut AL-MU-HC-1004 for MG Hector</image:caption>
     </image:image>
   </url>
+  <url>
+    <loc>https://alainashockabsorbers.com/privacy-policy/</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://alainashockabsorbers.com/shipping-policy/</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://alainashockabsorbers.com/returns-policy/</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://alainashockabsorbers.com/terms/</loc>
+    <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>

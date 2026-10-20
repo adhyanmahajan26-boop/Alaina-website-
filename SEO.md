@@ -22,7 +22,7 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 | Catalogue SKUs | 74 |
 | SKUs with photo | 73 |
 | SKUs without photo | 1 |
-| URL entries in sitemaps | 117 |
+| URL entries in sitemaps | 121 |
 | Image entries (unique loc per page, summed) | 477 |
 | Pages with JSON-LD WebPage/ItemList/Org | 118 |
 
