@@ -326,8 +326,22 @@ def webp_rel(img: str) -> str | None:
     return rel if (ROOT / rel).exists() else None
 
 
-def with_webp(rel_prefix: str, img_src: str, img_tag: str) -> str:
-    """Wrap an <img> in <picture> with the pixel-identical WebP; the PNG stays the fallback."""
+def card_rel(img: str, big: bool = False) -> str | None:
+    """Catalogue cut-out from scripts/build_cards.py: every part at the same angle, size and light."""
+    rel = f"images/cards/{Path(img).stem}{'@2x' if big else ''}.webp"
+    return rel if (ROOT / rel).exists() else None
+
+
+def with_webp(rel_prefix: str, img_src: str, img_tag: str, *, sizes: str = "") -> str:
+    """Wrap an <img> in <picture>. Browsers get the matched catalogue cut-out (or, where a photo has
+    none, the pixel-identical WebP); the original PNG stays the <img src> that crawlers index."""
+    small, big = card_rel(img_src), card_rel(img_src, True)
+    if small and big:
+        sz = f' sizes="{sizes}"' if sizes else ""
+        return (
+            f'<picture><source type="image/webp" srcset="{esc(rel_prefix + small)} 640w, '
+            f'{esc(rel_prefix + big)} 1280w"{sz}/>{img_tag}</picture>'
+        )
     webp = webp_rel(img_src)
     if not webp:
         return img_tag
@@ -349,8 +363,7 @@ def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> st
         f'<img{cls} src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
         f'width="{w}" height="{h}" loading="{loading}"{fetch} decoding="async"/>'
     )
-    # Lossless only: the 2026-10-13 lossy copies flattened transparent PNGs onto grey.
-    return with_webp(rel_prefix, p["img"], img)
+    return with_webp(rel_prefix, p["img"], img, sizes="(max-width:860px) 100vw, 640px")
 
 
 def json_ld(obj) -> str:
@@ -519,7 +532,6 @@ def head_tags(
 
 CHROME_NAV = """
 {sprite}
-<div class="scroll-progress" aria-hidden="true"></div>
 <div id="topbar">
   <div class="wrap">
     <span class="tb-left">Technical Catalogue <b>No.04</b> — 2026 Edition</span>
@@ -544,13 +556,13 @@ CHROME_NAV = """
       <a href="{xs}" class="nav-x">Alaina <b>×</b> Superlift</a>
       <a href="{home}#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
-    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><b>Menu</b><span></span><span></span></button></div>
   </div>
 </header>
 <div id="mobnav">
   <div class="mn-top">
     <div class="brand-word">ALAINA<sup>®</sup></div>
-    <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
+    <button class="mn-x" id="mnClose" aria-label="Close menu">Close</button>
   </div>
   <nav>
     <a href="{home}">Home</a>
@@ -564,7 +576,7 @@ CHROME_NAV = """
   </nav>
   <div class="mn-foot">
     <a href="tel:+917982555636">+91 79825 55636</a>
-    <a href="{wa}" target="_blank" rel="noopener">WhatsApp →</a>
+    <a href="{wa}" target="_blank" rel="noopener">WhatsApp</a>
   </div>
 </div>
 """
@@ -647,10 +659,8 @@ def chrome(rel: str, dock_wa: str | None = None) -> tuple[str, str]:
   </div>
 </footer>
 <nav class="dock" aria-label="Quick actions">
-  <a href="{home}">{ico("home")}Home</a>
-  <a href="{home}#catalogue">{ico("grid")}Catalogue</a>
-  <a href="{rel}alaina-x-superlift/" class="dock-x">{ico("gas")}Superlift</a>
-  <a class="dock-wa" href="{wa}" target="_blank" rel="noopener">{ico("wa", True)}WhatsApp</a>
+  <a class="dock-find" href="{home}#find">{ico("search")}<span>Find a part</span><i>Catalogue</i></a>
+  <a class="dock-wa" href="{wa}" target="_blank" rel="noopener" aria-label="WhatsApp the trade desk">{ico("wa", True)}<span>WhatsApp</span></a>
 </nav>
 <a id="wafab" href="{wa}" target="_blank" rel="noopener">{ico("wa", True)}WhatsApp</a>
 <script src="{rel}site.js?v={ASSET_VERSION}" defer></script>
@@ -658,7 +668,7 @@ def chrome(rel: str, dock_wa: str | None = None) -> tuple[str, str]:
     return nav, footer
 
 
-def page_shell(rel: str, head: str, body: str, ld: list, *, dock_wa: str | None = None) -> str:
+def page_shell(rel: str, head: str, body: str, ld: list, *, dock_wa: str | None = None, body_class: str = "") -> str:
     nav, footer = chrome(rel, dock_wa)
     head = head.replace("@@REL@@", rel)
     lds = "\n".join(json_ld(x) for x in ld)
@@ -668,7 +678,7 @@ def page_shell(rel: str, head: str, body: str, ld: list, *, dock_wa: str | None 
 {head}
 {lds}
 </head>
-<body>
+<body{f' class="{body_class}"' if body_class else ""}>
 <a id="top"></a>
 {nav}
 {body}
@@ -702,7 +712,7 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
             f'width="{w}" height="{h}" loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        img = with_webp(rel, p["img"], img)
+        img = with_webp(rel, p["img"], img, sizes="(max-width:640px) 46vw, 300px")
         stage = f'<a class="pc-stage" href="{href}">{tag}{img}</a>'
     else:
         stage = f'<a class="pc-stage no-zoom" href="{href}">{tag}<span class="nopic">Photo<br/>on request</span></a>'
@@ -716,7 +726,7 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
   </div>
   <div class="pc-foot">
     <a class="pc-btn wa" target="_blank" rel="noopener" href="{WA}?text={wamsg}" aria-label="Enquire about {esc(p['partno'])} on WhatsApp">{ico("wa", True)}Enquire</a>
-    <a class="pc-btn go" href="{href}" aria-label="Details for {esc(p['partno'])}">{ico("next")}</a>
+    <a class="pc-btn go" href="{href}" aria-label="Details for {esc(p['partno'])}">Details{ico("next")}</a>
   </div>
 </article>"""
 
@@ -2100,16 +2110,17 @@ def write_superlift() -> tuple[str, str, list, str] | None:
             <a class="btn btn-line" href="{wa_both}" target="_blank" rel="noopener">{ico("wa", True)}Ask the trade desk</a>
           </div>
         </div>
-        <div class="px-film" data-reveal>
-          <video muted loop playsinline preload="none" data-lazy data-src="{rel}images/superlift/superlift-film.mp4" poster="{rel}images/superlift/superlift-film-poster.jpg" aria-label="Superlift gas spring film"></video>
-          <div class="px-lock">{MARK}<span class="x">×</span><b>Superlift</b></div>
-        </div>
+        <div class="px-art"><picture><source type="image/webp" srcset="{rel}images/partner-x-720.webp 720w, {rel}images/partner-x.webp 1280w" sizes="(max-width:860px) 100vw, 50vw"/><img src="{rel}images/partner-x.webp" alt="An Alaina cabin damper crossed with a Superlift gas spring" width="1280" height="1280" fetchpriority="high" decoding="async"/></picture></div>
       </div>
       <div class="px-stats">
         <div class="px-stat"><b data-count="{len(rows)}">{len(rows)}</b><span>Superlift part numbers</span></div>
         <div class="px-stat"><b data-count="{cars}">{cars}</b><span>Car and SUV models</span></div>
         <div class="px-stat"><b data-count="{n_make}">{n_make}</b><span>Vehicle makes</span></div>
         <div class="px-stat"><b>1</b><span>Trade desk for both lines</span></div>
+      </div>
+      <div class="px-film" data-reveal>
+        <video muted loop playsinline preload="none" data-lazy data-src="{rel}images/superlift/superlift-film.mp4" poster="{rel}images/superlift/superlift-film-poster.jpg" aria-label="Superlift gas spring film"></video>
+        <div class="px-lock">{MARK}<span class="x">×</span><b>Superlift</b></div>
       </div>
     </div>
   </div>
@@ -2188,7 +2199,7 @@ def write_superlift() -> tuple[str, str, list, str] | None:
             "provider": MMI_ORG,
         },
     ]
-    write(ROOT / "alaina-x-superlift" / "index.html", page_shell(rel, head, body, ld, dock_wa=wa_both))
+    write(ROOT / "alaina-x-superlift" / "index.html", page_shell(rel, head, body, ld, dock_wa=wa_both, body_class="has-hero"))
     if not SUPERLIFT_INDEXABLE:
         return None
     images = [(banner, "Superlift gas springs")]

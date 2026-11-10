@@ -20,7 +20,7 @@
     var n = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     var go = function () { root.setAttribute('data-theme', n); syncTheme(); };
     try { localStorage.setItem('alaina-theme', n); } catch (e) {}
-    if (d.startViewTransition && !reduce) d.startViewTransition(go); else go();
+    if (d.startViewTransition && !reduce) { var vt = d.startViewTransition(go); ['ready', 'finished', 'updateCallbackDone'].forEach(function (k) { if (vt && vt[k]) vt[k].catch(function () {}); }); } else go();
   });
 
   /* mobile menu */
@@ -39,13 +39,13 @@
   }
   window.AlainaUI = { lock: lock, closeMenu: closeMenu };
 
-  /* header hides on the way down, returns on the way up; progress bar */
-  var bar = $('.scroll-progress'), lastY = window.pageYOffset, ticking = false;
+  /* header hides on the way down, returns on the way up */
+  var lastY = window.pageYOffset, ticking = false;
   function onScroll() {
     ticking = false;
-    var y = window.pageYOffset, max = d.documentElement.scrollHeight - window.innerHeight;
-    if (bar) bar.style.setProperty('--sp', max > 0 ? (y / max).toFixed(4) : 0);
+    var y = window.pageYOffset;
     root.classList.toggle('at-top', y < 240);
+    root.classList.toggle('at-hero', y < 16);
     if (Math.abs(y - lastY) > 6) {
       root.classList.toggle('nav-hide', y > lastY && y > 520 && !(menu && menu.classList.contains('open')));
       lastY = y;
@@ -95,21 +95,6 @@
       });
     }, { rootMargin: '200px' });
     vids.forEach(function (v) { vio.observe(v); });
-  }
-
-  /* cards lean towards the pointer (desktop only) */
-  if (window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce) {
-    d.addEventListener('pointermove', function (e) {
-      var c = e.target.closest && e.target.closest('.pcard');
-      if (!c) return;
-      var r = c.getBoundingClientRect();
-      c.style.setProperty('--ry', (((e.clientX - r.left) / r.width - 0.5) * 7).toFixed(2) + 'deg');
-      c.style.setProperty('--rx', ((0.5 - (e.clientY - r.top) / r.height) * 7).toFixed(2) + 'deg');
-    }, { passive: true });
-    d.addEventListener('pointerout', function (e) {
-      var c = e.target.closest && e.target.closest('.pcard');
-      if (c && !c.contains(e.relatedTarget)) { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); }
-    }, { passive: true });
   }
 
   /* dock steps aside while typing */

@@ -40,7 +40,7 @@
 <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
 <script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}setTimeout(function(){if(!window.__alainaReady)d.classList.remove('js')},3000)})();</script>
-<link rel="stylesheet" href="style.css?v=20"/>
+<link rel="stylesheet" href="style.css?v=30"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -308,9 +308,8 @@
 }
 </script>
 </head>
-<body>
+<body class="has-hero">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol><symbol id="i-go" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol><symbol id="i-next" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-5.2v-5.2H9.2V20H4z"/></symbol><symbol id="i-gas" viewBox="0 0 24 24"><circle cx="4.5" cy="19.5" r="1.7"/><circle cx="19.5" cy="4.5" r="1.7"/><path d="m5.8 18.2 3-3M15.2 8.8l3-3"/><path d="m8.3 15.7 6.4-6.4" stroke-width="4.6"/></symbol><symbol id="i-spin" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol></defs></svg>
-<div class="scroll-progress" aria-hidden="true"></div>
 
 <!-- ═══ TOPBAR ═══ -->
 <div id="topbar">
@@ -337,9 +336,9 @@
       <a href="alaina-x-superlift/" class="nav-x">Alaina <b>×</b> Superlift</a>
       <a href="#about">About</a>
       <a href="#faq">FAQ</a>
-      <a href="#enquire" class="nav-cta">Enquire &#8599;</a>
+      <a href="#enquire" class="nav-cta">Enquire</a>
     </nav>
-    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><b>Menu</b><span></span><span></span></button></div>
   </div>
 </header>
 
@@ -347,7 +346,7 @@
 <div id="mobnav">
   <div class="mn-top">
     <div class="brand-word">ALAINA<sup>®</sup></div>
-    <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
+    <button class="mn-x" id="mnClose" aria-label="Close menu">Close</button>
   </div>
   <nav>
     <a href="#range">Range</a>
@@ -363,17 +362,19 @@
   </nav>
   <div class="mn-foot">
     <a href="tel:+917982555636">+91 79825 55636</a>
-    <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank">WhatsApp →</a>
+    <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank">WhatsApp</a>
   </div>
 </div>
 
 <main>
-<!-- ═══ STAGE: hero + anatomy share one 3D damper ═══ -->
-<div class="stage" id="stage">
-  <div class="stage-bg" aria-hidden="true"></div>
-  <div class="stage-canvas" aria-hidden="true">
-    <canvas id="gl"></canvas>
-    <picture><source type="image/webp" srcset="images/webp/tata-4018-hywa-cabin.webp"/><img class="stage-fallback" src="images/tata-4018-hywa-cabin.png" alt="" width="1536" height="1024" loading="lazy" decoding="async"/></picture>
+<!-- ═══ STAGE: hero and anatomy share one rendered damper ═══ -->
+<div class="stage" id="stage" data-seq="seq/">
+  <div class="stage-view" aria-hidden="true">
+    <div class="stage-glow"></div>
+    <div class="stage-sq">
+      <img class="stage-poster" src="seq/poster.webp" alt="" width="1080" height="1080" fetchpriority="high" decoding="async"/>
+      <canvas id="seq" width="720" height="720"></canvas>
+    </div>
   </div>
 
   <!-- ═══ HERO ═══ -->
@@ -381,14 +382,17 @@
     <a id="top"></a>
     <div class="hero-inner wrap">
       <p class="hero-eyebrow">Alaina Shockers &middot; Since 1978</p>
-      <h1 class="hero-title">Cabin dampers <span>and rare struts</span></h1>
+      <h1 class="hero-title"><span class="l1">Cabin dampers</span> <span class="l2">and rare struts</span></h1>
       <p class="hero-sub">OE-matched shock absorbers for Tata, Leyland, Eicher and Bharat Benz trucks, plus struts for discontinued imports.</p>
       <div class="hero-cta-row">
         <a href="#catalogue" class="btn btn-fill">View catalogue <svg class="ico ico-go" aria-hidden="true"><use href="#i-go"/></svg></a>
         <a href="#enquire" class="btn btn-line">Get a quote</a>
       </div>
     </div>
-    <div class="hero-zone" aria-hidden="true"><div class="hero-hint"><svg class="ico"><use href="#i-spin"/></svg>Drag to spin</div></div>
+    <div class="hero-read" aria-hidden="true">
+      <span class="hr-hint">Press the damper</span>
+      <span class="hr-val"><b id="travel">00.0</b> mm travel</span>
+    </div>
     <div class="hero-foot">
       <div class="wrap">
         <a class="hf-item" href="#catalogue" data-jump="Tata"><span class="nm">Tata</span><span class="ct" data-cti="Tata"></span></a>
@@ -403,19 +407,20 @@
   <section id="anatomy" aria-labelledby="an-h">
     <div class="an-pin">
       <div class="wrap an-wrap">
-        <p class="sec-kicker">Engineering</p>
-        <h2 class="sec-title" id="an-h">Inside a cabin damper</h2>
+        <div class="an-head">
+          <p class="sec-kicker">Engineering</p>
+          <h2 class="sec-title" id="an-h">Inside a cabin damper</h2>
+        </div>
         <ol class="an-steps">
-          <li class="is-active"><span class="an-no">01</span><h3>Mounting eyes</h3><p><span>Bushed eyes at both ends carry the cabin's movement without knocking.</span></p></li>
+          <li><span class="an-no">01</span><h3>Mounting eyes</h3><p><span>Bushed eyes at both ends carry the cabin's movement without knocking.</span></p></li>
           <li><span class="an-no">02</span><h3>Damper body</h3><p><span>Length and stroke are matched to the OE part number it replaces.</span></p></li>
           <li><span class="an-no">03</span><h3>Coil spring</h3><p><span>Holds the cabin at ride height, so the damper only has to control it.</span></p></li>
           <li><span class="an-no">04</span><h3>Piston rod and seal</h3><p><span>Oil, seals and bump rubbers are specified for overload and heat.</span></p></li>
           <li><span class="an-no">05</span><h3>Dust shield</h3><p><span>Keeps road grit off the rod and seal. The part number is stamped on every body.</span></p></li>
           <li><span class="an-no">06</span><h3>Tested as one unit</h3><p><span>Every unit is cycled on the rig and pressure-tested before dispatch.</span></p></li>
         </ol>
-        <div class="an-bar" aria-hidden="true"><i></i></div>
+        <div class="an-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </div>
-      <span class="an-dot" aria-hidden="true"></span>
     </div>
   </section>
 </div>
@@ -427,40 +432,40 @@
   </div>
 </div>
 
-<!-- ═══ 01 · RANGE ═══ -->
+<!-- ═══ RANGE ═══ -->
 <section id="range">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">01 / Range</p>
+      <p class="sec-kicker">Range</p>
       <div>
         <h2 class="sec-title">Product range</h2>
       </div>
     </div>
     <div class="range-list">
       <div class="range-row" onclick="jumpCat('HD')" data-reveal>
+        <div class="range-fig"><picture><source type="image/webp" srcset="images/cards/tata-4018-hywa-cabin@2x.webp"/><img src="images/tata-4018-hywa-cabin.png" alt="Tata 4018 Hywa cabin damper" width="1536" height="1024" loading="lazy" decoding="async"/></picture></div>
         <div class="range-name">Cabin Dampers<small>Tata · Leyland · Eicher · Bharat Benz · Mann · AMW</small></div>
         <div class="range-desc">OE-matched fitments for Tata 4018, Prima and Signa, Leyland U Truck, Eicher Pro and more. <a class="range-more" href="cabin-dampers/">All cabin dampers &rarr;</a></div>
-        <div class="range-fig"><picture><source type="image/webp" srcset="images/webp/tata-4018-hywa-cabin.webp"/><img src="images/tata-4018-hywa-cabin.png" alt="Tata 4018 Hywa cabin damper" width="1536" height="1024" loading="lazy" decoding="async"/></picture></div>
       </div>
       <div class="range-row" onclick="jumpCat('Mahindra')" data-reveal style="--d:.08s">
+        <div class="range-fig"><picture><source type="image/webp" srcset="images/cards/bolero-front@2x.webp"/><img src="images/bolero-front.png" alt="Mahindra Bolero front shock absorber" width="1024" height="1024" loading="lazy" decoding="async"/></picture></div>
         <div class="range-name">Pickup &amp; LCV<small>Bolero · Bolero Pickup · Navi Star</small></div>
         <div class="range-desc">Front and rear shockers and steering dampers for Mahindra pickups. <a class="range-more" href="shock-absorbers/">All shock absorbers &rarr;</a></div>
-        <div class="range-fig"><picture><source type="image/webp" srcset="images/webp/bolero-front.webp"/><img src="images/bolero-front.png" alt="Mahindra Bolero front shock absorber" width="1024" height="1024" loading="lazy" decoding="async"/></picture></div>
       </div>
       <div class="range-row" onclick="jumpCat('RS')" data-reveal style="--d:.16s">
+        <div class="range-fig"><picture><source type="image/webp" srcset="images/cards/camry-front-lh@2x.webp"/><img src="images/camry-front-lh.png" alt="Toyota Camry rare strut" width="768" height="1024" loading="lazy" decoding="async"/></picture></div>
         <div class="range-name">Rare Struts<small>Toyota · Mitsubishi · Renault · Isuzu · Suzuki · MG</small></div>
         <div class="range-desc">Struts for models the OEM no longer supplies, including Camry, Corolla, Lancer, D-Max and Hector. <a class="range-more" href="rare-struts/">All rare struts &rarr;</a></div>
-        <div class="range-fig"><picture><source type="image/webp" srcset="images/webp/camry-front-lh.webp"/><img src="images/camry-front-lh.png" alt="Toyota Camry rare strut" width="768" height="1024" loading="lazy" decoding="async"/></picture></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ 02 · CATALOGUE ═══ -->
+<!-- ═══ CATALOGUE ═══ -->
 <section id="catalogue">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">02 / Technical Catalogue No.04</p>
+      <p class="sec-kicker">Technical Catalogue No.04</p>
       <div>
         <h2 class="sec-title">Catalogue</h2>
       </div>
@@ -480,11 +485,11 @@
   </div>
 </section>
 
-<!-- ═══ 03 · PROVING ═══ -->
-<section id="proving">
+<!-- ═══ PROVING ═══ -->
+<section id="proving" class="on-dark">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">03 / Proving</p>
+      <p class="sec-kicker">Proving</p>
       <div>
         <h2 class="sec-title">Testing</h2>
       </div>
@@ -514,11 +519,11 @@
   </div>
 </div>
 
-<!-- ═══ 04 · ABOUT ═══ -->
+<!-- ═══ ABOUT ═══ -->
 <section id="about">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">04 / Company</p>
+      <p class="sec-kicker">Company</p>
       <div>
         <h2 class="sec-title">About Alaina</h2>
       </div>
@@ -544,22 +549,22 @@
 <section id="partner">
   <div class="wrap">
     <div class="partner-card" data-reveal>
-      <div>
+      <div class="partner-fig" aria-hidden="true"><img src="images/partner-x.webp" srcset="images/partner-x-720.webp 720w, images/partner-x.webp 1280w" sizes="(max-width:860px) 100vw, 50vw" alt="" width="1280" height="1280" loading="lazy" decoding="async"/></div>
+      <div class="partner-copy">
         <p class="sec-kicker">Partner line</p>
         <h2 class="lockup"><span>Alaina</span><span class="x">×</span><span class="sl">Superlift</span></h2>
         <p>Alaina looks after the ride. Superlift looks after the lift: dicky and bonnet gas springs for 190+ cars and SUVs, supplied by the same trade desk at Mahajan Motors India.</p>
         <a class="btn btn-fill" href="alaina-x-superlift/">Open the Superlift catalogue <svg class="ico ico-go" aria-hidden="true"><use href="#i-go"/></svg></a>
       </div>
-      <div class="partner-fig" aria-hidden="true"><svg viewBox="0 0 440 150" role="img" aria-label="Gas spring"><defs><linearGradient id="gsb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3c42"/><stop offset=".35" stop-color="#17181b"/><stop offset="1" stop-color="#050506"/></linearGradient><linearGradient id="gsr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#b9bcc4"/><stop offset="1" stop-color="#5d6068"/></linearGradient></defs><g transform="rotate(-14 220 75)"><g class="gs-rod"><rect x="250" y="69.5" width="152" height="11" rx="5.5" fill="url(#gsr)"/><circle cx="408" cy="75" r="13" fill="#17181b" stroke="rgba(255,255,255,.45)"/><circle cx="408" cy="75" r="4.5" fill="#FF4A1A"/></g><rect x="52" y="60" width="232" height="30" rx="8" fill="url(#gsb)" stroke="rgba(255,255,255,.28)"/><rect x="264" y="60" width="20" height="30" rx="4" fill="#2c2e33"/><rect x="96" y="60.5" width="5" height="29" fill="#FF4A1A"/><circle cx="36" cy="75" r="13" fill="#17181b" stroke="rgba(255,255,255,.45)"/><circle cx="36" cy="75" r="4.5" fill="#FF4A1A"/></g></svg></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ 05 · BUY ONLINE ═══ -->
+<!-- ═══ BUY ONLINE ═══ -->
 <section id="buy">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">05 / How to order</p>
+      <p class="sec-kicker">How to order</p>
       <div>
         <h2 class="sec-title">Buy cabin dampers and shockers online</h2>
       </div>
@@ -600,11 +605,11 @@
   </div>
 </section>
 
-<!-- ═══ 06 · FAQ ═══ -->
+<!-- ═══ FAQ ═══ -->
 <section id="faq">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">06 / FAQ</p>
+      <p class="sec-kicker">FAQ</p>
       <div>
         <h2 class="sec-title">Questions buyers ask</h2>
       </div>
@@ -623,11 +628,11 @@
   </div>
 </section>
 
-<!-- ═══ 07 · ENQUIRE ═══ -->
+<!-- ═══ ENQUIRE ═══ -->
 <section id="enquire">
   <div class="wrap">
     <div class="sec-head" data-reveal>
-      <p class="sec-kicker">07 / Trade desk</p>
+      <p class="sec-kicker">Trade desk</p>
       <div>
         <h2 class="sec-title">Get a quote</h2>
       </div>
@@ -651,14 +656,14 @@
             </select>
           </div>
           <div class="fg full"><label for="f-msg">Requirement</label><textarea id="f-msg" placeholder="Part number, vehicle model, quantity…"></textarea></div>
-          <button type="submit" class="ef-submit"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Send via WhatsApp ↗</button>
+          <button type="submit" class="ef-submit"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Send via WhatsApp</button>
         </div>
       </form>
       <aside class="enq-side" data-reveal style="--d:.1s">
         <div class="es-row"><span class="lab">Direct line</span><span class="val"><a href="tel:+917982555636">+91 79825 55636</a></span></div>
         <div class="es-row"><span class="lab">Email</span><span class="val"><a href="mailto:adhyanmahajan26@gmail.com">adhyanmahajan26@gmail.com</a></span></div>
         <div class="es-row"><span class="lab">Hours</span><p>Mon–Sat, 10:00–19:00 IST.<br/>WhatsApp is fastest. Send a part number or a photo of the old unit.</p></div>
-        <a class="es-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp the trade desk ↗</a>
+        <a class="es-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp the trade desk</a>
       </aside>
     </div>
   </div>
@@ -717,11 +722,9 @@
 <div id="lb" onclick="if(event.target===this)closeLb()" aria-hidden="true">
   <div class="lb-panel" role="dialog" aria-modal="true" aria-labelledby="lb-nm">
     <button class="lb-x" onclick="closeLb()" aria-label="Close">&#10005;</button>
-    <!-- Photo side -->
     <div class="lb-vis">
       <img id="lb-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Product figure"/>
     </div>
-    <!-- Spec sheet side -->
     <div class="lb-info">
       <div class="lb-kicker">Technical specification</div>
       <div class="lb-pn mono" id="lb-pn"></div>
@@ -738,8 +741,8 @@
           <svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>
           WhatsApp Enquiry
         </button>
-        <button class="lb-eq-btn" id="lb-eq-btn">Enquire via Form →</button>
-        <a class="lb-eq-btn" id="lb-page" href="#">Full details →</a>
+        <button class="lb-eq-btn" id="lb-eq-btn">Enquire via form</button>
+        <a class="lb-eq-btn" id="lb-page" href="#">Full details &rarr;</a>
       </div>
     </div>
   </div>
@@ -747,10 +750,8 @@
 
 <!-- ═══ DOCK (phones) + FLOATING WA (desktop) ═══ -->
 <nav class="dock" aria-label="Quick actions">
-  <a href="#catalogue"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>Catalogue</a>
-  <button type="button" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>Search</button>
-  <a href="alaina-x-superlift/" class="dock-x"><svg class="ico" aria-hidden="true"><use href="#i-gas"/></svg>Superlift</a>
-  <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+  <button type="button" class="dock-find" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><span>Find a part</span><i>74 parts</i></button>
+  <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener" aria-label="WhatsApp the trade desk"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
 </nav>
 <a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
 
@@ -761,18 +762,19 @@
 const PRODUCTS = [{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0241(A)","name":"4018 Hywa / Prima Cabin","oe":"2816 8910 0241","app":"4018 Hywa / Signa / Prima Truck","img":"images/tata-4018-hywa-cabin.png","card":"images/tata-4018-hywa-cabin-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0161(A)","name":"4018 BS3 Cabin Rear","oe":"2816 8911 0161","app":"4018 / 1516 / 4923 / 1040","img":"images/tata-4018-cabin-rear.png","card":"images/tata-4018-cabin-rear-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0242","name":"4018 Cabin Front","oe":"2816 8910 0242","app":"4018 / 1516 / 4923 / 1040","img":"images/tata-4018-cabin-front.png","card":"images/tata-4018-cabin-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0103(A)","name":"1516 Cabin, Non-Sleeper","oe":"2679 8920 0103","app":"Tata 1516 Truck (Non Sleeper)","img":"images/tata-1516-cabin.png","card":"images/tata-1516-cabin-card.png"},{"brand":"Tata","cat":"HD","tag":"Front","partno":"AL-TA-HD-0102","name":"1518 LPT Tilt Cabin Front","oe":"2809 3260 0102","app":"Tata 1518 LPT Tilt Cabin","img":"images/tata-1518-lpt-front.png","card":"images/tata-1518-lpt-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0104","name":"Hywa / Signa Cabin","oe":"3501 3206 0104","app":"Tata Hywa / Signa","img":"images/tata-hywa-signa-cabin.png","card":"images/tata-hywa-signa-cabin-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0107","name":"1526 Cabin Damper","oe":"2680 9810 0107","app":"Tata 1526 Damper Truck","img":"images/tata-1526-cabin.png","card":"images/tata-1526-cabin-card.png"},{"brand":"Tata","cat":"HD","tag":"Truck &amp; Bus","partno":"AL-TA-HD-0106","name":"B54 Bus 3718","oe":"","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-b54-3718-front.png","card":"images/tata-b54-3718-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Rear","partno":"AL-TA-HD-0121","name":"709 / 703 Rear","oe":"","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-709-703-rear.png","card":"images/tata-709-703-rear-card.png"},{"brand":"Tata","cat":"HD","tag":"Front","partno":"AL-TA-HD-0114","name":"709 / 713 / 2515 Front","oe":"","app":"709 / 713 / 2515 / 608 / 1109 / B54","img":"images/tata-709-front.png","card":"images/tata-709-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Rear","partno":"AL-TA-HD-0119","name":"608 Rear","oe":"","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-709-front.png","card":"images/tata-709-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Front","partno":"AL-TA-HD-0108","name":"1109 Front","oe":"2574 3235 0108","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-1109-front.png","card":"images/tata-1109-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Front / Rear","partno":"AL-TA-HD-0101","name":"2515 Front / Rear","oe":"","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-709-front.png","card":"images/tata-709-front-card.png"},{"brand":"Tata","cat":"HD","tag":"Stabilizer","partno":"AL-TA-HD-9937","name":"Shock Absorber Stabilizer","oe":"2846 3390 9937","app":"Tata — Stabilizer","img":"images/tata-stabilizer-9937.png","card":"images/tata-stabilizer-9937-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0173","name":"Tata Tilt Cabin","oe":"","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-tilt-cabin.png","card":"images/tata-tilt-cabin-card.png"},{"brand":"Tata","cat":"HD","tag":"Cabin","partno":"AL-TA-HD-0122","name":"Tata Tilt Cabin 2515","oe":"","app":"709 / 608 / 1109 / 2515 / B54","img":"images/tata-tilt-cabin.png","card":"images/tata-tilt-cabin-card.png"},{"brand":"Leyland","cat":"HD","tag":"Cabin","partno":"AL-LE-HD-0100(A)","name":"Ashok Leyland AL G91 SLP U Series Trucks, Cabin","oe":"F5500100","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/leyland-u-truck-cabin.png","card":"images/leyland-u-truck-cabin-card.png"},{"brand":"Leyland","cat":"HD","tag":"Cabin","partno":"AL-LE-HD-6500(A)","name":"Ashok Leyland U Series Trucks, Cabin Rear","oe":"F5S06500","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/leyland-g91-cabin.png","card":"images/leyland-g91-cabin-card.png"},{"brand":"Leyland","cat":"HD","tag":"Cabin","partno":"AL-LE-HD-3300","name":"U Truck (Tall)","oe":"F-1503300","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/leyland-3300-rear.png","card":"images/leyland-3300-rear-card.png"},{"brand":"Leyland","cat":"HD","tag":"Cabin","partno":"AL-LE-HD-3500","name":"2518 U Truck Cabin","oe":"TF1503500","app":"Leyland 2518 / U Truck Series","img":"images/leyland-2518-cabin.png","card":"images/leyland-2518-cabin-card.png"},{"brand":"Leyland","cat":"HD","tag":"Cabin","partno":"AL-LE-HD-4200","name":"Stalian Cabin","oe":"","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/leyland-stalian-cabin.png","card":"images/leyland-stalian-cabin-card.png"},{"brand":"Leyland","cat":"HD","tag":"Front","partno":"AL-LE-HD-1310","name":"U Truck Front (2 Kill)","oe":"","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/leyland-2kill-front.png","card":"images/leyland-2kill-front-card.png"},{"brand":"Leyland","cat":"HD","tag":"Front","partno":"AL-LE-HD-1000","name":"Leyland Front (Small)","oe":"","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/tata-b54-3718-front.png","card":"images/tata-b54-3718-front-card.png"},{"brand":"Leyland","cat":"HD","tag":"Front","partno":"AL-LE-HD-1900","name":"Cargo Econmet Front","oe":"","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/leyland-2kill-front.png","card":"images/leyland-2kill-front-card.png"},{"brand":"Leyland","cat":"HD","tag":"Cabin","partno":"AL-LE-HD-0110","name":"NGC Series Cabin","oe":"F5S00110","app":"Ashok Leyland NGC / U Truck / G91 / Stalian","img":"images/leyland-cabin-0110.png","card":"images/leyland-cabin-0110-card.png"},{"brand":"Leyland","cat":"HD","tag":"Front","partno":"AL-LE-HD-50000","name":"Leyland Front (Tall)","oe":"","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"images/tata-b54-3718-front.png","card":"images/tata-b54-3718-front-card.png"},{"brand":"Leyland","cat":"HD","tag":"Front","partno":"AL-LE-HD-0200","name":"Marcopolo / Bharat Benz Front","oe":"","app":"U Truck / G91 / Stalian / Cargo / Marcopolo","img":"","card":""},{"brand":"Leyland","cat":"HD","tag":"Front","partno":"AL-LE-HD-7326","name":"A Star Front","oe":"732600116","app":"Ashok Leyland A Star Bus","img":"images/leyland-astar-front.png","card":"images/leyland-astar-front-card.png"},{"brand":"Eicher","cat":"HD","tag":"Cabin","partno":"AL-EI-HD-5551(A)","name":"Eicher Canter Cabin Assy","oe":"","app":"Eicher Canter — Cabin","img":"images/eicher-canter-cabin-551.png","card":"images/eicher-canter-cabin-551-card.png"},{"brand":"Eicher","cat":"HD","tag":"Cabin","partno":"AL-EI-HD-0077(A)","name":"Eicher Pro / Canter / Jumbo","oe":"","app":"Eicher Pro / Canter / Jumbo — Cabin","img":"images/eicher-pro-canter-cabin.png","card":"images/eicher-pro-canter-cabin-card.png"},{"brand":"Eicher","cat":"HD","tag":"Front","partno":"AL-EI-HD-0467","name":"Eicher Pro / Jumbo / AMW Front","oe":"","app":"Eicher Cabin / Bharat Benz / Mann / AMW","img":"images/amw-front.png","card":"images/amw-front-card.png"},{"brand":"Eicher","cat":"HD","tag":"Cabin","partno":"AL-EI-HD-0103(A)","name":"Bharat Benz Cabin Assembly","oe":"A 400.317.01.03 / A 400.317.19.03","app":"Eicher Cabin / Bharat Benz / Mann / AMW","img":"images/bharatbenz-cabin.png","card":"images/bharatbenz-cabin-card.png"},{"brand":"Eicher","cat":"HD","tag":"Cabin","partno":"AL-EI-HD-30076","name":"Bharat Benz Cabin","oe":"30076","app":"Eicher Cabin / Bharat Benz / Mann / AMW","img":"images/bharatbenz-cabin-30076.png","card":"images/bharatbenz-cabin-30076-card.png"},{"brand":"Eicher","cat":"HD","tag":"Cabin","partno":"AL-EI-HD-6002(A)","name":"Mann Cabin Assembly","oe":"","app":"Mann / Eicher / BharatBenz — Cabin","img":"images/mann-cabin-6002.png","card":"images/mann-cabin-6002-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Front","partno":"AL-MA-HD-0591(A)","name":"Navi Star Front Assembly","oe":"6119AAA00591N","app":"Navi Star","img":"images/navistar-front.png","card":"images/navistar-front-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Rear","partno":"AL-MA-HD-0601(A)","name":"Navi Star Rear Assembly","oe":"6119AAA00601N","app":"Navi Star","img":"images/navistar-rear.png","card":"images/navistar-rear-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Front","partno":"MA-BO-4001","name":"Bolero Front","oe":"","app":"Mahindra Bolero","img":"images/bolero-front.png","card":"images/bolero-front-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Rear","partno":"MA-BO-4002","name":"Bolero Rear","oe":"","app":"Mahindra Bolero","img":"images/bolero-rear.png","card":"images/bolero-rear-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Front","partno":"MA-BO-4011","name":"Bolero Pickup Front","oe":"","app":"Mahindra Bolero Pickup","img":"images/bolero-pickup-front.png","card":"images/bolero-pickup-front-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Rear","partno":"MA-BO-4012","name":"Bolero Pickup Rear","oe":"","app":"Mahindra Bolero Pickup","img":"images/bolero-pickup-rear.png","card":"images/bolero-pickup-rear-card.png"},{"brand":"Mahindra","cat":"HD","tag":"Steering","partno":"MA-BO-4021","name":"Bolero/Marshal Steering","oe":"","app":"Mahindra Bolero / Marshal","img":"images/bolero-marshal-steering.png","card":"images/bolero-marshal-steering-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front LH","partno":"TO-CA-2001","name":"Camry Front LH","oe":"","app":"Camry (2007–2014)","img":"images/camry-front-lh.png","card":"images/camry-front-lh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front RH","partno":"TO-CA-2002","name":"Camry Front RH","oe":"","app":"Camry (2007–2014)","img":"images/camry-front-rh.png","card":"images/camry-front-rh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Rear LH","partno":"TO-CA-2003","name":"Camry Rear LH","oe":"","app":"Camry (2007–2014)","img":"images/camry-rear-lh.png","card":"images/camry-rear-lh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Rear RH","partno":"TO-CA-2004","name":"Camry Rear RH","oe":"","app":"Camry (2007–2014)","img":"images/camry-rear-rh.png","card":"images/camry-rear-rh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front LH","partno":"TO-AL-2019","name":"Corolla Front LH","oe":"","app":"Corolla (2003–2008)","img":"images/corolla-front-lh.png","card":"images/corolla-front-lh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front RH","partno":"TO-AL-2020","name":"Corolla Front RH","oe":"","app":"Corolla (2003–2008)","img":"images/corolla-front-rh.png","card":"images/corolla-front-rh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Rear","partno":"TO-AL-2021","name":"Corolla Rear","oe":"","app":"Toyota Corolla (2008–2020)","img":"images/corolla-rear.png","card":"images/corolla-rear-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front LH","partno":"TO-AL-2029","name":"Corolla T-1 Front LH","oe":"","app":"Corolla T-1 (2008–2014)","img":"images/corolla-t1-front-lh.png","card":"images/corolla-t1-front-lh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front RH","partno":"TO-AL-2030","name":"Corolla T-1 Front RH","oe":"","app":"Corolla T-1 (2008–2014)","img":"images/corolla-t1-front-rh.png","card":"images/corolla-t1-front-rh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Rear","partno":"TO-AL-2031","name":"Corolla T-1 Rear","oe":"","app":"Corolla T-1 (2008–2014)","img":"images/altis-t1-rear.png","card":"images/altis-t1-rear-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front LH","partno":"TO-AL-2039","name":"Corolla T-2 Front LH","oe":"","app":"Corolla T-2 (2014–2020)","img":"images/corolla-t2-front-lh.png","card":"images/corolla-t2-front-lh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Front RH","partno":"TO-AL-2040","name":"Corolla T-2 Front RH","oe":"","app":"Corolla T-2 (2014–2020)","img":"images/corolla-t2-front-rh.png","card":"images/corolla-t2-front-rh-card.png"},{"brand":"Toyota","cat":"RS","tag":"Rear","partno":"TO-AL-2041","name":"Corolla T-2 Rear","oe":"","app":"Toyota Corolla T-2 (2014–2020)","img":"images/corolla-t2-rear.png","card":"images/corolla-t2-rear-card.png"},{"brand":"Renault","cat":"RS","tag":"Front 4x4","partno":"RE-DS-3009","name":"Duster 4x4 Front","oe":"","app":"Duster 4x4 (2012–2019)","img":"images/duster-4x4-front.png","card":"images/duster-4x4-front-card.png"},{"brand":"Renault","cat":"RS","tag":"Rear 4x4","partno":"RE-DS-3011","name":"Duster 4x4 Rear","oe":"","app":"Duster 4x4 (2012–2019)","img":"images/duster-4x4-rear.png","card":"images/duster-4x4-rear-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Front LH","partno":"AL-MT-LA-5001","name":"Lancer Front LH","oe":"","app":"Mitsubishi Lancer","img":"images/lancer-front-lh.png","card":"images/lancer-front-lh-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Front RH","partno":"AL-MT-LA-5002","name":"Lancer Front RH","oe":"","app":"Mitsubishi Lancer","img":"images/lancer-front-rh.png","card":"images/lancer-front-rh-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Rear LH","partno":"AL-MT-LA-5003","name":"Lancer Rear LH","oe":"","app":"Mitsubishi Lancer","img":"images/lancer-rear-lh.png","card":"images/lancer-rear-lh-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Rear RH","partno":"AL-MT-LA-5004","name":"Lancer Rear RH","oe":"","app":"Mitsubishi Lancer","img":"images/lancer-rear-rh.png","card":"images/lancer-rear-rh-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Front LH","partno":"AL-MT-LA-5005","name":"Lancer Cedia Front LH","oe":"","app":"Mitsubishi Lancer Cedia","img":"images/lancer-cedia-front-lh.png","card":"images/lancer-cedia-front-lh-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Front RH","partno":"AL-MT-LA-5006","name":"Lancer Cedia Front RH","oe":"","app":"Mitsubishi Lancer Cedia","img":"images/lancer-cedia-front-rh.png","card":"images/lancer-cedia-front-rh-card.png"},{"brand":"Mitsubishi","cat":"RS","tag":"Rear","partno":"AL-MT-LA-5009","name":"Lancer Cedia Rear","oe":"","app":"Mitsubishi Lancer Cedia","img":"images/lancer-cedia-rear.png","card":"images/lancer-cedia-rear-card.png"},{"brand":"Isuzu","cat":"RS","tag":"Front","partno":"IS-5021","name":"D-Max 4x4 Front","oe":"","app":"Isuzu D-Max 4x4","img":"images/isuzu-front-lh.png","card":"images/isuzu-4x4-front-card.png"},{"brand":"Isuzu","cat":"RS","tag":"Rear","partno":"IS-5022","name":"D-Max 4x4 Rear","oe":"","app":"Isuzu D-Max 4x4","img":"images/isuzu-rear-lh.png","card":"images/isuzu-4x4-rear-card.png"},{"brand":"Isuzu","cat":"RS","tag":"Front","partno":"IS-5023","name":"D-Max 2WD Front","oe":"","app":"Isuzu D-Max 2WD","img":"images/isuzu-2wd-front-lh.png","card":"images/isuzu-2wd-front-card.png"},{"brand":"Isuzu","cat":"RS","tag":"Rear","partno":"IS-5024","name":"D-Max 2WD Rear","oe":"","app":"Isuzu D-Max 2WD","img":"images/isuzu-2wd-rear-lh.png","card":"images/isuzu-2wd-rear-card.png"},{"brand":"Suzuki","cat":"RS","tag":"Front LH","partno":"AL-SU-BL-3001","name":"Baleno Front LH","oe":"","app":"Baleno (2009)","img":"images/baleno-front-lh.png","card":"images/baleno-front-lh-card.png"},{"brand":"Suzuki","cat":"RS","tag":"Front RH","partno":"AL-SU-BL-3002","name":"Baleno Front RH","oe":"","app":"Baleno (2009)","img":"images/baleno-front-rh.png","card":"images/baleno-front-rh-card.png"},{"brand":"Suzuki","cat":"RS","tag":"Rear","partno":"AL-SU-BL-3009","name":"Baleno Rear","oe":"","app":"Baleno (2009)","img":"images/baleno-rear.png","card":"images/baleno-rear-card.png"},{"brand":"MG","cat":"RS","tag":"Front LH","partno":"AL-MU-HC-1001","name":"Hector Front LH","oe":"","app":"MG Hector","img":"images/hector-front-lh.png","card":"images/hector-front-lh-card.png"},{"brand":"MG","cat":"RS","tag":"Front RH","partno":"AL-MU-HC-1002","name":"Hector Front RH","oe":"","app":"MG Hector","img":"images/hector-front-rh.png","card":"images/hector-front-rh-card.png"},{"brand":"MG","cat":"RS","tag":"Rear LH","partno":"AL-MU-HC-1003","name":"Hector Rear LH","oe":"","app":"MG Hector","img":"images/hector-rear-lh.png","card":"images/hector-rear-lh-card.png"},{"brand":"MG","cat":"RS","tag":"Rear RH","partno":"AL-MU-HC-1004","name":"Hector Rear RH","oe":"","app":"MG Hector","img":"images/hector-rear-rh.png","card":"images/hector-rear-rh-card.png"}];
 
 const GROUPS = [
-  {id:'tata',    label:'Tata — Heavy Duty',                 match:p=>p.brand==='Tata'},
-  {id:'leyland', label:'Ashok Leyland — Heavy Duty',        match:p=>p.brand==='Leyland'},
-  {id:'eicher',  label:'Eicher / Bharat Benz / Mann — Heavy Duty', match:p=>p.brand==='Eicher'},
-  {id:'mahindra',label:'Mahindra — Pickup, LCV & Navi Star',match:p=>p.brand==='Mahindra'},
-  {id:'toyota',  label:'Toyota — Rare Struts',              match:p=>p.brand==='Toyota'},
-  {id:'renault', label:'Renault — Rare Struts',             match:p=>p.brand==='Renault'},
-  {id:'mitsu',   label:'Mitsubishi — Rare Struts',          match:p=>p.brand==='Mitsubishi'},
-  {id:'isz',     label:'Isuzu / Suzuki / MG — Rare Struts', match:p=>['Isuzu','Suzuki','MG'].includes(p.brand)},
+  {id:'tata',    label:'Tata', sub:'Heavy duty',                    match:p=>p.brand==='Tata'},
+  {id:'leyland', label:'Ashok Leyland', sub:'Heavy duty',           match:p=>p.brand==='Leyland'},
+  {id:'eicher',  label:'Eicher, Bharat Benz, Mann', sub:'Heavy duty', match:p=>p.brand==='Eicher'},
+  {id:'mahindra',label:'Mahindra', sub:'Pickup, LCV and Navi Star', match:p=>p.brand==='Mahindra'},
+  {id:'toyota',  label:'Toyota', sub:'Rare struts',                 match:p=>p.brand==='Toyota'},
+  {id:'renault', label:'Renault', sub:'Rare struts',                match:p=>p.brand==='Renault'},
+  {id:'mitsu',   label:'Mitsubishi', sub:'Rare struts',             match:p=>p.brand==='Mitsubishi'},
+  {id:'isz',     label:'Isuzu, Suzuki, MG', sub:'Rare struts',      match:p=>['Isuzu','Suzuki','MG'].includes(p.brand)},
 ];
 
 /* ════════ STATE ════════ */
 let fBrand='All', fQ='';
+const OPEN=new Set();
 (function(){
   try{
     const sp=new URLSearchParams(location.search);
@@ -826,9 +828,12 @@ function passes(p){
 /* ════════ TABLE ════════ */
 /* Pixel-identical WebP copies (scripts/build_webp.py); the PNG stays the fallback. */
 const WEBP=/*WEBP_START*/{"images/altis-t1-rear.png":"images/webp/altis-t1-rear.webp","images/amw-front.png":"images/webp/amw-front.webp","images/baleno-front-lh.png":"images/webp/baleno-front-lh.webp","images/baleno-front-rh.png":"images/webp/baleno-front-rh.webp","images/baleno-rear.png":"images/webp/baleno-rear.webp","images/bharatbenz-cabin-30076.png":"images/webp/bharatbenz-cabin-30076.webp","images/bharatbenz-cabin.png":"images/webp/bharatbenz-cabin.webp","images/bolero-front.png":"images/webp/bolero-front.webp","images/bolero-marshal-steering.png":"images/webp/bolero-marshal-steering.webp","images/bolero-pickup-front.png":"images/webp/bolero-pickup-front.webp","images/bolero-pickup-rear.png":"images/webp/bolero-pickup-rear.webp","images/bolero-rear.png":"images/webp/bolero-rear.webp","images/camry-front-lh.png":"images/webp/camry-front-lh.webp","images/camry-front-rh.png":"images/webp/camry-front-rh.webp","images/camry-rear-lh.png":"images/webp/camry-rear-lh.webp","images/camry-rear-rh.png":"images/webp/camry-rear-rh.webp","images/corolla-front-lh.png":"images/webp/corolla-front-lh.webp","images/corolla-front-rh.png":"images/webp/corolla-front-rh.webp","images/corolla-rear.png":"images/webp/corolla-rear.webp","images/corolla-t1-front-lh.png":"images/webp/corolla-t1-front-lh.webp","images/corolla-t1-front-rh.png":"images/webp/corolla-t1-front-rh.webp","images/corolla-t2-front-lh.png":"images/webp/corolla-t2-front-lh.webp","images/corolla-t2-front-rh.png":"images/webp/corolla-t2-front-rh.webp","images/corolla-t2-rear.png":"images/webp/corolla-t2-rear.webp","images/duster-4x4-front.png":"images/webp/duster-4x4-front.webp","images/duster-4x4-rear.png":"images/webp/duster-4x4-rear.webp","images/eicher-canter-cabin-551.png":"images/webp/eicher-canter-cabin-551.webp","images/eicher-pro-canter-cabin.png":"images/webp/eicher-pro-canter-cabin.webp","images/hector-front-lh.png":"images/webp/hector-front-lh.webp","images/hector-front-rh.png":"images/webp/hector-front-rh.webp","images/hector-rear-lh.png":"images/webp/hector-rear-lh.webp","images/hector-rear-rh.png":"images/webp/hector-rear-rh.webp","images/isuzu-2wd-front-lh.png":"images/webp/isuzu-2wd-front-lh.webp","images/isuzu-2wd-rear-lh.png":"images/webp/isuzu-2wd-rear-lh.webp","images/isuzu-front-lh.png":"images/webp/isuzu-front-lh.webp","images/isuzu-rear-lh.png":"images/webp/isuzu-rear-lh.webp","images/lancer-cedia-front-lh.png":"images/webp/lancer-cedia-front-lh.webp","images/lancer-cedia-front-rh.png":"images/webp/lancer-cedia-front-rh.webp","images/lancer-cedia-rear.png":"images/webp/lancer-cedia-rear.webp","images/lancer-front-lh.png":"images/webp/lancer-front-lh.webp","images/lancer-front-rh.png":"images/webp/lancer-front-rh.webp","images/lancer-rear-lh.png":"images/webp/lancer-rear-lh.webp","images/lancer-rear-rh.png":"images/webp/lancer-rear-rh.webp","images/leyland-2518-cabin.png":"images/webp/leyland-2518-cabin.webp","images/leyland-2kill-front.png":"images/webp/leyland-2kill-front.webp","images/leyland-3300-rear.png":"images/webp/leyland-3300-rear.webp","images/leyland-astar-front.png":"images/webp/leyland-astar-front.webp","images/leyland-cabin-0110.png":"images/webp/leyland-cabin-0110.webp","images/leyland-g91-cabin.png":"images/webp/leyland-g91-cabin.webp","images/leyland-stalian-cabin.png":"images/webp/leyland-stalian-cabin.webp","images/leyland-u-truck-cabin.png":"images/webp/leyland-u-truck-cabin.webp","images/mann-cabin-6002.png":"images/webp/mann-cabin-6002.webp","images/navistar-front.png":"images/webp/navistar-front.webp","images/navistar-rear.png":"images/webp/navistar-rear.webp","images/tata-1109-front.png":"images/webp/tata-1109-front.webp","images/tata-1516-cabin.png":"images/webp/tata-1516-cabin.webp","images/tata-1518-lpt-front.png":"images/webp/tata-1518-lpt-front.webp","images/tata-1526-cabin.png":"images/webp/tata-1526-cabin.webp","images/tata-4018-cabin-front.png":"images/webp/tata-4018-cabin-front.webp","images/tata-4018-cabin-rear.png":"images/webp/tata-4018-cabin-rear.webp","images/tata-4018-hywa-cabin.png":"images/webp/tata-4018-hywa-cabin.webp","images/tata-709-703-rear.png":"images/webp/tata-709-703-rear.webp","images/tata-709-front.png":"images/webp/tata-709-front.webp","images/tata-b54-3718-front.png":"images/webp/tata-b54-3718-front.webp","images/tata-hywa-signa-cabin.png":"images/webp/tata-hywa-signa-cabin.webp","images/tata-stabilizer-9937.png":"images/webp/tata-stabilizer-9937.webp","images/tata-tilt-cabin.png":"images/webp/tata-tilt-cabin.webp"}/*WEBP_END*/;
+/* Card photos: the same part cut out, turned to one angle and scaled alike (scripts/build_cards.py). */
+function cardSrc(p,big){return WEBP[p.img]?p.img.replace('images/','images/cards/').replace(/\.png$/,(big?'@2x':'')+'.webp'):'';}
 function pic(p){
   const im=`<img loading="lazy" decoding="async" src="${p.img}" alt="${esc(p.name)} — ${esc(p.brand)} shock absorber"/>`;
-  return WEBP[p.img]?`<picture><source type="image/webp" srcset="${WEBP[p.img]}"/>${im}</picture>`:im;
+  const c=cardSrc(p), c2=cardSrc(p,1);
+  return c?`<picture><source type="image/webp" srcset="${c} 640w, ${c2} 1280w" sizes="(max-width:640px) 62vw, 300px"/>${im}</picture>`:im;
 }
 function slugPn(pn){return String(pn).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
 const WA_ICO='<svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>';
@@ -838,7 +843,6 @@ function cardHTML(p,i){
     ?`<div class="pc-stage" role="button" tabindex="0" aria-label="Spec sheet for ${esc(p.partno)}" onclick="openLb('${esc(p.partno)}')" onkeydown="if(event.key==='Enter')openLb('${esc(p.partno)}')">
         <span class="pc-tag">${p.tag||p.cat}</span>
         ${pic(p)}
-        <span class="pc-zoom"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
       </div>`
     :`<div class="pc-stage no-zoom"><span class="pc-tag">${p.tag||p.cat}</span><span class="nopic">Photo<br/>on request</span></div>`;
   const wamsg=encodeURIComponent(`Hi, I want to enquire about ${p.partno} — ${p.name} (${p.app}).`);
@@ -852,24 +856,30 @@ function cardHTML(p,i){
     </div>
     <div class="pc-foot">
       <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=${wamsg}" title="WhatsApp">${WA_ICO}Enquire</a>
-      <a class="pc-btn go" href="${href}" aria-label="Details for ${esc(p.partno)}"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
+      <a class="pc-btn go" href="${href}" aria-label="Details for ${esc(p.partno)}">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
     </div>
   </article>`;
 }
 function esc(s){return (s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+/* With nothing filtered each make is one swipeable row, so the page stays short on a phone.
+   Pick a make, or search, and the matches open out into a grid. */
 function renderTable(){
   let html='',shown=0;
+  const browsing=fBrand==='All'&&!fQ;
   GROUPS.forEach(g=>{
     const items=PRODUCTS.filter(p=>g.match(p)&&passes(p));
     if(!items.length)return;
-    html+=`<div class="cat-ghead"><span>${g.label}</span><span>${items.length} parts</span></div>`;
-    html+=items.map((p,i)=>cardHTML(p,i)).join('');
+    const rail=browsing&&!OPEN.has(g.id);
+    html+=`<div class="cat-ghead"><span><b>${g.label}</b><small>${g.sub}</small></span>`+
+      (browsing?`<button type="button" class="cat-all" onclick="toggleGroup('${g.id}')">${rail?'All '+items.length:'Show less'}</button>`:`<span class="cat-n">${items.length} parts</span>`)+`</div>`;
+    html+=`<div class="${rail?'cat-rail':'cat-cells'}">`+items.map((p,i)=>cardHTML(p,i)).join('')+`</div>`;
     shown+=items.length;
   });
   if(!shown)html='<div class="cat-empty">No parts match. Try another term or call +91 79825 55636.</div>';
   $('#table').innerHTML=html;
   $('#shown').textContent=shown;
 }
+function toggleGroup(id){OPEN.has(id)?OPEN.delete(id):OPEN.add(id);renderTable();}
 $('#q').addEventListener('input',e=>{fQ=e.target.value.trim().toLowerCase();renderTable();keepResultsInView();});
 $('#q').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();});
 
@@ -878,7 +888,7 @@ function openLb(pn){
   const p=PRODUCTS.find(x=>x.partno===pn);
   if(!p||!p.img)return;
 
-  $('#lb-img').src=p.img;
+  $('#lb-img').src=cardSrc(p,1)||p.img;
   $('#lb-img').alt=p.name+' — '+p.brand+' shock absorber';
   $('#lb-pn').textContent=p.partno;
   $('#lb-nm').textContent=p.name;
@@ -934,11 +944,12 @@ $$('.hf-item .ct').forEach(el=>{
 $$('.hf-item').forEach(a=>{
   a.addEventListener('click',()=>setBrand(a.dataset.jump));
 });
-$('#dockSearch').addEventListener('click',()=>{
+function findPart(){
   const q=$('#q');
   document.getElementById('catalogue').scrollIntoView({behavior:'instant'});
   q.focus({preventScroll:true});
-});
+}
+$('#dockSearch').addEventListener('click',findPart);
 
 /* ════════ INIT ════════ */
 $('#total').textContent=PRODUCTS.length;
@@ -946,8 +957,9 @@ $('#yr').textContent=new Date().getFullYear();
 if(fQ && $('#q')) $('#q').value=fQ;
 renderChips();renderTable();
 if(fQ) document.getElementById('catalogue')&&document.getElementById('catalogue').scrollIntoView();
+if(location.hash==='#find') setTimeout(findPart,60);
 </script>
-<script src="site.js?v=20" defer></script>
-<script src="hero3d.js?v=20" defer></script>
+<script src="site.js?v=30" defer></script>
+<script src="stage.js?v=30" defer></script>
 </body>
 </html>
