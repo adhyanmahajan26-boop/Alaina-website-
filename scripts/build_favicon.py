@@ -1,66 +1,49 @@
 #!/usr/bin/env python3
-"""Square Alaina 'A' mark as crawlable favicons at the site root."""
+"""Square Alaina mark as crawlable favicons at the site root.
+
+The mark is the same one the header uses (scripts/site_chrome.py): an "A" whose
+crossbar is a damper rod running out of the letter. Drawn from its geometry, so
+no font files are needed.
+"""
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
-from fontTools.misc.transform import Transform
-from fontTools.pens.boundsPen import BoundsPen
-from fontTools.pens.svgPathPen import SVGPathPen
-from fontTools.pens.transformPen import TransformPen
-from fontTools.ttLib import TTFont
+from PIL import Image, ImageDraw
+
+sys.path.insert(0, str(Path(__file__).parent))
+from site_chrome import MARK_INNER  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-ACCENT = (255, 74, 26, 255)  # --accent #FF4A1A from style.css .brand-mark
-WHITE = (255, 255, 255, 255)
-FONT = Path("/usr/share/fonts/truetype/macos/Inter-Bold.ttf")
-MASTER = 1024
-
-
-def glyph_svg_path(view: int = 32, pad_ratio: float = 0.18) -> str:
-    font = TTFont(str(FONT))
-    gs = font.getGlyphSet()
-    g = gs["A"]
-    bp = BoundsPen(gs)
-    g.draw(bp)
-    xmin, ymin, xmax, ymax = bp.bounds
-    w, h = xmax - xmin, ymax - ymin
-    inner = view * (1 - 2 * pad_ratio)
-    scale = inner / max(w, h)
-    dx = (view - w * scale) / 2 - xmin * scale
-    # SVG Y is down; font Y is up
-    dy = (view - h * scale) / 2 + ymax * scale
-    pen = SVGPathPen(gs)
-    g.draw(TransformPen(pen, Transform(scale, 0, 0, -scale, dx, dy)))
-    return pen.getCommands()
+ACCENT = (255, 74, 26)  # --accent #FF4A1A
+WHITE = (255, 255, 255)
+INK = (16, 17, 20)
+MASTER = 1536
+# Same shapes as MARK_INNER, on its 48 x 48 grid.
+LETTER = [(10, 37.5), (20.4, 10.5), (27.6, 10.5), (38, 37.5), (31.1, 37.5), (24, 17.6), (16.9, 37.5)]
+ROD = [(17.2, 27.2), (40.5, 27.2), (40.5, 31.8), (15.4, 31.8)]
 
 
 def write_svg() -> None:
-    d = glyph_svg_path()
     svg = f"""<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Alaina">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Alaina">
   <title>Alaina</title>
-  <rect width="32" height="32" fill="#FF4A1A"/>
-  <path fill="#FFFFFF" d="{d}"/>
+  {MARK_INNER}
 </svg>
 """
     (ROOT / "favicon.svg").write_text(svg, encoding="utf-8")
 
 
 def render_mark(size: int) -> Image.Image:
-    img = Image.new("RGBA", (size, size), ACCENT)
+    """Full-bleed square (no rounded corners) so launchers and search results can mask it themselves."""
+    img = Image.new("RGB", (size, size), ACCENT)
     draw = ImageDraw.Draw(img)
-    # Match .brand-mark: heavy A, optically centred in the orange square
-    font_size = int(size * 0.72)
-    font = ImageFont.truetype(str(FONT), font_size)
-    bbox = draw.textbbox((0, 0), "A", font=font)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    x = (size - tw) / 2 - bbox[0]
-    y = (size - th) / 2 - bbox[1] - size * 0.02
-    draw.text((x, y), "A", font=font, fill=WHITE)
-    return img.convert("RGB")
+    k = size / 48
+    draw.polygon([(x * k, y * k) for x, y in LETTER], fill=WHITE)
+    draw.polygon([(x * k, y * k) for x, y in ROD], fill=INK)
+    return img
 
 
 def write_rasters() -> None:

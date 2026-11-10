@@ -35,11 +35,10 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
 <meta name="theme-color" content="#FF4A1A"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('themeToggle');if(!b)return;function sync(){var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'☀':'☾'}sync();b.addEventListener('click',function(){var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('alaina-theme',n)}catch(e){}sync()})})})();</script>
-<link rel="stylesheet" href="../../style.css?v=seo5"/>
+<link rel="preload" href="../../fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="../../fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}setTimeout(function(){if(!window.__alainaReady)d.classList.remove('js')},3000)})();</script>
+<link rel="stylesheet" href="../../style.css?v=20"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -221,6 +220,8 @@
 <body>
 <a id="top"></a>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol><symbol id="i-go" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol><symbol id="i-next" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-5.2v-5.2H9.2V20H4z"/></symbol><symbol id="i-gas" viewBox="0 0 24 24"><circle cx="4.5" cy="19.5" r="1.7"/><circle cx="19.5" cy="4.5" r="1.7"/><path d="m5.8 18.2 3-3M15.2 8.8l3-3"/><path d="m8.3 15.7 6.4-6.4" stroke-width="4.6"/></symbol><symbol id="i-spin" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol></defs></svg>
+<div class="scroll-progress" aria-hidden="true"></div>
 <div id="topbar">
   <div class="wrap">
     <span class="tb-left">Technical Catalogue <b>No.04</b> — 2026 Edition</span>
@@ -232,8 +233,8 @@
 </div>
 <header id="nav">
   <div class="wrap">
-    <a href="../../" class="brand">
-      <div class="brand-mark">A</div>
+    <a href="../../" class="brand" aria-label="Alaina Shockers, home">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="11" fill="#FF4A1A"/><path fill="#fff" d="M10 37.5 20.4 10.5h7.2L38 37.5h-6.9L24 17.6 16.9 37.5z"/><path fill="#101114" d="M17.2 27.2h23.3v4.6H15.4z"/></svg>
       <div class="brand-word">ALAINA<sup>®</sup><small>Precision damping</small></div>
     </a>
     <nav class="navlinks">
@@ -242,6 +243,7 @@
       <a href="../../cabin-dampers/">Cabin Dampers</a>
       <a href="../../shock-absorbers/">Shockers</a>
       <a href="../../rare-struts/">Rare Struts</a>
+      <a href="../../alaina-x-superlift/" class="nav-x">Alaina <b>×</b> Superlift</a>
       <a href="../../#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
     <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
@@ -253,13 +255,19 @@
     <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
   </div>
   <nav>
-    <a href="../../#range">Range</a>
+    <a href="../../">Home</a>
     <a href="../../#catalogue">Catalogue</a>
     <a href="../../cabin-dampers/">Cabin Dampers</a>
     <a href="../../shock-absorbers/">Shockers</a>
     <a href="../../rare-struts/">Rare Struts</a>
+    <a href="../../shockers/">Shockers by vehicle</a>
+    <a href="../../alaina-x-superlift/">Alaina × Superlift</a>
     <a href="../../#enquire">Enquire</a>
   </nav>
+  <div class="mn-foot">
+    <a href="tel:+917982555636">+91 79825 55636</a>
+    <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp →</a>
+  </div>
 </div>
 
 
@@ -272,31 +280,31 @@
   <p class="seo-count">4 catalogued parts — every SKU below is from Technical Catalogue No.04.</p>
   <div class="cat-grid">
     <article class="pcard">
-  <a class="pc-stage no-zoom" href="../../products/al-le-hd-0200/"><span class="nopic">Photo<br/>on request</span></a>
+  <a class="pc-stage no-zoom" href="../../products/al-le-hd-0200/"><span class="pc-tag">Front</span><span class="nopic">Photo<br/>on request</span></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-LE-HD-0200</span><span class="pc-brand">Leyland</span></div>
     <h3 class="pc-name"><a href="../../products/al-le-hd-0200/">Marcopolo / Bharat Benz Front</a></h3>
     <div class="pc-app">U Truck / G91 / Stalian / Cargo / Marcopolo</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-le-hd-0200/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-LE-HD-0200%20%E2%80%94%20Marcopolo%20/%20Bharat%20Benz%20Front%20%28U%20Truck%20/%20G91%20/%20Stalian%20/%20Cargo%20/%20Marcopolo%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-LE-HD-0200%20%E2%80%94%20Marcopolo%20/%20Bharat%20Benz%20Front%20%28U%20Truck%20/%20G91%20/%20Stalian%20/%20Cargo%20/%20Marcopolo%29." aria-label="Enquire about AL-LE-HD-0200 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-le-hd-0200/" aria-label="Details for AL-LE-HD-0200"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-ei-hd-0467/"><picture><source type="image/webp" srcset="../../images/webp/amw-front.webp"/><img src="../../images/amw-front.png" alt="Alaina shock absorber AL-EI-HD-0467 for Eicher Cabin / Bharat Benz / Mann / AMW" title="Alaina shock absorber AL-EI-HD-0467 for Eicher Cabin / Bharat Benz / Mann / AMW" width="1024" height="1536" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-ei-hd-0467/"><span class="pc-tag">Front</span><picture><source type="image/webp" srcset="../../images/webp/amw-front.webp"/><img src="../../images/amw-front.png" alt="Alaina shock absorber AL-EI-HD-0467 for Eicher Cabin / Bharat Benz / Mann / AMW" title="Alaina shock absorber AL-EI-HD-0467 for Eicher Cabin / Bharat Benz / Mann / AMW" width="1024" height="1536" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-EI-HD-0467</span><span class="pc-brand">Eicher</span></div>
     <h3 class="pc-name"><a href="../../products/al-ei-hd-0467/">Eicher Pro / Jumbo / AMW Front</a></h3>
     <div class="pc-app">Eicher Cabin / Bharat Benz / Mann / AMW</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-ei-hd-0467/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-EI-HD-0467%20%E2%80%94%20Eicher%20Pro%20/%20Jumbo%20/%20AMW%20Front%20%28Eicher%20Cabin%20/%20Bharat%20Benz%20/%20Mann%20/%20AMW%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-EI-HD-0467%20%E2%80%94%20Eicher%20Pro%20/%20Jumbo%20/%20AMW%20Front%20%28Eicher%20Cabin%20/%20Bharat%20Benz%20/%20Mann%20/%20AMW%29." aria-label="Enquire about AL-EI-HD-0467 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-ei-hd-0467/" aria-label="Details for AL-EI-HD-0467"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-ei-hd-0103-a/"><picture><source type="image/webp" srcset="../../images/webp/bharatbenz-cabin.webp"/><img src="../../images/bharatbenz-cabin.png" alt="Alaina cabin damper AL-EI-HD-0103(A) for Eicher Cabin / Bharat Benz / Mann / AMW" title="Alaina cabin damper AL-EI-HD-0103(A) for Eicher Cabin / Bharat Benz / Mann / AMW" width="1536" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-ei-hd-0103-a/"><span class="pc-tag">Cabin</span><picture><source type="image/webp" srcset="../../images/webp/bharatbenz-cabin.webp"/><img src="../../images/bharatbenz-cabin.png" alt="Alaina cabin damper AL-EI-HD-0103(A) for Eicher Cabin / Bharat Benz / Mann / AMW" title="Alaina cabin damper AL-EI-HD-0103(A) for Eicher Cabin / Bharat Benz / Mann / AMW" width="1536" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-EI-HD-0103(A)</span><span class="pc-brand">Eicher</span></div>
     <h3 class="pc-name"><a href="../../products/al-ei-hd-0103-a/">Bharat Benz Cabin Assembly</a></h3>
@@ -304,11 +312,11 @@
     <div class="pc-oe">OE A 400.317.01.03 / A 400.317.19.03</div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-ei-hd-0103-a/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-EI-HD-0103%28A%29%20%E2%80%94%20Bharat%20Benz%20Cabin%20Assembly%20%28Eicher%20Cabin%20/%20Bharat%20Benz%20/%20Mann%20/%20AMW%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-EI-HD-0103%28A%29%20%E2%80%94%20Bharat%20Benz%20Cabin%20Assembly%20%28Eicher%20Cabin%20/%20Bharat%20Benz%20/%20Mann%20/%20AMW%29." aria-label="Enquire about AL-EI-HD-0103(A) on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-ei-hd-0103-a/" aria-label="Details for AL-EI-HD-0103(A)"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-ei-hd-30076/"><picture><source type="image/webp" srcset="../../images/webp/bharatbenz-cabin-30076.webp"/><img src="../../images/bharatbenz-cabin-30076.png" alt="Alaina cabin damper AL-EI-HD-30076 for Eicher Cabin / Bharat Benz / Mann / AMW" title="Alaina cabin damper AL-EI-HD-30076 for Eicher Cabin / Bharat Benz / Mann / AMW" width="1024" height="1536" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-ei-hd-30076/"><span class="pc-tag">Cabin</span><picture><source type="image/webp" srcset="../../images/webp/bharatbenz-cabin-30076.webp"/><img src="../../images/bharatbenz-cabin-30076.png" alt="Alaina cabin damper AL-EI-HD-30076 for Eicher Cabin / Bharat Benz / Mann / AMW" title="Alaina cabin damper AL-EI-HD-30076 for Eicher Cabin / Bharat Benz / Mann / AMW" width="1024" height="1536" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-EI-HD-30076</span><span class="pc-brand">Eicher</span></div>
     <h3 class="pc-name"><a href="../../products/al-ei-hd-30076/">Bharat Benz Cabin</a></h3>
@@ -316,8 +324,8 @@
     <div class="pc-oe">OE 30076</div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-ei-hd-30076/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-EI-HD-30076%20%E2%80%94%20Bharat%20Benz%20Cabin%20%28Eicher%20Cabin%20/%20Bharat%20Benz%20/%20Mann%20/%20AMW%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-EI-HD-30076%20%E2%80%94%20Bharat%20Benz%20Cabin%20%28Eicher%20Cabin%20/%20Bharat%20Benz%20/%20Mann%20/%20AMW%29." aria-label="Enquire about AL-EI-HD-30076 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-ei-hd-30076/" aria-label="Details for AL-EI-HD-30076"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article>
   </div>
@@ -356,6 +364,7 @@
         <a href="../../shockers/mahindra-bolero/">Bolero shockers</a>
         <a href="../../#catalogue">Full catalogue</a>
         <a href="../../dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>
+        <a href="../../alaina-x-superlift/">Alaina × Superlift</a>
       </div>
       <div class="fcol">
         <div class="fc-lab">Contact</div>
@@ -364,6 +373,9 @@
         <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp ↗</a>
       </div>
     </div>
+  </div>
+  <div class="foot-giant" aria-hidden="true">Alaina</div>
+  <div class="wrap">
     <div class="foot-base">
       <span>© 2026 Alaina Shockers — All parts catalogued</span>
       <span class="foot-legal"><a href="../../privacy-policy/">Privacy policy</a> <a href="../../shipping-policy/">Shipping &amp; delivery</a> <a href="../../returns-policy/">Returns &amp; refunds</a> <a href="../../terms/">Terms</a></span>
@@ -371,18 +383,14 @@
     </div>
   </div>
 </footer>
-<a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp</a>
-<script>
-(function(){
-  var b=document.getElementById('burger'), m=document.getElementById('mobnav'), x=document.getElementById('mnClose');
-  if(!b||!m) return;
-  function shut(){m.classList.remove('open');b.setAttribute('aria-expanded','false');document.body.style.overflow='';}
-  b.onclick=function(){m.classList.add('open');b.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';};
-  if(x) x.onclick=shut;
-  m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',shut);});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.classList.contains('open'))shut();});
-})();
-</script>
+<nav class="dock" aria-label="Quick actions">
+  <a href="../../"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg>Home</a>
+  <a href="../../#catalogue"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>Catalogue</a>
+  <a href="../../alaina-x-superlift/" class="dock-x"><svg class="ico" aria-hidden="true"><use href="#i-gas"/></svg>Superlift</a>
+  <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+</nav>
+<a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+<script src="../../site.js?v=20" defer></script>
 
 </body>
 </html>

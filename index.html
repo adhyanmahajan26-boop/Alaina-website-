@@ -37,11 +37,10 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
 <meta name="theme-color" content="#FF4A1A"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('themeToggle');if(!b)return;function sync(){var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'\u2600':'\u263E'}sync();b.addEventListener('click',function(){var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('alaina-theme',n)}catch(e){}sync()})})})();</script>
-<link rel="stylesheet" href="style.css?v=17"/>
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}setTimeout(function(){if(!window.__alainaReady)d.classList.remove('js')},3000)})();</script>
+<link rel="stylesheet" href="style.css?v=20"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -310,6 +309,8 @@
 </script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol><symbol id="i-go" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol><symbol id="i-next" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-5.2v-5.2H9.2V20H4z"/></symbol><symbol id="i-gas" viewBox="0 0 24 24"><circle cx="4.5" cy="19.5" r="1.7"/><circle cx="19.5" cy="4.5" r="1.7"/><path d="m5.8 18.2 3-3M15.2 8.8l3-3"/><path d="m8.3 15.7 6.4-6.4" stroke-width="4.6"/></symbol><symbol id="i-spin" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol></defs></svg>
+<div class="scroll-progress" aria-hidden="true"></div>
 
 <!-- ═══ TOPBAR ═══ -->
 <div id="topbar">
@@ -325,14 +326,15 @@
 <!-- ═══ NAV ═══ -->
 <header id="nav">
   <div class="wrap">
-    <a href="#top" class="brand">
-      <div class="brand-mark">A</div>
+    <a href="#top" class="brand" aria-label="Alaina Shockers, home">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="11" fill="#FF4A1A"/><path fill="#fff" d="M10 37.5 20.4 10.5h7.2L38 37.5h-6.9L24 17.6 16.9 37.5z"/><path fill="#101114" d="M17.2 27.2h23.3v4.6H15.4z"/></svg>
       <div class="brand-word">ALAINA<sup>®</sup><small>Precision damping</small></div>
     </a>
     <nav class="navlinks">
       <a href="#range">Range</a>
       <a href="#catalogue">Catalogue</a>
       <a href="cabin-dampers/">Cabin Dampers</a>
+      <a href="alaina-x-superlift/" class="nav-x">Alaina <b>×</b> Superlift</a>
       <a href="#about">About</a>
       <a href="#faq">FAQ</a>
       <a href="#enquire" class="nav-cta">Enquire &#8599;</a>
@@ -353,6 +355,7 @@
     <a href="cabin-dampers/">Cabin Dampers</a>
     <a href="shock-absorbers/">Shockers</a>
     <a href="rare-struts/">Rare Struts</a>
+    <a href="alaina-x-superlift/">Alaina × Superlift</a>
     <a href="#proving">Testing</a>
     <a href="#about">About</a>
     <a href="#faq">FAQ</a>
@@ -364,50 +367,87 @@
   </div>
 </div>
 
-<!-- ═══ HERO ═══ -->
-<section id="hero">
-  <a id="top"></a>
-  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="images/hero-poster.webp" src="hero-video.mp4"></video>
-  <div class="hero-shade"></div>
-  <div class="hero-inner wrap">
-    <p class="hero-eyebrow">Alaina Shockers &middot; Since 1978</p>
-    <h1 class="hero-title">Cabin dampers and rare struts</h1>
-    <p class="hero-sub">OE-matched shock absorbers for Tata, Leyland, Eicher and Bharat Benz trucks, plus struts for discontinued imports.</p>
-    <div class="hero-cta-row">
-      <a href="#catalogue" class="btn btn-fill">View catalogue</a>
-      <a href="#enquire" class="btn btn-line">Get a quote</a>
-    </div>
+<main>
+<!-- ═══ STAGE: hero + anatomy share one 3D damper ═══ -->
+<div class="stage" id="stage">
+  <div class="stage-bg" aria-hidden="true"></div>
+  <div class="stage-canvas" aria-hidden="true">
+    <canvas id="gl"></canvas>
+    <picture><source type="image/webp" srcset="images/webp/tata-4018-hywa-cabin.webp"/><img class="stage-fallback" src="images/tata-4018-hywa-cabin.png" alt="" width="1536" height="1024" loading="lazy" decoding="async"/></picture>
   </div>
-  <div class="hero-foot">
-    <div class="wrap">
-      <a class="hf-item" href="#catalogue" data-jump="Tata"><span class="nm">Tata</span><span class="ct" data-cti="Tata"></span></a>
-      <a class="hf-item" href="#catalogue" data-jump="Leyland"><span class="nm">Ashok Leyland</span><span class="ct" data-cti="Leyland"></span></a>
-      <a class="hf-item" href="#catalogue" data-jump="Eicher"><span class="nm">Eicher, Benz, Mann</span><span class="ct" data-cti="Eicher"></span></a>
-      <a class="hf-item" href="#catalogue" data-jump="RS"><span class="nm">Rare struts</span><span class="ct" data-cti="RS"></span></a>
+
+  <!-- ═══ HERO ═══ -->
+  <section id="hero">
+    <a id="top"></a>
+    <div class="hero-inner wrap">
+      <p class="hero-eyebrow">Alaina Shockers &middot; Since 1978</p>
+      <h1 class="hero-title">Cabin dampers <span>and rare struts</span></h1>
+      <p class="hero-sub">OE-matched shock absorbers for Tata, Leyland, Eicher and Bharat Benz trucks, plus struts for discontinued imports.</p>
+      <div class="hero-cta-row">
+        <a href="#catalogue" class="btn btn-fill">View catalogue <svg class="ico ico-go" aria-hidden="true"><use href="#i-go"/></svg></a>
+        <a href="#enquire" class="btn btn-line">Get a quote</a>
+      </div>
     </div>
+    <div class="hero-zone" aria-hidden="true"><div class="hero-hint"><svg class="ico"><use href="#i-spin"/></svg>Drag to spin</div></div>
+    <div class="hero-foot">
+      <div class="wrap">
+        <a class="hf-item" href="#catalogue" data-jump="Tata"><span class="nm">Tata</span><span class="ct" data-cti="Tata"></span></a>
+        <a class="hf-item" href="#catalogue" data-jump="Leyland"><span class="nm">Ashok Leyland</span><span class="ct" data-cti="Leyland"></span></a>
+        <a class="hf-item" href="#catalogue" data-jump="Eicher"><span class="nm">Eicher, Benz, Mann</span><span class="ct" data-cti="Eicher"></span></a>
+        <a class="hf-item" href="#catalogue" data-jump="RS"><span class="nm">Rare struts</span><span class="ct" data-cti="RS"></span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ANATOMY ═══ -->
+  <section id="anatomy" aria-labelledby="an-h">
+    <div class="an-pin">
+      <div class="wrap an-wrap">
+        <p class="sec-kicker">Engineering</p>
+        <h2 class="sec-title" id="an-h">Inside a cabin damper</h2>
+        <ol class="an-steps">
+          <li class="is-active"><span class="an-no">01</span><h3>Mounting eyes</h3><p><span>Bushed eyes at both ends carry the cabin's movement without knocking.</span></p></li>
+          <li><span class="an-no">02</span><h3>Damper body</h3><p><span>Length and stroke are matched to the OE part number it replaces.</span></p></li>
+          <li><span class="an-no">03</span><h3>Coil spring</h3><p><span>Holds the cabin at ride height, so the damper only has to control it.</span></p></li>
+          <li><span class="an-no">04</span><h3>Piston rod and seal</h3><p><span>Oil, seals and bump rubbers are specified for overload and heat.</span></p></li>
+          <li><span class="an-no">05</span><h3>Dust shield</h3><p><span>Keeps road grit off the rod and seal. The part number is stamped on every body.</span></p></li>
+          <li><span class="an-no">06</span><h3>Tested as one unit</h3><p><span>Every unit is cycled on the rig and pressure-tested before dispatch.</span></p></li>
+        </ol>
+        <div class="an-bar" aria-hidden="true"><i></i></div>
+      </div>
+      <span class="an-dot" aria-hidden="true"></span>
+    </div>
+  </section>
+</div>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <ul><li>Tata</li><li>Ashok Leyland</li><li>Eicher</li><li>Bharat Benz</li><li>Mann</li><li>AMW</li><li>Mahindra</li><li>Toyota</li><li>Mitsubishi</li><li>Renault</li><li>Isuzu</li><li>Suzuki</li><li>MG</li><li>Since 1978</li></ul>
+    <ul><li>Tata</li><li>Ashok Leyland</li><li>Eicher</li><li>Bharat Benz</li><li>Mann</li><li>AMW</li><li>Mahindra</li><li>Toyota</li><li>Mitsubishi</li><li>Renault</li><li>Isuzu</li><li>Suzuki</li><li>MG</li><li>Since 1978</li></ul>
   </div>
-</section>
+</div>
 
 <!-- ═══ 01 · RANGE ═══ -->
 <section id="range">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">01 / Range</p>
       <div>
         <h2 class="sec-title">Product range</h2>
       </div>
     </div>
     <div class="range-list">
-      <div class="range-row" onclick="jumpCat('HD')">
+      <div class="range-row" onclick="jumpCat('HD')" data-reveal>
         <div class="range-name">Cabin Dampers<small>Tata · Leyland · Eicher · Bharat Benz · Mann · AMW</small></div>
         <div class="range-desc">OE-matched fitments for Tata 4018, Prima and Signa, Leyland U Truck, Eicher Pro and more. <a class="range-more" href="cabin-dampers/">All cabin dampers &rarr;</a></div>
         <div class="range-fig"><picture><source type="image/webp" srcset="images/webp/tata-4018-hywa-cabin.webp"/><img src="images/tata-4018-hywa-cabin.png" alt="Tata 4018 Hywa cabin damper" width="1536" height="1024" loading="lazy" decoding="async"/></picture></div>
       </div>
-      <div class="range-row" onclick="jumpCat('Mahindra')">
+      <div class="range-row" onclick="jumpCat('Mahindra')" data-reveal style="--d:.08s">
         <div class="range-name">Pickup &amp; LCV<small>Bolero · Bolero Pickup · Navi Star</small></div>
         <div class="range-desc">Front and rear shockers and steering dampers for Mahindra pickups. <a class="range-more" href="shock-absorbers/">All shock absorbers &rarr;</a></div>
         <div class="range-fig"><picture><source type="image/webp" srcset="images/webp/bolero-front.webp"/><img src="images/bolero-front.png" alt="Mahindra Bolero front shock absorber" width="1024" height="1024" loading="lazy" decoding="async"/></picture></div>
       </div>
-      <div class="range-row" onclick="jumpCat('RS')">
+      <div class="range-row" onclick="jumpCat('RS')" data-reveal style="--d:.16s">
         <div class="range-name">Rare Struts<small>Toyota · Mitsubishi · Renault · Isuzu · Suzuki · MG</small></div>
         <div class="range-desc">Struts for models the OEM no longer supplies, including Camry, Corolla, Lancer, D-Max and Hector. <a class="range-more" href="rare-struts/">All rare struts &rarr;</a></div>
         <div class="range-fig"><picture><source type="image/webp" srcset="images/webp/camry-front-lh.webp"/><img src="images/camry-front-lh.png" alt="Toyota Camry rare strut" width="768" height="1024" loading="lazy" decoding="async"/></picture></div>
@@ -419,16 +459,18 @@
 <!-- ═══ 02 · CATALOGUE ═══ -->
 <section id="catalogue">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">02 / Technical Catalogue No.04</p>
       <div>
         <h2 class="sec-title">Catalogue</h2>
       </div>
+      <p class="sec-note">Search by part number, vehicle model or the OE number on your old unit. Tap a photo for the spec sheet.</p>
     </div>
 
     <div class="cat-tools">
       <div class="cat-search">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input id="q" type="text" placeholder="Search part no, model or OE ref" autocomplete="off"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="q" type="search" enterkeyhint="search" placeholder="Search part no, model or OE ref" autocomplete="off" aria-label="Search the catalogue"/>
       </div>
       <div class="chiprow" id="chips"></div>
       <div class="cat-count">Showing <b id="shown">74</b> of <span id="total">74</span></div>
@@ -441,48 +483,74 @@
 <!-- ═══ 03 · PROVING ═══ -->
 <section id="proving">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">03 / Proving</p>
       <div>
         <h2 class="sec-title">Testing</h2>
       </div>
     </div>
     <div class="prove-grid">
-      <div class="prove-media">
-        <video autoplay muted loop playsinline preload="metadata" src="testing-video.mp4"></video>
+      <div class="prove-media" data-reveal>
+        <video muted loop playsinline preload="none" data-lazy data-src="testing-video.mp4"></video>
+        <span class="prove-badge">On the rig</span>
       </div>
       <div>
         <div class="prove-list" style="margin-top:0">
-          <div class="prove-item"><h4>Every unit pressure-tested</h4><p>Cycled on the rig before dispatch, not batch-sampled.</p></div>
-          <div class="prove-item"><h4>OE dimensions</h4><p>Length, stroke and valving matched to the part number it replaces.</p></div>
-          <div class="prove-item"><h4>Built for Indian duty</h4><p>Oil, seals and bump rubbers specified for overload and heat.</p></div>
-          <div class="prove-item"><h4>Traceable</h4><p>Part number stamped on every body.</p></div>
+          <div class="prove-item" data-reveal><h4>Every unit pressure-tested</h4><p>Cycled on the rig before dispatch, not batch-sampled.</p></div>
+          <div class="prove-item" data-reveal style="--d:.06s"><h4>OE dimensions</h4><p>Length, stroke and valving matched to the part number it replaces.</p></div>
+          <div class="prove-item" data-reveal style="--d:.12s"><h4>Built for Indian duty</h4><p>Oil, seals and bump rubbers specified for overload and heat.</p></div>
+          <div class="prove-item" data-reveal style="--d:.18s"><h4>Traceable</h4><p>Part number stamped on every body.</p></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<div class="cinema">
+  <video muted loop playsinline preload="none" poster="images/hero-poster.webp" data-lazy data-src="hero-video.mp4"></video>
+  <div class="wrap">
+    <p class="cinema-line" data-reveal>Built for <em>Indian</em> duty</p>
+    <p class="cinema-meta" data-reveal style="--d:.1s"><span>Est. 1978</span><span>Tata · Leyland · Eicher · Bharat Benz</span><span>Dispatched across India</span></p>
+  </div>
+</div>
+
 <!-- ═══ 04 · ABOUT ═══ -->
 <section id="about">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">04 / Company</p>
       <div>
         <h2 class="sec-title">About Alaina</h2>
       </div>
     </div>
     <div class="about-grid">
-      <div class="about-left">
+      <div class="about-left" data-reveal>
         <div class="about-body">
           <p>Alaina has supplied dampers to Indian transporters since 1978. The range covers heavy-duty cabin dampers for every major truck platform, pickup and LCV shockers, and struts for discontinued imports.</p>
           <p>Distributed across India by Mahajan Motors India.</p>
         </div>
       </div>
       <div class="about-meta">
-        <div class="am-cell"><div class="lab">Founded</div><div class="val">1978</div></div>
-        <div class="am-cell"><div class="lab">Catalogue</div><div class="val">74 SKUs · 10 marques</div></div>
-        <div class="am-cell"><div class="lab">Coverage</div><div class="val">Pan-India · 120+ cities</div></div>
-        <div class="am-cell"><div class="lab">Trade line</div><div class="val mono">+91 79825 55636</div></div>
+        <div class="am-cell" data-reveal><div class="lab">Founded</div><div class="val"><span data-count="1978" data-from="1900">1978</span></div></div>
+        <div class="am-cell" data-reveal style="--d:.06s"><div class="lab">Catalogue</div><div class="val"><span data-count="74">74</span> SKUs · 10 marques</div></div>
+        <div class="am-cell" data-reveal style="--d:.12s"><div class="lab">Coverage</div><div class="val">Pan-India · 120+ cities</div></div>
+        <div class="am-cell" data-reveal style="--d:.18s"><div class="lab">Trade line</div><div class="val mono">+91 79825 55636</div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ALAINA × SUPERLIFT ═══ -->
+<section id="partner">
+  <div class="wrap">
+    <div class="partner-card" data-reveal>
+      <div>
+        <p class="sec-kicker">Partner line</p>
+        <h2 class="lockup"><span>Alaina</span><span class="x">×</span><span class="sl">Superlift</span></h2>
+        <p>Alaina looks after the ride. Superlift looks after the lift: dicky and bonnet gas springs for 190+ cars and SUVs, supplied by the same trade desk at Mahajan Motors India.</p>
+        <a class="btn btn-fill" href="alaina-x-superlift/">Open the Superlift catalogue <svg class="ico ico-go" aria-hidden="true"><use href="#i-go"/></svg></a>
+      </div>
+      <div class="partner-fig" aria-hidden="true"><svg viewBox="0 0 440 150" role="img" aria-label="Gas spring"><defs><linearGradient id="gsb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3c42"/><stop offset=".35" stop-color="#17181b"/><stop offset="1" stop-color="#050506"/></linearGradient><linearGradient id="gsr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#b9bcc4"/><stop offset="1" stop-color="#5d6068"/></linearGradient></defs><g transform="rotate(-14 220 75)"><g class="gs-rod"><rect x="250" y="69.5" width="152" height="11" rx="5.5" fill="url(#gsr)"/><circle cx="408" cy="75" r="13" fill="#17181b" stroke="rgba(255,255,255,.45)"/><circle cx="408" cy="75" r="4.5" fill="#FF4A1A"/></g><rect x="52" y="60" width="232" height="30" rx="8" fill="url(#gsb)" stroke="rgba(255,255,255,.28)"/><rect x="264" y="60" width="20" height="30" rx="4" fill="#2c2e33"/><rect x="96" y="60.5" width="5" height="29" fill="#FF4A1A"/><circle cx="36" cy="75" r="13" fill="#17181b" stroke="rgba(255,255,255,.45)"/><circle cx="36" cy="75" r="4.5" fill="#FF4A1A"/></g></svg></div>
     </div>
   </div>
 </section>
@@ -490,18 +558,19 @@
 <!-- ═══ 05 · BUY ONLINE ═══ -->
 <section id="buy">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">05 / How to order</p>
       <div>
         <h2 class="sec-title">Buy cabin dampers and shockers online</h2>
       </div>
     </div>
     <div class="buy-grid">
-      <ol class="buy-steps">
+      <ol class="buy-steps" data-reveal>
         <li><strong>Find your part.</strong> Search the catalogue by Alaina part number, the OE number on your old unit, or your truck or car model.</li>
         <li><strong>Send it on WhatsApp.</strong> Message the part number and quantity to <a href="https://wa.me/917982555636" target="_blank" rel="noopener">+91 79825 55636</a>. A photo of the old unit helps.</li>
         <li><strong>Get a quote and dispatch.</strong> We confirm price and stock, then dispatch across India through Mahajan Motors India, Kashmere Gate, Delhi. Dealers, workshops and fleets can order in bulk.</li>
       </ol>
-      <div class="buy-links">
+      <div class="buy-links" data-reveal style="--d:.1s">
         <h3>Shop by truck</h3>
         <p>
           <a href="shockers/tata-signa/">Tata Signa</a>
@@ -534,7 +603,8 @@
 <!-- ═══ 06 · FAQ ═══ -->
 <section id="faq">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">06 / FAQ</p>
       <div>
         <h2 class="sec-title">Questions buyers ask</h2>
       </div>
@@ -556,18 +626,19 @@
 <!-- ═══ 07 · ENQUIRE ═══ -->
 <section id="enquire">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
+      <p class="sec-kicker">07 / Trade desk</p>
       <div>
         <h2 class="sec-title">Get a quote</h2>
       </div>
     </div>
     <div class="enq-grid">
-      <form class="enq-form" onsubmit="sendForm(event)">
+      <form class="enq-form" onsubmit="sendForm(event)" data-reveal>
         <div class="ef-head">Send an enquiry (opens WhatsApp)</div>
         <div class="ef-body">
-          <div class="fg"><label>Name</label><input id="f-name" type="text" placeholder="Your name" required/></div>
-          <div class="fg"><label>Phone / WhatsApp</label><input id="f-phone" type="tel" placeholder="+91…" required/></div>
-          <div class="fg full"><label>Product line</label>
+          <div class="fg"><label for="f-name">Name</label><input id="f-name" type="text" placeholder="Your name" autocomplete="name" required/></div>
+          <div class="fg"><label for="f-phone">Phone / WhatsApp</label><input id="f-phone" type="tel" placeholder="+91…" autocomplete="tel" required/></div>
+          <div class="fg full"><label for="f-cat">Product line</label>
             <select id="f-cat">
               <option value="">Select…</option>
               <option>Cabin Dampers — Tata</option>
@@ -575,22 +646,24 @@
               <option>Cabin Dampers — Eicher / Benz / Mann</option>
               <option>Pickup &amp; LCV — Mahindra</option>
               <option>Rare Struts — Imports</option>
+              <option>Superlift gas springs</option>
               <option>Bulk / Fleet order</option>
             </select>
           </div>
-          <div class="fg full"><label>Requirement</label><textarea id="f-msg" placeholder="Part number, vehicle model, quantity…"></textarea></div>
-          <button type="submit" class="ef-submit">Send via WhatsApp ↗</button>
+          <div class="fg full"><label for="f-msg">Requirement</label><textarea id="f-msg" placeholder="Part number, vehicle model, quantity…"></textarea></div>
+          <button type="submit" class="ef-submit"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Send via WhatsApp ↗</button>
         </div>
       </form>
-      <aside class="enq-side">
+      <aside class="enq-side" data-reveal style="--d:.1s">
         <div class="es-row"><span class="lab">Direct line</span><span class="val"><a href="tel:+917982555636">+91 79825 55636</a></span></div>
         <div class="es-row"><span class="lab">Email</span><span class="val"><a href="mailto:adhyanmahajan26@gmail.com">adhyanmahajan26@gmail.com</a></span></div>
         <div class="es-row"><span class="lab">Hours</span><p>Mon–Sat, 10:00–19:00 IST.<br/>WhatsApp is fastest. Send a part number or a photo of the old unit.</p></div>
-        <a class="es-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank">WhatsApp the trade desk ↗</a>
+        <a class="es-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp the trade desk ↗</a>
       </aside>
     </div>
   </div>
 </section>
+</main>
 
 <!-- ═══ FOOTER ═══ -->
 <footer>
@@ -621,6 +694,7 @@
         <a href="rare-struts/">Rare Struts</a>
         <a href="steering-dampers/">Steering Dampers</a>
         <a href="shockers/">Shockers by vehicle</a>
+        <a href="alaina-x-superlift/">Alaina × Superlift</a>
       </div>
       <div class="fcol">
         <div class="fc-lab">Contact</div>
@@ -629,6 +703,9 @@
         <a href="https://wa.me/917982555636" target="_blank">WhatsApp ↗</a>
       </div>
     </div>
+  </div>
+  <div class="foot-giant" aria-hidden="true">Alaina</div>
+  <div class="wrap">
     <div class="foot-base">
       <span>© <span id="yr">2026</span> Alaina Shockers</span>
       <span class="foot-legal"><a href="privacy-policy/">Privacy policy</a> <a href="shipping-policy/">Shipping &amp; delivery</a> <a href="returns-policy/">Returns &amp; refunds</a> <a href="terms/">Terms</a></span>
@@ -636,13 +713,13 @@
   </div>
 </footer>
 
-<!-- ═══ LIGHTBOX — PLAQUE CARD ═══ -->
-<div id="lb" onclick="if(event.target===this)closeLb()">
-  <div class="lb-panel">
-    <button class="lb-x" onclick="closeLb()">&#10005;</button>
+<!-- ═══ QUICK VIEW — spec sheet ═══ -->
+<div id="lb" onclick="if(event.target===this)closeLb()" aria-hidden="true">
+  <div class="lb-panel" role="dialog" aria-modal="true" aria-labelledby="lb-nm">
+    <button class="lb-x" onclick="closeLb()" aria-label="Close">&#10005;</button>
     <!-- Photo side -->
     <div class="lb-vis">
-      <img id="lb-img" src="" alt="Product figure"/>
+      <img id="lb-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Product figure"/>
     </div>
     <!-- Spec sheet side -->
     <div class="lb-info">
@@ -658,17 +735,24 @@
       <div class="lb-avail">In catalogue — available</div>
       <div class="lb-acts">
         <button class="lb-wa-btn" id="lb-wa-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg>
+          <svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>
           WhatsApp Enquiry
         </button>
         <button class="lb-eq-btn" id="lb-eq-btn">Enquire via Form →</button>
+        <a class="lb-eq-btn" id="lb-page" href="#">Full details →</a>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ FLOATING WA ═══ -->
-<a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank">WhatsApp</a>
+<!-- ═══ DOCK (phones) + FLOATING WA (desktop) ═══ -->
+<nav class="dock" aria-label="Quick actions">
+  <a href="#catalogue"><svg class="ico" aria-hidden="true"><use href="#i-grid"/></svg>Catalogue</a>
+  <button type="button" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>Search</button>
+  <a href="alaina-x-superlift/" class="dock-x"><svg class="ico" aria-hidden="true"><use href="#i-gas"/></svg>Superlift</a>
+  <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+</nav>
+<a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
 
 <div id="toast">Opening WhatsApp…</div>
 
@@ -714,7 +798,7 @@ function renderChips(){
   ).join('');
   // Phones: keep the active chip visible in the sideways-scrolling row
   const on=row.querySelector('.chip.on'),r=row.getBoundingClientRect(),c=on.getBoundingClientRect();
-  if(c.left<r.left||c.right>r.right)row.scrollLeft+=c.left-r.left-8;
+  if(c.left<r.left||c.right>r.right-28)row.scrollLeft+=c.left-r.left-8;
 }
 // A shorter result list must not leave the reader scrolled past the catalogue
 function keepResultsInView(){
@@ -747,26 +831,28 @@ function pic(p){
   return WEBP[p.img]?`<picture><source type="image/webp" srcset="${WEBP[p.img]}"/>${im}</picture>`:im;
 }
 function slugPn(pn){return String(pn).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+const WA_ICO='<svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>';
 function cardHTML(p,i){
+  const href=`products/${slugPn(p.partno)}/`;
   const stage=p.img
-    ?`<div class="pc-stage" onclick="openLb('${esc(p.partno)}')">
+    ?`<div class="pc-stage" role="button" tabindex="0" aria-label="Spec sheet for ${esc(p.partno)}" onclick="openLb('${esc(p.partno)}')" onkeydown="if(event.key==='Enter')openLb('${esc(p.partno)}')">
         <span class="pc-tag">${p.tag||p.cat}</span>
         ${pic(p)}
-        <span class="pc-zoom"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></span>
+        <span class="pc-zoom"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
       </div>`
     :`<div class="pc-stage no-zoom"><span class="pc-tag">${p.tag||p.cat}</span><span class="nopic">Photo<br/>on request</span></div>`;
   const wamsg=encodeURIComponent(`Hi, I want to enquire about ${p.partno} — ${p.name} (${p.app}).`);
-  return `<article class="pcard">
+  return `<article class="pcard" style="--i:${i}">
     ${stage}
     <div class="pc-body">
       <div class="pc-top"><span class="pc-no">${p.partno}</span><span class="pc-brand">${p.brand}</span></div>
-      <h3 class="pc-name"><a href="products/${slugPn(p.partno)}/" style="color:inherit;text-decoration:none">${p.name}</a></h3>
+      <h3 class="pc-name"><a href="${href}">${p.name}</a></h3>
       <div class="pc-app">${p.app}</div>
-      <div class="pc-oe">${p.oe?'OE '+p.oe:'&nbsp;'}</div>
+      <div class="pc-oe">${p.oe?'OE '+p.oe:''}</div>
     </div>
     <div class="pc-foot">
-      <button class="pc-btn" onclick="enquire('${esc(p.partno)}','${esc(p.name)}')">Enquire →</button>
-      <a class="pc-btn wa" target="_blank" href="https://wa.me/917982555636?text=${wamsg}" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></svg></a>
+      <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=${wamsg}" title="WhatsApp">${WA_ICO}Enquire</a>
+      <a class="pc-btn go" href="${href}" aria-label="Details for ${esc(p.partno)}"><svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
     </div>
   </article>`;
 }
@@ -777,7 +863,7 @@ function renderTable(){
     const items=PRODUCTS.filter(p=>g.match(p)&&passes(p));
     if(!items.length)return;
     html+=`<div class="cat-ghead"><span>${g.label}</span><span>${items.length} parts</span></div>`;
-    html+=items.map((p,i)=>cardHTML(p,shown+i)).join('');
+    html+=items.map((p,i)=>cardHTML(p,i)).join('');
     shown+=items.length;
   });
   if(!shown)html='<div class="cat-empty">No parts match. Try another term or call +91 79825 55636.</div>';
@@ -785,13 +871,15 @@ function renderTable(){
   $('#shown').textContent=shown;
 }
 $('#q').addEventListener('input',e=>{fQ=e.target.value.trim().toLowerCase();renderTable();keepResultsInView();});
+$('#q').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();});
 
-/* ════════ LIGHTBOX — PLAQUE CARD ════════ */
+/* ════════ QUICK VIEW — spec sheet ════════ */
 function openLb(pn){
   const p=PRODUCTS.find(x=>x.partno===pn);
   if(!p||!p.img)return;
 
   $('#lb-img').src=p.img;
+  $('#lb-img').alt=p.name+' — '+p.brand+' shock absorber';
   $('#lb-pn').textContent=p.partno;
   $('#lb-nm').textContent=p.name;
   $('#lb-br').textContent=p.brand;
@@ -799,16 +887,29 @@ function openLb(pn){
   $('#lb-oe-row').style.display=p.oe?'':'none';
   $('#lb-ap').textContent=p.app;
   $('#lb-ct').textContent=p.cat==='HD'?'Heavy Duty — Cabin / Truck':'Rare Strut — Passenger Car';
+  $('#lb-page').href='products/'+slugPn(p.partno)+'/';
 
   const msg=encodeURIComponent(`Hi, I want to enquire about ${p.partno} — ${p.name} (${p.app}).`);
   $('#lb-wa-btn').onclick=()=>window.open(`https://wa.me/917982555636?text=${msg}`,'_blank');
   $('#lb-eq-btn').onclick=()=>{closeLb();enquire(p.partno,p.name);};
 
   $('#lb').classList.add('open');
-  document.body.style.overflow='hidden';
+  $('#lb').setAttribute('aria-hidden','false');
+  if(window.AlainaUI)AlainaUI.lock(true);else document.body.style.overflow='hidden';
 }
-function closeLb(){$('#lb').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLb();closeMenu();}});
+function closeLb(){
+  if(!$('#lb').classList.contains('open'))return;
+  $('#lb').classList.remove('open');$('#lb').setAttribute('aria-hidden','true');
+  if(window.AlainaUI)AlainaUI.lock(false);else document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb();});
+// Phones: pull the sheet down to close it
+(function(){
+  const vis=$('.lb-vis'),panel=$('.lb-panel');let y0=null,dy=0;
+  vis.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;dy=0;panel.style.transition='none';},{passive:true});
+  vis.addEventListener('touchmove',e=>{if(y0===null)return;dy=Math.max(0,e.touches[0].clientY-y0);panel.style.transform=`translateY(${dy}px)`;},{passive:true});
+  vis.addEventListener('touchend',()=>{panel.style.transition='';panel.style.transform='';if(dy>90)closeLb();y0=null;});
+})();
 
 /* ════════ ENQUIRE PRE-FILL ════════ */
 function enquire(pn,name){
@@ -833,13 +934,11 @@ $$('.hf-item .ct').forEach(el=>{
 $$('.hf-item').forEach(a=>{
   a.addEventListener('click',()=>setBrand(a.dataset.jump));
 });
-
-/* ════════ MOBILE NAV ════════ */
-function openMenu(){$('#mobnav').classList.add('open');$('#burger').setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
-function closeMenu(){if(!$('#mobnav').classList.contains('open'))return;$('#mobnav').classList.remove('open');$('#burger').setAttribute('aria-expanded','false');document.body.style.overflow='';}
-$('#burger').onclick=openMenu;
-$('#mnClose').onclick=closeMenu;
-$$('#mobnav a').forEach(a=>a.addEventListener('click',closeMenu));
+$('#dockSearch').addEventListener('click',()=>{
+  const q=$('#q');
+  document.getElementById('catalogue').scrollIntoView({behavior:'instant'});
+  q.focus({preventScroll:true});
+});
 
 /* ════════ INIT ════════ */
 $('#total').textContent=PRODUCTS.length;
@@ -848,5 +947,7 @@ if(fQ && $('#q')) $('#q').value=fQ;
 renderChips();renderTable();
 if(fQ) document.getElementById('catalogue')&&document.getElementById('catalogue').scrollIntoView();
 </script>
+<script src="site.js?v=20" defer></script>
+<script src="hero3d.js?v=20" defer></script>
 </body>
 </html>
