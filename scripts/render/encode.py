@@ -24,7 +24,9 @@ for f in sorted(glob.glob(src + '/*.png')):
             im.save(out, 'WEBP', quality=q, method=6, alpha_quality=88)
         tot[size] += os.path.getsize(out)
     n += 1
-if os.path.exists(src + '/h04.png'):
-    im = Image.open(src + '/h04.png').convert('RGBA')
-    im.save(dst + '/poster.webp', 'WEBP', quality=80, method=6, alpha_quality=90)
+# stills shown before the frames arrive, and kept when motion is switched off
+for frame, still in (('h04', 'poster'), ('k15', 'shock'), ('t15', 'strut')):
+    if os.path.exists(f'{src}/{frame}.png'):
+        im = Image.open(f'{src}/{frame}.png').convert('RGBA')
+        im.save(f'{dst}/{still}.webp', 'WEBP', quality=80, method=6, alpha_quality=90)
 print(n, 'frames', {k: round(v / 1e6, 2) for k, v in tot.items()}, 'MB')

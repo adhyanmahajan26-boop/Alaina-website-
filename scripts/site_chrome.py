@@ -4,7 +4,7 @@ The homepage (index.html) carries literal copies of SPRITE and MARK; every other
 page gets them from scripts/build_seo.py. Change them here and in index.html together.
 """
 
-ASSET_VERSION = "30"
+ASSET_VERSION = "31"
 
 # Runs before first paint: applies the saved theme and flags that JS is available.
 # If site.js never arrives, the flag is dropped so scroll-reveal content stays visible.

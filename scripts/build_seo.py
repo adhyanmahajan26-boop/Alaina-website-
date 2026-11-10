@@ -548,7 +548,7 @@ CHROME_NAV = """
       <div class="brand-word">ALAINA<sup>®</sup><small>Precision damping</small></div>
     </a>
     <nav class="navlinks">
-      <a href="{home}#range">Range</a>
+      <a href="{home}#range">Our products</a>
       <a href="{home}#catalogue">Catalogue</a>
       <a href="{cd}">Cabin Dampers</a>
       <a href="{sa}">Shockers</a>

@@ -1,9 +1,10 @@
-/* Alaina — the rendered cabin damper on the homepage.
-   Three frame sets, drawn to one canvas:
+/* Alaina — the rendered products on the homepage.
+   The cabin damper has three frame sets, drawn to one canvas:
      h  the damper at rest, swept through its stroke (driven by a spring-and-damper model you can press)
      s  the scroll sequence: it comes apart and the camera visits each part
      r  the assembled unit cycling on the rig
-   Frames are pre-rendered with scripts/render/damper.py (see README), so this looks the same on every phone. */
+   The shocker (k) and the strut (t) each turn through one short set as their section scrolls past.
+   Frames are pre-rendered with scripts/render/damper.py and lines.py (see README), so this looks the same on every phone. */
 (function () {
   'use strict';
   var d = document, root = d.documentElement;
@@ -13,7 +14,7 @@
   if (reduce) return; // the poster frame and a plain list of parts stay in place
 
   var ctx = cv.getContext('2d');
-  var sq = stage.querySelector('.stage-sq'), anatomy = d.getElementById('anatomy');
+  var sq = stage.querySelector('.stage-sq'), anatomy = d.getElementById('anatomy'), intro = d.getElementById('range');
   var steps = [].slice.call(stage.querySelectorAll('.an-steps li'));
   var ticks = [].slice.call(stage.querySelectorAll('.an-bar i'));
   var travel = d.getElementById('travel'), hint = stage.querySelector('.hr-hint');
@@ -48,7 +49,7 @@
   }
 
   /* layout: on phones the damper sits low in the hero and moves up under the heading once the tour starts */
-  var vh = 0, side = 0, shiftY = 0, shiftS = 1, anTop = 0, anLen = 1;
+  var vh = 0, side = 0, shiftY = 0, shiftS = 1, anTop = 0, anLen = 1, inTop = 0, inH = 0, dimNow = -1;
   function measure() {
     vh = window.innerHeight;
     sq.style.transform = '';
@@ -66,8 +67,9 @@
       shiftY = (top + s2 / 2) - ((r.top - view.top) + side / 2);
     }
     var a = anatomy.getBoundingClientRect(), y = window.pageYOffset;
-    anTop = a.top + y - vh * 0.55;                 // the tour starts while the hero copy is still leaving
+    anTop = a.top + y - vh * 0.06;                 // the tour starts once the products title card has left
     anLen = Math.max(1, a.top + y + a.height - vh - anTop);
+    if (intro) { var ir = intro.getBoundingClientRect(); inTop = ir.top + y; inH = ir.height; }
     dirty = true;
   }
 
@@ -95,9 +97,16 @@
 
   function frame(now) {
     requestAnimationFrame(frame);
-    if (!inView || d.hidden) { last = now; return; }
+    if (!inView || d.hidden || root.classList.contains('cat-open')) { last = now; return; }
     var dt = Math.min(0.033, (now - last) / 1000 || 0.016); last = now;
-    var ap = Math.max(0, Math.min(1, (window.pageYOffset - anTop) / anLen));
+    var sy = window.pageYOffset;
+    var ap = Math.max(0, Math.min(1, (sy - anTop) / anLen));
+    // on phones the products title card passes over the damper, so the damper steps back while it does
+    if (inH) {
+      var k = wide() ? 0 : Math.max(0, Math.min(1, Math.min((sy + vh - inTop) / (vh * 0.24) - 0.1, (inTop + inH - sy) / (vh * 0.3) + 0.85)));
+      k = k * k * (3 - 2 * k);
+      if (Math.abs(k - dimNow) > 0.004) { dimNow = k; sq.style.opacity = (1 - 0.8 * k).toFixed(3); }
+    }
     var tF = ap * (N.s - 1);
     fS += (tF - fS) * Math.min(1, dt * 9);
     if (Math.abs(tF - fS) < 0.02) fS = tF;
@@ -162,4 +171,88 @@
   // settle in on arrival
   x = 34; v = 0; nextBump = performance.now() + 3200;
   requestAnimationFrame(function (t) { last = t; frame(t); });
+})();
+
+/* The shocker and the strut: a short rendered set each, turned by the scroll position of its section. */
+(function () {
+  'use strict';
+  var d = document;
+  var cvs = [].slice.call(d.querySelectorAll('canvas[data-scrub]'));
+  if (!cvs.length || !cvs[0].getContext || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; // the still stays
+  var stage = d.getElementById('stage');
+  var big = window.innerWidth > 860 && window.innerWidth * (window.devicePixelRatio || 1) > 1500;
+  var base = ((stage && stage.getAttribute('data-seq')) || 'seq/') + (big ? '1080/' : '720/');
+  var live = [], running = false, last = 0;
+
+  var items = cvs.map(function (cv) {
+    var it = { cv: cv, ctx: cv.getContext('2d'), set: cv.getAttribute('data-scrub'), n: +cv.getAttribute('data-n') || 30,
+      box: cv.parentNode, host: cv.closest('.line') || cv.parentNode, F: [], f: -1, shown: -1, loaded: false };
+    return it;
+  });
+  function pad(i) { return (i < 10 ? '0' : '') + i; }
+  function load(it) {
+    if (it.loaded) return; it.loaded = true;
+    // middle frame first so there is something to show, then every other frame, then the rest
+    var order = [it.n >> 1], i;
+    for (i = 0; i < it.n; i += 2) order.push(i);
+    for (i = 1; i < it.n; i += 2) order.push(i);
+    order.forEach(function (k) {
+      if (it.F[k]) return;
+      var im = new Image(); im.decoding = 'async';
+      im.onload = function () { im.ok = true; it.shown = -1; if (!it.box.classList.contains('on')) { size(it); it.box.classList.add('on'); } kick(); };
+      im.src = base + it.set + pad(k) + '.webp';
+      it.F[k] = im;
+    });
+  }
+  function size(it) {
+    var px = Math.round(Math.min(big ? 1080 : 720, it.box.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 3)));
+    if (px > 0 && it.cv.width !== px) { it.cv.width = px; it.cv.height = px; it.shown = -1; }
+  }
+  function pick(it, i) {
+    for (var k = 0; k < it.n; k++) {
+      var a = it.F[i - k], b = it.F[i + k];
+      if (a && a.ok) return a;
+      if (b && b.ok) return b;
+    }
+    return null;
+  }
+  function frame(now) {
+    if (!live.length) { running = false; return; }
+    requestAnimationFrame(frame);
+    var dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
+    var vh = window.innerHeight;
+    live.forEach(function (it) {
+      var r = it.host.getBoundingClientRect();
+      // 0 as the section rises into view, 1 once most of it has gone by
+      var p = Math.max(0, Math.min(1, (vh * 0.92 - r.top) / Math.max(1, r.height - vh * 0.08)));
+      var target = p * (it.n - 1);
+      it.f = it.f < 0 ? target : it.f + (target - it.f) * Math.min(1, dt * 8);
+      var i = Math.round(it.f);
+      if (i === it.shown) return;
+      var im = pick(it, i);
+      if (!im) return;
+      it.shown = i;
+      it.ctx.clearRect(0, 0, it.cv.width, it.cv.height);
+      it.ctx.drawImage(im, 0, 0, it.cv.width, it.cv.height);
+    });
+  }
+  function kick() { if (!running && live.length) { running = true; last = performance.now(); requestAnimationFrame(frame); } }
+
+  var near = new IntersectionObserver(function (en) {
+    en.forEach(function (e) { if (e.isIntersecting) { items.forEach(function (it) { if (it.host === e.target) load(it); }); near.unobserve(e.target); } });
+  }, { rootMargin: '120% 0px' });
+  var seen = new IntersectionObserver(function (en) {
+    en.forEach(function (e) {
+      items.forEach(function (it) {
+        if (it.host !== e.target) return;
+        var k = live.indexOf(it);
+        if (e.isIntersecting && k < 0) { live.push(it); size(it); } else if (!e.isIntersecting && k >= 0) live.splice(k, 1);
+      });
+    });
+    kick();
+  }, { rootMargin: '10% 0px' });
+  items.forEach(function (it) { near.observe(it.host); seen.observe(it.host); });
+  var rt;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { items.forEach(size); }, 150); });
 })();

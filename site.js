@@ -25,7 +25,15 @@
 
   /* mobile menu */
   var burger = $('#burger'), menu = $('#mobnav'), mx = $('#mnClose');
-  function lock(on) { d.body.style.overflow = on ? 'hidden' : ''; root.classList.toggle('dock-off', !!on); }
+  /* several layers can hold the page still at once (menu, catalogue, spec sheet); it scrolls again when the last lets go */
+  var locks = {};
+  function lock(on, key) {
+    key = key || 'menu';
+    if (on) locks[key] = 1; else delete locks[key];
+    var any = Object.keys(locks).length > 0;
+    d.body.style.overflow = any ? 'hidden' : '';
+    root.classList.toggle('dock-off', any);
+  }
   function closeMenu() {
     if (!menu || !menu.classList.contains('open')) return;
     menu.classList.remove('open'); burger && burger.setAttribute('aria-expanded', 'false'); lock(false);
@@ -99,6 +107,6 @@
 
   /* dock steps aside while typing */
   d.addEventListener('focusin', function (e) { if (e.target.matches && e.target.matches('input,textarea,select')) root.classList.add('dock-off'); });
-  d.addEventListener('focusout', function () { if (!(menu && menu.classList.contains('open')) && !d.querySelector('#lb.open')) root.classList.remove('dock-off'); });
+  d.addEventListener('focusout', function () { if (!Object.keys(locks).length) root.classList.remove('dock-off'); });
   var yr = $('#yr'); if (yr) yr.textContent = new Date().getFullYear();
 })();
