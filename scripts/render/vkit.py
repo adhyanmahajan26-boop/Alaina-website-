@@ -596,9 +596,27 @@ def cam_matrix(target, dist, az, el, roll=0.0):
     return m
 
 
-def render_setup(res=1080, samples=96, blur=True, threshold=0.03):
+def use_gpu():
+    """Switch Cycles to the graphics card (Metal on a Mac, OptiX or CUDA elsewhere). Returns the device names in use."""
+    prefs = bpy.context.preferences.addons['cycles'].preferences
+    for kind in ('METAL', 'OPTIX', 'CUDA', 'HIP', 'ONEAPI'):
+        try:
+            prefs.compute_device_type = kind
+        except Exception:
+            continue
+        prefs.get_devices() if hasattr(prefs, 'get_devices') else prefs.refresh_devices()
+        devs = [d for d in prefs.devices if d.type == kind]
+        if devs:
+            for d in prefs.devices: d.use = d.type == kind
+            bpy.context.scene.cycles.device = 'GPU'
+            return [d.name for d in devs]
+    return []
+
+
+def render_setup(res=1080, samples=96, blur=True, threshold=0.03, gpu=False):
     sc = bpy.context.scene
     sc.render.engine = 'CYCLES'; sc.cycles.device = 'CPU'
+    if gpu: print('GPU', use_gpu() or 'none found, rendering on the CPU', flush=True)
     sc.cycles.samples = samples
     sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = threshold
     sc.cycles.use_denoising = True

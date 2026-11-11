@@ -1,6 +1,6 @@
 """The vehicle films: a vehicle drives in, comes apart and the camera finds the Alaina part inside.
 
-usage: python films.py <car|cabin|axle|rear> <outdir> [--res N] [--samples N] [--only a-b | i,j,k] [--force] [--noblur]
+usage: python films.py <car|cabin|axle|rear> <outdir> [--res N] [--samples N] [--threshold x] [--gpu] [--only a-b | i,j,k] [--force] [--noblur]
 Frames are written as <prefix><nnn>.png (c car, b cabin, x axle, q rear); encode_films.py turns them into seq/film.
 """
 import bpy, math, sys, os, time
@@ -264,7 +264,7 @@ def main():
     sc = bpy.context.scene
     rig, n, prefix, fps = FILMS[name]()
     sc.render.fps = fps
-    sc = vk.render_setup(res=res, samples=samples, blur='--noblur' not in argv, threshold=opt('--threshold', 0.03))
+    sc = vk.render_setup(res=res, samples=samples, blur='--noblur' not in argv, threshold=opt('--threshold', 0.03), gpu='--gpu' in argv)
     frames = list(range(n))
     rig.key(frames, fps)
     sc.frame_start = 0; sc.frame_end = n - 1
