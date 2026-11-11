@@ -54,7 +54,7 @@ def cast(name, base=(0.075, 0.076, 0.08), rough=0.62, metal=0.55, ghost_kw=None)
     return m
 
 
-def label(name, path, size_px, draw, base=(0.9, 0.9, 0.88), rough=0.35, ghost=True):
+def label(name, path, size_px, draw, base=(0.9, 0.9, 0.88), rough=0.35, ghost=True, face=1):
     """A flat printed part (number plate): PIL draws the artwork, mapped over the object's Generated Y/Z box.
     draw(img, ImageDraw) paints into an RGB image of size_px."""
     if not os.path.exists(path):
@@ -72,7 +72,16 @@ def label(name, path, size_px, draw, base=(0.9, 0.9, 0.88), rough=0.35, ghost=Tr
     nt.links.new(flip.outputs[0], uv.inputs[0]); nt.links.new(sep.outputs[2], uv.inputs[1])
     img = nt.nodes.new('ShaderNodeTexImage'); img.image = bpy.data.images.load(path); img.extension = 'EXTEND'
     m['uv_flip'] = flip.name
-    nt.links.new(uv.outputs[0], img.inputs[0]); nt.links.new(img.outputs['Color'], b.inputs['Base Color'])
+    nt.links.new(uv.outputs[0], img.inputs[0])
+    # print only on the face that looks along +X (face=1) or -X (face=-1); the back and edges stay plain
+    nrm = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Normal'], nrm.inputs[0])
+    fm = nt.nodes.new('ShaderNodeMath'); fm.operation = 'MULTIPLY'; fm.inputs[1].default_value = float(face)
+    nt.links.new(nrm.outputs[0], fm.inputs[0])
+    gt = nt.nodes.new('ShaderNodeMath'); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.5
+    nt.links.new(fm.outputs[0], gt.inputs[0])
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (*base, 1)
+    nt.links.new(gt.outputs[0], mx.inputs[0]); nt.links.new(img.outputs['Color'], mx.inputs[7])
+    nt.links.new(mx.outputs[2], b.inputs['Base Color'])
     if ghost: vk._ghost_mix(nt, b.outputs[0])
     return m
 

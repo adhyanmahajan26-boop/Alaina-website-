@@ -338,7 +338,7 @@ def build(M=None):
         vs = [v.co for v in P[nm].data.vertices]
         cy = sum(v.y for v in vs) / len(vs); cz = sum(v.z for v in vs) / len(vs)
         xe = max(v.x for v in vs) if sign > 0 else min(v.x for v in vs)
-        pm = pt.label('plate_art_' + nm, os.path.join(pt_cache(), 'plate.png'), (1040, 230), pt.plate_art(txt), base=(0.86, 0.86, 0.84))
+        pm = pt.label('plate_art_' + nm, os.path.join(pt_cache(), 'plate.png'), (1040, 230), pt.plate_art(txt), base=(0.86, 0.86, 0.84), face=sign)
         M['plate_art_' + nm] = pm
         if sign > 0:
             nt = pm.node_tree; nt.links.new(nt.nodes['Separate XYZ'].outputs[1], nt.nodes['Combine XYZ'].inputs[0])
