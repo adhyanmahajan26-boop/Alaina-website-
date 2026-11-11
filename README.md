@@ -101,6 +101,12 @@ and the background stay black: **Studio Small 09** by Sergej Majboroda, from Pol
 lit by the area lights alone. A film's frame count is on its canvas in `index.html`
 (`data-c`, `data-b`, `data-n`); change it there if a film gets longer or shorter.
 
+Playback is kept off the main thread: `stage.js` fetches each frame as a file and decodes only the few frames around
+the one on screen with `createImageBitmap`, so scrolling never waits for a decode (browsers without it fall back to
+`<img>` frames). The film frames must stay opaque and melt into the page colour at their edges (`encode_films.py`
+does this), because the page draws them without a mask. The 1080 px set goes only to sharp screens on a good
+connection and a phone with enough memory; a phone that cannot keep the hero film's pace gets the 720 px set after it.
+
 `sequence.json` lists the damper frames: `s000`–`s084` the scroll tour and `r00`–`r11`
 the unit cycling on the rig (`stage.js` holds the matching counts).
 

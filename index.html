@@ -40,7 +40,7 @@
 <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
 <script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}setTimeout(function(){if(!window.__alainaReady)d.classList.remove('js')},3000)})();</script>
-<link rel="stylesheet" href="style.css?v=32"/>
+<link rel="stylesheet" href="style.css?v=33"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -430,6 +430,7 @@
           <li><span class="an-no">06</span><h4>Tested as one unit</h4><p><span>Every unit is cycled on the rig and pressure-tested before dispatch.</span></p></li>
         </ol>
         <div class="an-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <a class="an-skip" href="#catalogue">Skip to catalogue <b aria-hidden="true">&rarr;</b></a>
       </div>
     </div>
   </section>
@@ -810,11 +811,12 @@
   </div>
 </div>
 
-<!-- ═══ DOCK (phones) + FLOATING WA (desktop) ═══ -->
+<!-- ═══ DOCK (phones) + FLOATING CATALOGUE AND WA (desktop) ═══ -->
 <nav class="dock" aria-label="Quick actions">
-  <button type="button" class="dock-find" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><span>Find a part</span><i>74 parts</i></button>
+  <button type="button" class="dock-find" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><span>Catalogue</span><i><b data-total>74</b> parts</i></button>
   <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener" aria-label="WhatsApp the trade desk"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
 </nav>
+<a id="catfab" href="#catalogue"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>Catalogue <i><b data-total>74</b> parts</i></a>
 <a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
 
 <div id="toast">Opening WhatsApp…</div>
@@ -1042,7 +1044,7 @@ document.addEventListener('click',e=>{
 $('#catClose').addEventListener('click',()=>closeCat());
 // Escape closes the top layer only: the spec sheet first, then the catalogue
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('#lb').classList.contains('open'))closeLb();else closeCat();});
-function findPart(){openCat({focus:true});}
+function findPart(){openCat();}
 $('#dockSearch').addEventListener('click',findPart);
 
 /* ════════ COUNTS ════════ */
@@ -1059,7 +1061,7 @@ if(fQ && $('#q')) $('#q').value=fQ;
 renderChips();renderTable();
 if(CAT_ON&&(fQ||wantsCat()))openCat({restore:true,focus:location.hash==='#find'});
 </script>
-<script src="site.js?v=32" defer></script>
-<script src="stage.js?v=32" defer></script>
+<script src="site.js?v=33" defer></script>
+<script src="stage.js?v=33" defer></script>
 </body>
 </html>

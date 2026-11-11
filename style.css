@@ -224,8 +224,9 @@ section{padding:clamp(64px,10vw,150px) 0}
 }
 /* close-ups run past the edge of the frame, so the edges melt into the studio instead of cutting off */
 .touring .stage-sq canvas{--mf:16%}
-/* the films are rendered on their own studio floor: their frames fade into the page, and the page glow steps back */
-.film .stage-sq canvas{--mf:7%}
+/* the films are rendered on their own studio floor and their frames already fade into the page at the edges,
+   so they carry no mask (a mask is one more full pass over the picture on every frame); the page glow steps back */
+.film:not(.touring) .stage-sq canvas{-webkit-mask-image:none;mask-image:none}
 .film .stage-glow{opacity:0}
 .stage-poster{animation:arrive 1.4s var(--ease-out) both;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
 .seq-on .stage-sq canvas{opacity:1}
@@ -305,7 +306,7 @@ html:not(.seq) .hero-read{display:none}
 
 /* ─── anatomy: scrolling takes the damper apart, one part per stop ─── */
 #anatomy{position:relative;z-index:2;padding:0;pointer-events:none}
-.seq #anatomy{height:820vh;height:820svh}
+.seq #anatomy{height:580vh;height:580svh}
 .seq .an-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column}
 .seq .an-pin::after{content:'';position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,transparent,rgba(10,10,11,.9) 62%);z-index:-1}
 .an-wrap{flex:1;width:100%;display:flex;flex-direction:column;padding-top:calc(var(--nav-h) + 14px);padding-bottom:calc(var(--dock-h) + 20px)}
@@ -322,6 +323,13 @@ html:not(.seq) .hero-read{display:none}
 .an-bar{display:flex;gap:5px;margin-top:16px}
 .an-bar i{flex:1;height:2px;background:rgba(255,255,255,.16);transition:background .4s}
 .an-bar i.on{background:var(--accent)}
+/* the way out of the tour: straight to the catalogue */
+.an-skip{pointer-events:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:8px;font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--deep-60);white-space:nowrap;transition:color .2s}
+.an-skip b{font-weight:400;color:var(--accent);transition:transform .25s var(--ease)}
+.an-skip:hover{color:#fff}
+.an-skip:hover b{transform:translateX(4px)}
+@media(max-width:860px){.seq .an-skip{position:absolute;right:var(--pad);top:calc(var(--nav-h) - 1px);margin:0;gap:6px;font-size:10px;letter-spacing:.06em}}
+@media(min-width:861px){.an-skip{font-size:12px;color:rgba(255,255,255,.72)}}
 @media(min-width:861px){
   .an-wrap{justify-content:center;padding-bottom:40px}
   #anatomy .sec-title{font-size:clamp(40px,4.4vw,72px);white-space:normal;max-width:8ch}
@@ -401,7 +409,7 @@ html:not(.seq) #range{padding-bottom:20px}
 /* a film brings its own studio floor: no page glow behind it, and its edges fade into the page */
 .line-film .line-vis::before{display:none}
 .line-film .line-sq{width:min(124vw,84vh);width:min(124vw,84svh);top:50%}
-.line-film .line-sq img,.line-film .line-sq canvas{-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
+.line-film .line-sq img{-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
 .line-copy{position:relative;z-index:1;margin-top:-9vh;padding:84px 0 clamp(70px,10vw,130px);background:linear-gradient(180deg,rgba(10,10,11,0),var(--deep) 120px)}
 .line .sec-kicker{color:var(--deep-60)}
 .line .sec-title{font-size:clamp(52px,14.6vw,116px);margin-top:12px}
@@ -795,7 +803,18 @@ footer{background:var(--deep);color:var(--deep-60);position:relative;overflow:hi
 #wafab .ico{width:22px;height:22px}
 #wafab:hover{background:var(--wa-deep);transform:translateY(-3px)}
 .at-top #wafab{opacity:0;pointer-events:none;transform:translateY(14px)}
-@media(max-width:860px){.dock{display:flex}#wafab{display:none}}
+/* desktop: the catalogue stays one click away beside WhatsApp, even while the header is tucked away */
+#catfab{
+  position:fixed;right:178px;bottom:20px;z-index:240;display:flex;align-items:center;gap:10px;height:54px;padding:0 18px 0 16px;border-radius:16px;
+  background:rgba(20,20,22,.88);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);
+  color:#fff;font-size:15px;font-weight:600;box-shadow:0 14px 34px -14px rgba(0,0,0,.6);transition:border-color .2s,transform .3s var(--ease),opacity .3s;
+}
+#catfab .ico{width:19px;height:19px;color:var(--accent)}
+#catfab i{font-style:normal;font-family:var(--fm);font-size:10px;font-weight:400;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.46);white-space:nowrap}
+#catfab i b,.dock-find i b{font-weight:400}
+#catfab:hover{border-color:rgba(255,255,255,.34);transform:translateY(-3px)}
+.at-top #catfab{opacity:0;pointer-events:none;transform:translateY(14px)}
+@media(max-width:860px){.dock{display:flex}#wafab,#catfab{display:none}}
 @media(max-width:350px){.dock-find i{display:none}.dock-wa span{display:none}}
 #toast{
   position:fixed;left:50%;bottom:calc(24px + var(--dock-h));transform:translate(-50%,80px);
