@@ -70,12 +70,14 @@ python3 scripts/build_seo.py
 ```bash
 python3 scripts/build_cards.py            # images/cards/*.webp from images/*.png (after adding a photo)
 
-# only when a model or a camera path changes (about two hours for everything on 4 CPU cores)
-pip install bpy
-python3 scripts/render/films.py car   /tmp/frames --res 800 --samples 40 --threshold 0.035   # hero: car and front strut (c000–c077)
-python3 scripts/render/films.py cabin /tmp/frames --res 720 --samples 24 --threshold 0.045   # truck and cabin damper (b000–b058)
-python3 scripts/render/films.py axle  /tmp/frames --res 720 --samples 24 --threshold 0.045   # light truck and axle shocker (x000–x058)
-python3 scripts/render/films.py rear  /tmp/frames --res 720 --samples 24 --threshold 0.045   # car from behind and rear strut (q000–q077)
+# only when a model or a camera path changes: masters are 1440 px, 320 samples, on the GPU
+# (about 8-15 s a frame on an M3 Ultra, so roughly an hour for all four films; days on a small CPU)
+pip install bpy pillow numpy
+python3 scripts/render/films.py car   /tmp/frames --res 1440 --samples 320 --threshold 0.01 --gpu   # hero: car and front strut (c000–c077)
+python3 scripts/render/films.py cabin /tmp/frames --res 1440 --samples 320 --threshold 0.01 --gpu   # truck and cabin damper (b000–b058)
+python3 scripts/render/films.py axle  /tmp/frames --res 1440 --samples 320 --threshold 0.01 --gpu   # light truck and axle shocker (x000–x058)
+python3 scripts/render/films.py rear  /tmp/frames --res 1440 --samples 320 --threshold 0.01 --gpu   # car from behind and rear strut (q000–q077)
+python3 scripts/render/contact.py /tmp/frames                                                    # one contact sheet per film, to check a render
 python3 scripts/render/encode_films.py /tmp/frames seq    # seq/film/720, seq/film/1080 and the stills car, axle, rear
 
 python3 scripts/render/damper.py /tmp/frames scripts/render/sequence.json --res 1080 --samples 96   # the damper tour
@@ -88,7 +90,15 @@ The vehicles are built in code, with no downloaded models: `vkit.py` holds the s
 modelling, studio and animation helpers, `sedan.py` the car, `truck.py` the heavy tractor
 and the light truck, and `films.py` the four films (`--only 40-50` re-renders part of one).
 The dampers, shockers and struts on the vehicles are the same models as the product
-renders (`damper.py`, `lines.py`). A film's frame count is on its canvas in `index.html`
+renders (`damper.py`, `lines.py`). `parts.py` holds the running-gear detail shared by the car and the trucks
+(vented discs, calipers, rubber boots, ball joints, bushes, brake hoses, air-brake chambers, wipers and
+number plates; the plates are drawn with Pillow on the first run).
+
+Reflections come from a studio HDRI that only glossy rays see, masked to its overhead softboxes so the floor
+and the background stay black: **Studio Small 09** by Sergej Majboroda, from Poly Haven
+(<https://polyhaven.com/a/studio_small_09>), licensed **CC0**. `vkit.py` downloads the 2K file into
+`scripts/render/hdri/` on the first render (that folder is not committed); without it the films still render,
+lit by the area lights alone. A film's frame count is on its canvas in `index.html`
 (`data-c`, `data-b`, `data-n`); change it there if a film gets longer or shorter.
 
 `sequence.json` lists the damper frames: `s000`–`s084` the scroll tour and `r00`–`r11`

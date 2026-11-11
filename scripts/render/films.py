@@ -108,14 +108,14 @@ def film_car(view='front'):
 
     # studio
     fl = vk.floor(); vk.world()
-    Ls = [vk.area('top', (-1.3, 0, 4.4), (8.0, 3.4), 1500, target=(-1.3, 0, 0)),
+    Ls = [vk.area('top', (-1.3, 0, 4.4), (8.0, 1.4), 820, target=(-1.3, 0, 0)),
           vk.area('side', (1.5, 7.0, 1.7), (8, 1.2), 800, target=(-1.2, 0, 0.6)),
           vk.area('front', (8.0, 2.0, 1.4), (3, 1.2), 240, target=(0, 0, 0.6)),
           vk.area('rim', (-7, -5, 2.8), (6, 1.0), 1500, (1.0, 0.42, 0.16), target=(-1.2, 0, 0.8)),
           vk.area('back', (-8, 4, 3.0), (4, 1.0), 500, (0.75, 0.84, 1.0), target=(-1.2, 0, 0.8))]
     vk.keep_off_floor(Ls, fl, also=[H['panels']['windshield' if view == 'front' else 'backlight']])
     pool = vk.spot('pool', (-1.3, 0, 11), (-1.3, 0, 0), 30000, size=0.78, blend=1.0, radius=0.8)
-    rig.add(pool.data, 'energy', lambda t: 30000 * (1 - 0.6 * ramp(t, Z0, Z1)))      # the floor steps back as the camera goes in
+    rig.add(pool.data, 'energy', lambda t: 30000 * (1 - 0.85 * ramp(t, Z0, Z1)))      # the floor steps back as the camera goes in
     sx = 0.0 if view == 'front' else -sd.WB
     kd = 1 if view == 'front' else -1          # the key light stands on the camera's side of the strut
     k1 = vk.area('key_strut', (sx + 1.4 * kd, 1.9, 1.5), (0.5, 0.9), 0, target=(sx, 0.6, 0.55)); vk.keep_off_floor([k1], fl)
@@ -206,13 +206,14 @@ def film_truck(kind):
     fl = vk.floor(); vk.world()
     cx = -WB / 2 + 0.2
     hgt = P['ZROOF']
-    Ls = [vk.area('top', (cx, 0, hgt * 2.3), (9.0, 4.0), 1500 if kind == 'cabin' else 1100, target=(cx, 0, 0)),
-          vk.area('side', (1.5, 8.0, hgt * 0.85), (9, 1.6), 800 if kind == 'cabin' else 600, target=(cx, 0, hgt * 0.4)),
-          vk.area('front', (9.0, 2.0, hgt * 0.6), (3, 1.6), 260, target=(0, 0, hgt * 0.4)),
+    Ls = [vk.area('top', (cx, 0, hgt * 2.3), (9.0, 1.8), 850 if kind == 'cabin' else 700, target=(cx, 0, 0)),
+          vk.area('side', (1.5, 8.0, hgt * 0.85), (9, 1.6), 520 if kind == 'cabin' else 420, target=(cx, 0, hgt * 0.4)),
+          vk.area('front', (9.0, 2.0, hgt * 0.6), (3, 1.6), 420, target=(0, 0, hgt * 0.4)),
           vk.area('rim', (-8, -6, hgt * 1.2), (7, 1.2), 2600, (1.0, 0.42, 0.16), target=(cx, 0, hgt * 0.5)),
           vk.area('back', (-9, 5, hgt * 1.2), (5, 1.2), 900, (0.75, 0.84, 1.0), target=(cx, 0, hgt * 0.5))]
     vk.keep_off_floor(Ls, fl)
-    vk.spot('pool', (cx, 0, 15), (cx, 0, 0), 62000, size=0.8, blend=1.0, radius=0.8)
+    pool = vk.spot('pool', (cx, 0, 15), (cx, 0, 0), 46000, size=0.72, blend=1.0, radius=0.8)
+    rig.add(pool.data, 'energy', lambda t: 46000 * (1 - 0.8 * ramp(t, Z0, Z1)))
     L = XF + WB + P['REAR']
     if kind == 'cabin':
         d0 = H['dampers']['FL']['root'].location
@@ -234,7 +235,8 @@ def film_truck(kind):
     rig.add(k1.data, 'energy', lambda t: 2600 * ramp(t, E0 + 0.3, Z1 - 0.2))
     rig.add(k2.data, 'energy', lambda t: 2200 * ramp(t, E0 + 0.3, Z1 - 0.2))
     rig.add(k3.data, 'energy', lambda t: 700 * ramp(t, E0 + 0.3, Z1 - 0.2))
-    for L_ in Ls[1:3]: rig.add(L_.data, 'energy', (lambda t, e0=L_.data.energy: e0 * (1 - 0.75 * ramp(t, Z0, Z1))))
+    # in the close-up the set falls away and the part carries the light
+    for L_, kf in zip(Ls, (0.85, 0.85, 0.85, 0.5, 0.5)): rig.add(L_.data, 'energy', (lambda t, e0=L_.data.energy, kf=kf: e0 * (1 - kf * ramp(t, Z0, Z1))))
     cam = vk.camera(70)
 
     def pose(t):

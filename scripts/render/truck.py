@@ -7,6 +7,7 @@ sys.path.insert(0, HERE)
 import damper as dm
 import lines as ln
 import vkit as vk
+import parts as pt
 from vkit import lerp, interp, linterp, smooth, rbox, cyl, lathe, tube, empty, extrude_poly
 
 HEAVY = dict(kind='heavy', XF=1.40, CL=2.25, CW=1.23, ZB=1.02, ZBELT=1.80, ZRAIL=2.74, ZROOF=2.88, WR=0.52, WW=0.29, RIM=0.286, WB=3.55, TR=1.03,
@@ -23,8 +24,14 @@ FOLLOW = {'glass_L': 'door_L', 'glass_R': 'door_R', 'bpillar_L': 'door_L', 'bpil
 
 def materials(P):
     M = {}
-    M['paint'] = vk.paint('cab_paint', (0.30, 0.305, 0.31), metallic=0.0, rough=0.34)
-    M['glass'] = vk.glass('cab_glass', tint=(0.16, 0.20, 0.21))
+    if P['kind'] == 'heavy':
+        M['paint'] = vk.paint('cab_paint', (0.22, 0.225, 0.23), metallic=0.75, rough=0.27)
+    else:
+        M['paint'] = vk.paint('cab_paint', (0.018, 0.040, 0.085), metallic=0.75, rough=0.28)
+    M['glass'] = vk.glass('cab_glass', tint=(0.30, 0.34, 0.36))
+    M['rubber_t'] = vk.simple('t_rubber_hose', (0.012, 0.012, 0.013), 0.55, bump=(800, 0.03), spec=0.35)
+    M['cast_dark'] = pt.cast('t_cast_dark', (0.03, 0.031, 0.034), 0.55, metal=0.5)
+    M['chamber'] = vk.simple('t_chamber', (0.02, 0.021, 0.024), 0.45, coat=0.3, bump=(700, 0.03))
     M['black_gloss'] = vk.simple('t_black_gloss', (0.012, 0.012, 0.014), 0.14, coat=0.6, ghost=True)
     M['black_trim'] = vk.simple('t_black_trim', (0.018, 0.018, 0.02), 0.55, bump=(900, 0.03), ghost=True)
     M['chrome'] = vk.simple('t_chrome', (0.9, 0.9, 0.92), 0.08, metal=1.0, ghost=True)
@@ -153,7 +160,19 @@ def leaf_spring(name, parent, M, length, loc, leaves=6, width=0.075, camber=0.07
         tube(f'{name}_ubolt{sgn}', [(sgn * 0.055, -width / 2 - 0.012, -0.16), (sgn * 0.055, -width / 2 - 0.012, 0.03), (sgn * 0.055, width / 2 + 0.012, 0.03), (sgn * 0.055, width / 2 + 0.012, -0.16)],
              0.009, M['zinc'], g, smooth_path=False)
     rbox(name + '_plate', (0.17, width + 0.05, 0.02), M['iron'], g, loc=(0, 0, 0.022), r=0.004)
+    rbox(name + '_lowplate', (0.15, width + 0.06, 0.018), M['iron'], g, loc=(0, 0, -0.15), r=0.004)
+    for sgn in (-1, 1):
+        for sy in (-1, 1):
+            dm.hex_nut(f'{name}_ubn{sgn}{sy}', M['zinc'], 0.0135, 0.016, -0.176, g).location = (sgn * 0.055, sy * (width / 2 + 0.012), 0)
+    # rebound clips around the pack
+    for sgn in (-1, 1):
+        x = sgn * length * 0.28
+        tube(f'{name}_clip{sgn}', [(x, -width / 2 - 0.006, camber * (2 * x / length) ** 2 - leaves * 0.0135 - 0.004), (x, -width / 2 - 0.006, camber * (2 * x / length) ** 2 + 0.008),
+                                   (x, width / 2 + 0.006, camber * (2 * x / length) ** 2 + 0.008), (x, width / 2 + 0.006, camber * (2 * x / length) ** 2 - leaves * 0.0135 - 0.004)], 0.004, M['steel'], g, smooth_path=False)
     return g
+
+
+M_SH = {}
 
 
 def shock_unit(name, parent, loc, top, sg=1, face=(0.62, 0.78, 0.0)):
@@ -169,6 +188,14 @@ def shock_unit(name, parent, loc, top, sg=1, face=(0.62, 0.78, 0.0)):
     m = Matrix((x, y, z)).transposed().to_4x4()
     m.translation = Vector(loc)
     root.matrix_local = m
+    # through-bolts with nuts at both eyes, along the eye axis
+    ax = Vector(y)
+    for k, p in enumerate((Vector(loc), Vector(top))):
+        o = cyl(f'{name}_bolt{k}', 0.0075, 0.11, M_SH['zinc'], parent, loc=p[:], axis='Z', seg=16)
+        o.rotation_euler = ax.to_track_quat('Z', 'Y').to_euler()
+        for e, hh in ((-1, 0.0125), (1, 0.011)):
+            n = dm.hex_nut(f'{name}_bn{k}{e}', M_SH['zinc'], hh, 0.010, -0.005, parent)
+            n.location = (p + ax * e * 0.050)[:]; n.rotation_euler = ax.to_track_quat('Z', 'Y').to_euler()
     rest = 0.482                      # eye to the top of the stem, fully out
     return dict(root=root, upper=G['upper'], c0=max(0.0, rest - L), mats=SM)
 
@@ -186,8 +213,25 @@ def cabin_damper(name, parent, loc, yaw=0.0):
     return dict(root=root, G=G, spring=hold, h=h, mats=DM)
 
 
+def air_brake(name, parent, M, pos, sg, line_to, k=1.0, spring=True):
+    """Air brake chamber on its bracket, push rod to a slack adjuster on the camshaft, and the air line up to the frame."""
+    p = Vector(pos)
+    r = 0.075 * (0.8 + 0.2 * k)
+    prof = [(0.0, 0.0), (r * 0.9, 0.0, 0.01), (r, 0.03, 0.01), (r * 1.06, 0.045, 0.004), (r * 1.06, 0.052, 0.002), (r, 0.066, 0.01), (r * 0.95, 0.10, 0.012), (0.0, 0.11)]
+    if spring: prof = prof[:-1] + [(r * 0.95, 0.16, 0.01), (r * 1.0, 0.175, 0.004), (r * 0.9, 0.24, 0.02), (0.0, 0.245)]
+    lathe(name + '_can', prof, M['chamber'], parent, axis='X', seg=48, rad=0.0, loc=(p.x + 0.02, p.y, p.z), rot=(0, 0, math.pi))
+    lathe(name + '_clamp', [(r * 1.06, 0.042), (r * 1.12, 0.044, 0.003), (r * 1.12, 0.054, 0.003), (r * 1.06, 0.056)], M['zinc'], parent, axis='X', seg=48, rad=0.0, loc=(p.x + 0.02, p.y, p.z), rot=(0, 0, math.pi))
+    cyl(name + '_rod', 0.008, 0.10, M['zinc'], parent, loc=(p.x + 0.07, p.y, p.z), axis='X', seg=16)
+    rbox(name + '_slack', (0.035, 0.03, 0.17), M['cast_dark'], parent, loc=(p.x + 0.12, p.y, p.z - 0.06), rot=(0, math.radians(-12), 0), r=0.008)
+    cyl(name + '_cam', 0.02, 0.22, M['iron'], parent, loc=(p.x + 0.13, p.y + sg * 0.10, p.z - 0.13), axis='Y', seg=24)
+    rbox(name + '_bracket', (0.012, 0.16, 0.16), M['cast_dark'], parent, loc=(p.x + 0.035, p.y, p.z), r=0.004)
+    q = Vector(line_to)
+    pt.hose(name + '_line', parent, dict(M, rubber=M['rubber_t']), [(p.x - 0.03, p.y, p.z + r * 0.8), (p.x - 0.06, p.y, p.z + 0.16), ((p.x + q.x) / 2, (p.y + q.y) / 2, q.z + 0.02), (q.x, q.y + sg * 0.04, q.z)], r=0.007)
+
+
 def build(P):
     M = materials(P)
+    M_SH.clear(); M_SH.update(M)
     XF, CL, CW, ZB, ZBELT, ZRAIL, ZROOF = (P[k] for k in ('XF', 'CL', 'CW', 'ZB', 'ZBELT', 'ZRAIL', 'ZROOF'))
     WR, WW, RIM, WB, TR = (P[k] for k in ('WR', 'WW', 'RIM', 'WB', 'TR'))
     RY, RT, RH, FLOOR = P['RAILY'], P['RAILTOP'], P['RAILH'], P['FLOOR']
@@ -267,7 +311,9 @@ def build(P):
     bx = XF - 0.02
     rbox('bumper', (0.42, 2 * CW - 0.02, bz1 - bz0), M['black_trim'], ch, loc=(bx - 0.16, 0, (bz0 + bz1) / 2), r=0.07, seg=5)
     rbox('bumper_face', (0.06, 2 * CW - 0.9, (bz1 - bz0) * 0.42), M['paint_solid'] if 'paint_solid' in M else M['steel'], ch, loc=(bx + 0.035, 0, lerp(bz0, bz1, 0.36)), r=0.02)
-    rbox('plate', (0.012, 0.50, 0.12), vk.simple('t_plate', (0.9, 0.78, 0.1), 0.4), ch, loc=(bx + 0.07, 0, lerp(bz0, bz1, 0.36)), r=0.004)
+    pm = pt.label('t_plate', os.path.join(vk.HDRI_DIR, 'plate_%s.png' % P['kind']), (1040, 230), pt.plate_art('MH 14 GT 7045' if heavy else 'MH 12 LT 3318'), base=(0.92, 0.74, 0.06), ghost=False)
+    nt = pm.node_tree; nt.links.new(nt.nodes['Separate XYZ'].outputs[1], nt.nodes['Combine XYZ'].inputs[0])
+    rbox('plate', (0.012, 0.50, 0.12), pm, ch, loc=(bx + 0.07, 0, lerp(bz0, bz1, 0.36)), r=0.004)
     for sg in (1, -1):
         ly = sg * (CW - 0.30)
         rbox(f'lamp_pod{sg}', (0.10, 0.44, (bz1 - bz0) * 0.52), M['black_gloss'], ch, loc=(bx + 0.012, ly, lerp(bz0, bz1, 0.62)), r=0.035, seg=4)
@@ -380,6 +426,7 @@ def build(P):
         rbox('shock_hi_' + key, (0.12, 0.14, 0.20), M['frame'], ch, loc=(0.20, sg * (RY + 0.06), az + 0.04 + 0.44), r=0.014)
         shocks[key] = shock_unit('shock_' + key, ch, lo, hi, sg)
         wheels[key] = dict(off=off, spin=spin, hubspin=hubs, sg=sg)
+        air_brake('brake_' + key, ch, M, (-0.17, sg * (TR - 0.36), az + 0.05), sg, (-0.10, sg * RY, RT - RH * 0.6), k)
     # rear axle with differential, dual wheels
     lathe('rear_axle', [(0.0, -TR + 0.1), (0.07, -TR + 0.1, 0.01), (0.075, -0.30, 0.02), (0.11, -0.22, 0.03), (0.11, 0.22, 0.03), (0.075, 0.30, 0.02), (0.07, TR - 0.1, 0.01), (0.0, TR - 0.1)], M['iron'], ch, axis='Y', seg=48, rad=0.01,
           loc=(-WB, 0, WR))
@@ -397,6 +444,7 @@ def build(P):
         rbox('shock_hi_' + key, (0.12, 0.14, 0.20), M['frame'], ch, loc=(-WB - 0.26, sg * (RY + 0.05), WR + 0.02 + 0.44), r=0.014)
         shocks[key] = shock_unit('shock_' + key, ch, lo, hi, sg)
         wheels[key] = dict(off=off, spin=spin, hubspin=None, sg=sg)
+        air_brake('brake_' + key, ch, M, (-WB + 0.17, sg * (TR - 0.42), WR + 0.06), sg, (-WB + 0.45, sg * RY, RT - RH * 0.6), k, spring=True)
 
     # ── cabin dampers: two at the front corners, two under the back wall ──
     dampers = {}

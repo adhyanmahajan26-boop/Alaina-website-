@@ -374,6 +374,19 @@ def set_ghost(mats, g):
             if n.type == 'VALUE' and n.label == 'ghost': n.outputs[0].default_value = g
 
 
+def turn_decal(mat, du):
+    """Turn a lathed body's printed decal around the tube by `du` of a turn (wraps at the seam), so it can face the camera."""
+    nt = mat.node_tree
+    img = next(n for n in nt.nodes if n.type == 'TEX_IMAGE')
+    uv = nt.nodes.new('ShaderNodeUVMap')
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(uv.outputs[0], sep.inputs[0])
+    ad = nt.nodes.new('ShaderNodeMath'); ad.operation = 'ADD'; ad.inputs[1].default_value = du
+    fr = nt.nodes.new('ShaderNodeMath'); fr.operation = 'FRACT'
+    nt.links.new(sep.outputs[0], ad.inputs[0]); nt.links.new(ad.outputs[0], fr.inputs[0])
+    cb = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(fr.outputs[0], cb.inputs[0]); nt.links.new(sep.outputs[1], cb.inputs[1])
+    nt.links.new(cb.outputs[0], img.inputs['Vector'])
+
+
 # ───────────────────────── wheels ─────────────────────────
 def tyre(name, R, W, rimR, mat, parent, blocks=64, grooves=3, seg=256):
     """Tyre about the Y axis, centred at the origin, with real circumferential grooves and shoulder blocks."""
@@ -563,11 +576,54 @@ def floor(size=120.0):
     return new_obj('floor', bm, m, smooth_shade=False)
 
 
-def world(strength=1.0, color=(0.006, 0.006, 0.007)):
+HDRI_URL = 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/studio_small_09_2k.hdr'   # Poly Haven, CC0
+HDRI_DIR = os.path.join(HERE, 'hdri')
+
+
+def hdri_path():
+    """The studio HDRI used only for reflections. Fetched once into scripts/render/hdri (not committed)."""
+    p = os.path.join(HDRI_DIR, os.path.basename(HDRI_URL))
+    if not os.path.exists(p):
+        os.makedirs(HDRI_DIR, exist_ok=True)
+        try:
+            import urllib.request
+            print('fetching', HDRI_URL, flush=True)
+            urllib.request.urlretrieve(HDRI_URL, p + '.part'); os.replace(p + '.part', p)
+        except Exception as ex:
+            print('no HDRI, reflections from the lights only:', ex, flush=True)
+            return None
+    return p
+
+
+def world(strength=1.0, color=(0.006, 0.006, 0.007), refl=0.6, rot=0.0, hz=(0.50, 0.78)):
+    """Near-black studio. The camera and diffuse light see `color`; reflections (glossy rays) see a CC0 studio HDRI,
+    so paint, glass and chrome pick up real softbox highlights without the HDRI lighting or brightening the set."""
     sc = bpy.context.scene
     w = bpy.data.worlds.new('w'); sc.world = w; w.use_nodes = True
-    bg = w.node_tree.nodes['Background']
+    nt = w.node_tree
+    bg = nt.nodes['Background']
     bg.inputs[0].default_value = (*color, 1); bg.inputs[1].default_value = strength
+    p = hdri_path() if refl > 0 else None
+    if p:
+        tc = nt.nodes.new('ShaderNodeTexCoord')
+        mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Rotation'].default_value = (0, 0, math.radians(rot))
+        env = nt.nodes.new('ShaderNodeTexEnvironment'); env.image = bpy.data.images.load(p)
+        bg2 = nt.nodes.new('ShaderNodeBackground'); bg2.inputs[1].default_value = refl
+        lp = nt.nodes.new('ShaderNodeLightPath')
+        mix = nt.nodes.new('ShaderNodeMixShader')
+        nt.links.new(tc.outputs['Generated'], mp.inputs[0]); nt.links.new(mp.outputs[0], env.inputs[0])
+        # keep only the overhead softboxes: the horizon (the studio's white cyc wall) goes black, so the floor and the
+        # lower body sides reflect darkness and the set stays a black stage
+        sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sep.inputs[0])
+        mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs[1].default_value = hz[0]; mr.inputs[2].default_value = hz[1]
+        mr.interpolation_type = 'SMOOTHSTEP'
+        nt.links.new(sep.outputs[2], mr.inputs[0])
+        mul = nt.nodes.new('ShaderNodeMix'); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs[0].default_value = 1.0
+        nt.links.new(env.outputs[0], mul.inputs[6]); nt.links.new(mr.outputs[0], mul.inputs[7])
+        nt.links.new(mul.outputs[2], bg2.inputs[0])
+        nt.links.new(lp.outputs['Is Glossy Ray'], mix.inputs[0])
+        nt.links.new(bg.outputs[0], mix.inputs[1]); nt.links.new(bg2.outputs[0], mix.inputs[2])
+        nt.links.new(mix.outputs[0], nt.nodes['World Output'].inputs['Surface'])
     return w
 
 
@@ -620,7 +676,12 @@ def render_setup(res=1080, samples=96, blur=True, threshold=0.03, gpu=False):
     sc.cycles.samples = samples
     sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = threshold
     sc.cycles.use_denoising = True
-    sc.cycles.max_bounces = 8; sc.cycles.glossy_bounces = 5; sc.cycles.diffuse_bounces = 2
+    for k, v in (('denoiser', 'OPENIMAGEDENOISE'), ('denoising_input_passes', 'RGB_ALBEDO_NORMAL'), ('denoising_prefilter', 'ACCURATE'),
+                 ('denoising_quality', 'HIGH'), ('denoising_use_gpu', True), ('use_light_tree', True), ('adaptive_min_samples', max(32, samples // 8))):
+        try: setattr(sc.cycles, k, v)
+        except Exception as ex: print('cycles', k, ex)
+    sc.render.use_persistent_data = True          # keep the scene on the card between frames
+    sc.cycles.max_bounces = 10; sc.cycles.glossy_bounces = 6; sc.cycles.diffuse_bounces = 3
     sc.cycles.transparent_max_bounces = 24; sc.cycles.transmission_bounces = 6
     sc.cycles.caustics_reflective = False; sc.cycles.caustics_refractive = False
     sc.cycles.sample_clamp_indirect = 6.0

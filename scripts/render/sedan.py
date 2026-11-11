@@ -1,12 +1,13 @@
 """A generic mid-size saloon, built procedurally: lofted body split into real panels, glass, lamps, wheels,
 a rolling chassis underneath and four Alaina struts. Faces +X, front axle at x=0, ground at z=0."""
 import bpy, bmesh, math, os, sys
-from mathutils import Vector, Matrix
+from mathutils import Vector, Matrix, Euler
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import damper as dm
 import lines as ln
 import vkit as vk
+import parts as pt
 from vkit import lerp, interp, linterp, smooth, rbox, cyl, lathe, tube, empty, extrude_poly
 
 XN = 0.93            # nose is this far ahead of the front axle
@@ -107,8 +108,8 @@ def panel_of_factory(S):
 
 def materials():
     M = {}
-    M['paint'] = vk.paint('paint', (0.105, 0.112, 0.125), metallic=0.9, rough=0.27)
-    M['glass'] = vk.glass('glass')
+    M['paint'] = vk.paint('paint', (0.048, 0.052, 0.060), metallic=0.85, rough=0.26)
+    M['glass'] = vk.glass('glass', tint=(0.30, 0.34, 0.36))
     M['lens'] = vk.glass('lens', tint=(0.8, 0.8, 0.8), clear=0.6)
     M['lens_red'] = vk.simple('lens_red', (0.45, 0.01, 0.01), 0.08, coat=1.0, ghost=True, emit=((1.0, 0.03, 0.02), 1.6))
     M['black_gloss'] = vk.simple('black_gloss', (0.012, 0.012, 0.014), 0.12, coat=0.6, ghost=True)
@@ -129,10 +130,21 @@ def materials():
     M['plastic'] = vk.simple('plastic', (0.02, 0.02, 0.022), 0.6, bump=(1200, 0.02), ghost=True, ghost_kw=dict(tint=(0.4, 0.45, 0.55), edge=0.10, body=0.0, glow=0.04))
     M['seat'] = vk.simple('seat', (0.035, 0.035, 0.038), 0.7, bump=(400, 0.06), spec=0.3, ghost=True, ghost_kw=dict(tint=(0.4, 0.45, 0.55), edge=0.10, body=0.0, glow=0.04))
     M['rubber'] = vk.simple('rubber', (0.016, 0.016, 0.017), 0.72, bump=(600, 0.05), spec=0.3)
-    M['drl'] = vk.simple('drl', (1, 1, 1), 0.3, emit=((1.0, 0.97, 0.92), 14.0))
-    M['amber'] = vk.simple('amber', (1, 0.4, 0.05), 0.3, emit=((1.0, 0.35, 0.03), 3.0))
-    M['red_led'] = vk.simple('red_led', (1, 0.02, 0.01), 0.3, emit=((1.0, 0.02, 0.01), 9.0))
-    M['mirror'] = vk.simple('mirror', (0.9, 0.9, 0.92), 0.02, metal=1.0)
+    M['drl'] = vk.simple('drl', (1, 1, 1), 0.3, emit=((1.0, 0.97, 0.92), 14.0), ghost=True)
+    M['amber'] = vk.simple('amber', (1, 0.4, 0.05), 0.3, emit=((1.0, 0.35, 0.03), 3.0), ghost=True)
+    M['red_led'] = vk.simple('red_led', (1, 0.02, 0.01), 0.3, emit=((1.0, 0.02, 0.01), 9.0), ghost=True)
+    M['mirror'] = vk.simple('mirror', (0.9, 0.9, 0.92), 0.02, metal=1.0, ghost=True)
+    M['disc_face'] = pt.machined('disc_face', (0.42, 0.42, 0.43), 0.30)
+    M['disc_core'] = pt.cast('disc_core', (0.10, 0.098, 0.095), 0.7, metal=0.7)
+    M['disc_hub'] = pt.machined('disc_hub', (0.30, 0.30, 0.31), 0.34, rings=900)
+    M['caliper'] = vk.simple('caliper', (0.035, 0.036, 0.04), 0.42, metal=0.3, coat=0.5)
+    M['pad'] = pt.cast('pad', (0.03, 0.03, 0.03), 0.8, metal=0.1)
+    M['cast'] = pt.cast('cast', (0.11, 0.112, 0.118), 0.6, metal=0.6)
+    M['cast_dark'] = pt.cast('cast_dark', (0.03, 0.031, 0.034), 0.55, metal=0.5)
+    M['ecoat_arm'] = vk.simple('ecoat_arm', (0.022, 0.023, 0.025), 0.42, metal=0.4, coat=0.3, bump=(900, 0.03))
+    M['chrome_dark'] = vk.simple('chrome_dark', (0.30, 0.31, 0.33), 0.12, metal=1.0, ghost=True)
+    M['screen'] = vk.simple('screen', (0.01, 0.012, 0.016), 0.08, coat=1.0, ghost=True, emit=((0.35, 0.55, 0.9), 0.6), ghost_kw=dict(tint=(0.4, 0.45, 0.55), edge=0.10, body=0.0, glow=0.04))
+    M['black_satin'] = vk.simple('black_satin', (0.014, 0.014, 0.016), 0.38, ghost=True)
     return M
 
 
@@ -218,11 +230,15 @@ FOLLOW = {'glass_f_L': 'door_f_L', 'glass_f_R': 'door_f_R', 'glass_r_L': 'door_r
           'grille': 'bumper_f', 'intake': 'bumper_f', 'plate_f': 'bumper_f', 'plate_r': 'trunk', 'trim_r': 'trunk'}
 
 
-def strut_unit(name, parent, M, loc, side):
+DECAL_TURN = {'FL': -0.14, 'RL': -0.38}   # turn the print on the hero struts toward the close-up camera
+
+
+def strut_unit(name, parent, M, loc, side, decal=0.0):
     """An Alaina strut as fitted: body and bracket, coil spring, bump stop and top mount. side=+1 left, -1 right.
     Returns a dict with the parts that move when the suspension works."""
     root, G, SM = ln.build_strut(reset=False)
     root.name = name
+    if decal: vk.turn_decal(SM['body'], decal)
     root.parent = parent
     root.location = loc
     root.rotation_euler = (math.radians(9 * side), math.radians(-3), math.radians(90 * side))
@@ -246,6 +262,10 @@ def strut_unit(name, parent, M, loc, side):
     lathe(name + '_bump', [(0.0112, zt - 0.070), (0.020, zt - 0.070, 0.004), (0.024, zt - 0.05, 0.006), (0.021, zt - 0.036, 0.003), (0.026, zt - 0.018, 0.006), (0.024, zt + 0.002, 0.003), (0.0112, zt + 0.002)],
           dm.principled(name + '_pu', (0.86, 0.23, 0.035), 0.62, bump=(700, 0.12), spec=0.35), top, rad=0.002)
     return dict(root=root, rod=top, spring=hold, h=h, mats=SM)
+
+
+def pt_cache():
+    d = os.path.join(HERE, 'hdri'); os.makedirs(d, exist_ok=True); return d
 
 
 def build(M=None):
@@ -282,7 +302,7 @@ def build(M=None):
             pts.append(((a.x + b.x) / 2 - 0.028, (a.y + b.y) / 2 * 0.985, (a.z + b.z) / 2 + 0.002))
         tube('drl_' + side, pts[:3] + [lerp(Vector(pts[2]), Vector(pts[3]), 0.55)[:]], 0.0065, M['drl'], C['bumper_f'])
         back = [(p[0] - 0.035, p[1] * 0.97, p[2]) for p in pts]
-        tube('lampback_' + side, back, 0.036, M['black_gloss'], C['bumper_f'])
+        tube('lampback_' + side, back, 0.036, M['chrome_dark'], C['bumper_f'])
         for k, f in enumerate((0.35, 0.72)):
             p = lerp(Vector(pts[1]), Vector(pts[2]), f)
             lathe(f'proj_{side}{k}', [(0.0, 0.0), (0.016, -0.004, 0.006), (0.021, -0.016, 0.004), (0.021, -0.03)], M['chrome'], C['bumper_f'], axis='X', seg=32, rad=0.002, loc=(p.x - 0.004, p.y, p.z + 0.012))
@@ -299,6 +319,34 @@ def build(M=None):
     for k in range(3):
         rbox(f'intake_bar{k}', (0.02, 0.9, 0.012), M['black_gloss'], C['bumper_f'], loc=(gf[0][3].co.x - 0.035, 0, lerp(gf[0][3].co.z, gf[2][3].co.z, 0.25 + 0.25 * k)), r=0.004)
     rbox('fin', (0.16, 0.035, 0.05), M['black_gloss'], C['roof'], loc=(XN - 3.36, 0, linterp(3.36, ZT_PTS) + 0.012), r=0.014, taper=(0, (0.5, 0.4)))
+
+    # grille and lower intake: a fine slatted mesh behind the openings
+    def row_x(r0, r1, y):
+        cols = sorted(range(len(gf[r0])), key=lambda c: gf[r0][c].co.y)
+        ys = [gf[r0][c].co.y for c in cols]
+        xs = [(gf[r0][c].co.x + gf[r1][c].co.x) / 2 for c in cols]
+        return linterp(y, list(zip(ys, xs)))
+    for nm, r0, r1, depth, pitch in (('grille', 3, 4, 0.024, 0.026), ('intake', 0, 2, 0.045, 0.030)):
+        y0, y1 = sorted((gf[r0][1].co.y, gf[r0][5].co.y))
+        z0 = min(gf[r0][3].co.z, gf[r1][3].co.z); z1 = max(gf[r0][3].co.z, gf[r1][3].co.z)
+        n = int((y1 - y0) / pitch)
+        for k in range(n + 1):
+            y = lerp(y0 + 0.01, y1 - 0.01, k / n)
+            rbox(f'{nm}_slat{k}', (0.022, 0.005, (z1 - z0) * 0.80), M['black_gloss'], C['bumper_f'], loc=(row_x(r0, r1, y) - depth, y, (z0 + z1) / 2), rot=(0, 0, math.radians(30)), r=0.0015, seg=1)
+    # number plates, front and back
+    for nm, host, sign, txt in (('plate_f', 'bumper_f', 1, 'MH 12 AL 2026'), ('plate_r', 'trunk', -1, 'MH 12 AL 2026')):
+        vs = [v.co for v in P[nm].data.vertices]
+        cy = sum(v.y for v in vs) / len(vs); cz = sum(v.z for v in vs) / len(vs)
+        xe = max(v.x for v in vs) if sign > 0 else min(v.x for v in vs)
+        pm = pt.label('plate_art_' + nm, os.path.join(pt_cache(), 'plate.png'), (1040, 230), pt.plate_art(txt), base=(0.86, 0.86, 0.84))
+        M['plate_art_' + nm] = pm
+        if sign > 0:
+            nt = pm.node_tree; nt.links.new(nt.nodes['Separate XYZ'].outputs[1], nt.nodes['Combine XYZ'].inputs[0])
+        rbox(nm + '_board', (0.006, 0.50, 0.11), pm, C[FOLLOW.get(nm, host)] if FOLLOW.get(nm) in C else C[host], loc=(xe + sign * 0.002, cy, cz), r=0.002, seg=1)
+    # wipers parked along the foot of the windscreen
+    up = Vector((0.40, 0, 0.78)).normalized(); WPM = dict(M, rubber=M['black_satin'])
+    pt.wiper('wiper_d', C['windshield'], WPM, (-0.555, -0.40, 1.040), (-0.640, 0.28, 1.072), up=up[:])
+    pt.wiper('wiper_p', C['windshield'], WPM, (-0.555, 0.06, 1.040), (-0.630, 0.64, 1.052), up=up[:])
 
     # ── rolling chassis ──
     ch = empty('chassis', car)
@@ -332,18 +380,28 @@ def build(M=None):
             rbox(f'seat_c_{nm}{sg}', (0.50, 0.50, 0.14), M['seat'], ch, loc=(xs, sg * 0.37, 0.36 if nm == 'f' else 0.38), r=0.06, seg=5)
             rbox(f'seat_b_{nm}{sg}', (0.13, 0.48, 0.62), M['seat'], ch, loc=(xs - 0.30, sg * 0.37, 0.68), rot=(0, math.radians(-16), 0), r=0.055, seg=5)
             rbox(f'seat_h_{nm}{sg}', (0.09, 0.24, 0.17), M['seat'], ch, loc=(xs - 0.40, sg * 0.37, 1.08), rot=(0, math.radians(-14), 0), r=0.04, seg=5)
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.18, minor_radius=0.016, major_segments=48, minor_segments=12)
-    t = bpy.context.active_object; t.name = 'steering_wheel'; t.parent = ch; t.data.materials.append(M['plastic'])
-    for p in t.data.polygons: p.use_smooth = True
-    t.location = (-0.98, -0.37, 0.93); t.rotation_euler = (0, math.radians(68), 0)
-    cyl('column', 0.02, 0.36, M['plastic'], ch, loc=(-0.83, -0.37, 0.87), axis='X', rot=(0, math.radians(-22), 0))
+    sw = empty('steering', ch, (-0.98, -0.37, 0.93), (0, math.radians(68), 0))
+    lathe('sw_rim', [(0.168, -0.014), (0.183, -0.016, 0.008), (0.196, -0.006, 0.008), (0.196, 0.006, 0.008), (0.183, 0.016, 0.008), (0.168, 0.012, 0.008), (0.164, -0.002, 0.006), (0.168, -0.014)], M['seat'], sw, axis='Z', seg=64, rad=0.0)
+    lathe('sw_hub', [(0.0, 0.03), (0.055, 0.03, 0.015), (0.07, 0.0, 0.012), (0.06, -0.04, 0.01), (0.0, -0.04)], M['plastic'], sw, axis='Z', seg=48, rad=0.0)
+    for a in (90, 210, 330):
+        ar = math.radians(a)
+        rbox(f'sw_spoke{a}', (0.12, 0.034, 0.014), M['plastic'], sw, loc=(0.115 * math.cos(ar), 0.115 * math.sin(ar), -0.004), rot=(0, 0, ar), r=0.006)
+    # instrument screen in a hooded binnacle, the centre display and the vents
+    rbox('binnacle', (0.16, 0.42, 0.10), M['plastic'], ch, loc=(-0.72, -0.37, 0.99), r=0.035, seg=4)
+    rbox('cluster', (0.006, 0.36, 0.11), M['screen'], ch, loc=(-0.80, -0.37, 0.975), rot=(0, math.radians(-20), 0), r=0.003)
+    rbox('display', (0.006, 0.30, 0.17), M['screen'], ch, loc=(-0.80, 0.0, 0.95), rot=(0, math.radians(-22), 0), r=0.004)
+    for yv in (-0.62, -0.08, 0.08, 0.62):
+        rbox(f'vent{yv}', (0.02, 0.10, 0.04), M['chrome_dark'], ch, loc=(-0.585, yv, 0.90), r=0.006)
+    rbox('console', (0.55, 0.20, 0.20), M['plastic'], ch, loc=(-1.20, 0, 0.47), r=0.05, seg=4)
+    lathe('shifter', [(0.0, 0.0), (0.018, 0.0, 0.002), (0.012, 0.07), (0.022, 0.09, 0.008), (0.018, 0.12, 0.008), (0.0, 0.125)], M['plastic'], ch, axis='Z', seg=32, rad=0.0, loc=(-1.05, 0, 0.57))
+    cyl('column', 0.028, 0.36, M['plastic'], ch, loc=(-0.83, -0.37, 0.87), axis='X', rot=(0, math.radians(-22), 0))
     # back end
     rbox('tank', (0.55, 0.95, 0.20), M['plastic'], ch, loc=(-2.25, 0, 0.30), r=0.06, seg=4)
     tube('exhaust', [(0.34, -0.10, 0.40), (-0.2, -0.05, 0.22), (-1.2, 0.04, 0.17), (-2.2, 0.10, 0.17), (-2.9, 0.32, 0.20), (-3.2, 0.42, 0.24)], 0.028, M['steel'], ch)
     lathe('muffler', [(0.0, -0.26), (0.085, -0.26, 0.03), (0.085, 0.26, 0.03), (0.0, 0.26)], M['steel'], ch, axis='X', rad=0.02, loc=(-3.28, 0.42, 0.27))
     lathe('tailpipe', [(0.030, -0.12), (0.034, -0.12, 0.001), (0.034, 0.12, 0.001), (0.030, 0.12), (0.030, -0.12)], M['chrome'], ch, axis='X', rad=0.001, loc=(-3.62, 0.42, 0.26))
     tube('rear_axle', [(-WB + 0.02, -0.66, 0.30), (-WB + 0.16, -0.40, 0.29), (-WB + 0.16, 0.40, 0.29), (-WB + 0.02, 0.66, 0.30)], 0.036, M['iron'], ch)
-    tube('arb', [(-0.16, -0.60, 0.33), (0.14, -0.50, 0.25), (0.16, 0.0, 0.25), (0.14, 0.50, 0.25), (-0.16, 0.60, 0.33)], 0.011, M['iron'], ch)
+    tube('arb', [(-0.045, -0.50, 0.30), (0.10, -0.46, 0.25), (0.14, 0.0, 0.25), (0.10, 0.46, 0.25), (-0.045, 0.50, 0.30)], 0.011, M['iron'], ch)
     lathe('rack', [(0.0, -0.36), (0.026, -0.36, 0.006), (0.026, 0.36, 0.006), (0.0, 0.36)], M['alu'], ch, axis='Y', rad=0.006, loc=(-0.16, 0, 0.30))
 
     # ── corners: wheel, hub, arms and the strut ──
@@ -357,31 +415,70 @@ def build(M=None):
         c = empty('corner_' + key, car, (x, 0, 0))
         off = empty('wheel_off_' + key, c)
         hold, spin = vk.alloy_wheel('wheel_' + key, off, WM[key], R=WR, loc=(0, sg * TR, WR), flip=sg < 0, disc=False)
-        # the brake stays on the hub when the wheel comes off
-        dR = 0.168
-        dprof = [(0.060, -0.004), (dR, -0.004, 0.001), (dR, 0.008, 0.001), (dR - 0.004, 0.010), (dR - 0.004, 0.016), (dR, 0.018, 0.001), (dR, 0.030, 0.001), (dR * 0.56, 0.030, 0.002), (dR * 0.52, 0.060, 0.004), (0.060, 0.060)]
+        # the brake and the knuckle stay on the car when the wheel comes off
+        front = x == 0.0
         hubh = empty('hub_' + key, c, (0, sg * TR, WR), (0, 0, 0 if sg > 0 else math.pi))
         hubs = empty('hubspin_' + key, hubh)
-        lathe('disc_' + key, dprof, M['disc'], hubs, axis='Y', seg=96, rad=0.001, loc=(0, -0.035, 0))
-        lathe('hubface_' + key, [(0.0, 0.03), (0.07, 0.03, 0.003), (0.07, 0.0)], M['steel_h'], hubs, axis='Y', seg=48, rad=0.002, loc=(0, 0.0, 0))
+        dR, dt = (0.168, 0.026) if front else (0.150, 0.012)
+        pt.vented_disc('disc_' + key, hubs, M, dR, t=dt, hat=0.05, loc=(0, -0.020, 0), vanes=40 if front else 0)
+        lathe('hubface_' + key, [(0.0, 0.034), (0.068, 0.034, 0.003), (0.072, 0.026, 0.002), (0.072, 0.0)], M['disc_hub'], hubs, axis='Y', seg=64, rad=0.0)
         for i in range(5):
             a = vk.TAU * i / 5
-            cyl(f'stud_{key}{i}', 0.006, 0.03, M['zinc'], hubs, loc=(0.052 * math.sin(a), 0.042, 0.052 * math.cos(a)), axis='Y', seg=12)
-        lathe('hubnose_' + key, [(0.0, 0.058), (0.022, 0.058, 0.004), (0.028, 0.03)], M['steel_h'], hubs, axis='Y', seg=32, rad=0.002)
-        rbox('caliper_' + key, (0.15, 0.095, 0.075), M['caliper'], hubh, loc=(-0.075, -0.02, dR - 0.048), rot=(0, math.radians(-32), 0), r=0.018, seg=4)
-        rbox('knuckle_' + key, (0.11, 0.07, 0.24), M['iron'], hubh, loc=(0.0, -0.105, 0.0), r=0.025, seg=4)
-        cyl('bearing_' + key, 0.062, 0.07, M['iron'], hubh, loc=(0, -0.075, 0), axis='Y', bevel=0.006)
-        if x == 0.0:
-            extrude_poly('arm_' + key, [(0.03, sg * 0.66), (0.10, sg * 0.36), (-0.02, sg * 0.34), (-0.30, sg * 0.36), (-0.34, sg * 0.42), (-0.06, sg * 0.62), (-0.03, sg * 0.67)], 0.032, M['iron'], c, axis='Z', bevel=0.01, loc=(0, 0, 0.215))
-            tube('tierod_' + key, [(-0.16, sg * 0.36, 0.30), (-0.15, sg * 0.66, 0.31)], 0.009, M['steel'], c, smooth_path=False)
-            lathe('shaft_' + key, [(0.0, 0.0), (0.014, 0.0, 0.002), (0.014, 0.05), (0.04, 0.07, 0.008), (0.03, 0.10, 0.006), (0.036, 0.115, 0.004), (0.014, 0.135), (0.014, 0.30), (0.0, 0.30)], M['rubber'], c, axis='Y', seg=48, rad=0.003,
-                  loc=(0, sg * 0.36, WR), rot=(0, 0, 0 if sg > 0 else math.pi))
+            lathe(f'stud_{key}{i}', [(0.0, 0.0), (0.0062, 0.0, 0.0004), (0.0062, 0.036), (0.004, 0.040), (0.0, 0.040)], M['zinc'], hubs, axis='Y', seg=16, rad=0.0,
+                  loc=(0.052 * math.sin(a), 0.020, 0.052 * math.cos(a)))
+        lathe('hubnose_' + key, [(0.0, 0.066), (0.020, 0.066, 0.003), (0.026, 0.034)], M['disc_hub'], hubs, axis='Y', seg=32, rad=0.0)
+        a0, a1 = (112, 168) if sg > 0 else (12, 68)
+        pt.caliper('caliper_' + key, hubh, M, dR, dt, a0, a1, loc=(0, -0.020, 0))
+        # cast knuckle: bearing housing, an upright to the strut clamp, the steering arm and the ball-joint arm
+        lathe('bearing_' + key, [(0.030, -0.052), (0.074, -0.052, 0.008), (0.078, -0.072, 0.006), (0.074, -0.104, 0.008), (0.046, -0.112, 0.004), (0.030, -0.112)], M['cast'], hubh, axis='Y', seg=64, rad=0.0)
+        ky = sg * (TR - 0.088)
+        tube('knuckle_up_' + key, [(0.0, ky, WR + 0.05), (0.004, sg * 0.672, WR + 0.11), (0.0, sg * 0.669, 0.395)], 0.026, M['cast'], c)
+        rbox('knuckle_boss_' + key, (0.05, 0.032, 0.085), M['cast'], c, loc=(0.0, sg * 0.669, 0.365), r=0.010, seg=3)
+        tube('knuckle_lo_' + key, [(0.0, ky, WR - 0.05), (-0.004, sg * 0.672, WR - 0.08), (-0.004, sg * 0.660, 0.252)], 0.024, M['cast'], c)
+        if front:
+            tube('steer_arm_' + key, [(-0.05, ky, WR + 0.01), (-0.10, sg * 0.676, 0.322), (-0.150, sg * 0.662, 0.318)], 0.016, M['cast'], c)
+            # lower arm: a pressed steel wishbone with a bonded bush at each pivot and the ball joint at the knuckle
+            extrude_poly('arm_' + key, [(0.03, sg * 0.66), (0.075, sg * 0.36), (-0.02, sg * 0.35), (-0.29, sg * 0.37), (-0.33, sg * 0.42), (-0.06, sg * 0.62), (-0.03, sg * 0.67)], 0.036,
+                         M['ecoat_arm'], c, axis='Z', bevel=0.012, seg=3, loc=(0, 0, 0.215))
+            pt.bush('arm_bushf_' + key, c, M, (0.045, sg * 0.335, 0.215), axis='X', r=0.030, w=0.07)
+            pt.bush('arm_bushr_' + key, c, M, (-0.31, sg * 0.385, 0.215), axis='Z', r=0.042, w=0.05)
+            pt.ball_joint('balljoint_' + key, c, M, (-0.004, sg * 0.660, 0.226), (0, 0, 1), r=0.017, stud=0.035)
+            # steering: rack gaiter, tie rod, the outer track-rod end
+            pt.bellows('rackboot_' + key, c, M, 0.028, 0.012, 0.12, folds=7, depth=0.007, axis='Y', loc=(-0.16, sg * 0.36, 0.30), rot=(0, 0, 0 if sg > 0 else math.pi))
+            tube('tierod_' + key, [(-0.16, sg * 0.47, 0.30), (-0.152, sg * 0.62, 0.312)], 0.0095, M['steel_h'], c, smooth_path=False)
+            dm.hex_nut('tierod_nut_' + key, M['zinc'], 0.012, 0.012, 0, c).rotation_euler = (math.pi / 2, 0, 0)
+            bpy.data.objects['tierod_nut_' + key].location = (-0.153, sg * 0.605, 0.311)
+            pt.ball_joint('tre_' + key, c, M, (-0.150, sg * 0.645, 0.300), (0, 0, 1), r=0.015, stud=0.03)
+            # drive shaft: plunging inner joint, two boots, the bar and the outer bell into the hub
+            lathe('shaft_' + key, [(0.0, 0.30), (0.040, 0.30, 0.006), (0.046, 0.34, 0.006), (0.042, 0.40, 0.004), (0.020, 0.405), (0.0, 0.405)], M['cast'], c, axis='Y', seg=48, rad=0.0,
+                  loc=(0, 0, WR), rot=(0, 0, 0 if sg > 0 else math.pi))
+            pt.bellows('cvboot_in_' + key, c, M, 0.040, 0.016, 0.075, folds=5, depth=0.006, axis='Y', loc=(0, sg * 0.40, WR), rot=(0, 0, 0 if sg > 0 else math.pi))
+            cyl('shaft_bar_' + key, 0.0135, 0.14, M['steel_h'], c, loc=(0, sg * 0.53, WR), axis='Y', seg=32)
+            pt.bellows('cvboot_out_' + key, c, M, 0.016, 0.044, 0.085, folds=6, depth=0.006, axis='Y', loc=(0, sg * 0.585, WR), rot=(0, 0, 0 if sg > 0 else math.pi))
             base = (0.0, sg * 0.615, 0.305)
         else:
+            # trailing arm forward to its bush, the beam behind it
+            tube('trail_' + key, [(0.0, sg * (TR - 0.10), WR - 0.02), (0.20, sg * 0.66, 0.30), (0.42, sg * 0.62, 0.33)], 0.030, M['ecoat_arm'], c)
+            pt.bush('trail_bush_' + key, c, M, (0.45, sg * 0.62, 0.33), axis='Y', r=0.036, w=0.06)
             base = (0.03, sg * 0.60, 0.30)
-        st = strut_unit('strut_' + key, c, M, base, sg)
+        st = strut_unit('strut_' + key, c, M, base, sg, decal=DECAL_TURN.get(key, 0.0))
+        # where the strut's welded tabs are, in the corner's frame
+        R0 = Matrix.Translation(base) @ Euler(st['root'].rotation_euler).to_matrix().to_4x4()
+        link_top = R0 @ Vector((-(ln.ST['R'] + 0.015), 0.003, 0.150))
+        hose_top = R0 @ Vector((-0.004, ln.ST['R'] + 0.013, 0.170))
+        if front:
+            # anti-roll bar drop link: ball joint at the bar, ball joint at the strut tab
+            lo = Vector((link_top.x - 0.004, link_top.y + sg * 0.004, 0.318))
+            tube('droplink_' + key, [lo[:], link_top[:]], 0.0058, M['steel_h'], c, smooth_path=False)
+            for k, (p, d) in enumerate(((lo, (0, 0, 1)), (link_top, (0, 0, -1)))):
+                lathe(f'droplink_ball{k}_{key}', [(0.0, -0.016), (0.012, -0.012, 0.004), (0.014, 0.0, 0.004), (0.010, 0.012, 0.003), (0.006, 0.016), (0.0, 0.016)], M['rubber'], c, axis='Z', seg=24, rad=0.0, loc=(p + Vector(d) * 0.012)[:])
+            tube('arb_end_' + key, [(link_top.x - 0.004, sg * 0.50, 0.30), (link_top.x - 0.004, lo.y, 0.31)], 0.011, M['iron'], c, smooth_path=False)
+        # brake hose from the strut bracket down to the caliper, with a lazy loop
+        am = math.radians((a0 + a1) / 2) if sg > 0 else math.radians(180 - (a0 + a1) / 2)
+        cp = Vector((math.cos(am) * (dR - 0.03), sg * (TR - 0.085), WR + math.sin(am) * (dR - 0.03)))
+        pt.hose('hose_' + key, c, M, [hose_top[:], (hose_top + Vector((-0.04, sg * 0.02, 0.03)))[:], (cp + Vector((-0.07, -sg * 0.03, 0.09)))[:], (cp + Vector((-0.01, -sg * 0.01, 0.03)))[:], cp[:]])
         corners[key] = dict(root=c, off=off, spin=spin, hubspin=hubs, strut=st, sg=sg, x=x)
-    ghosts = [M[k] for k in ('paint', 'glass', 'lens', 'lens_red', 'black_gloss', 'black_trim', 'chrome', 'plate')]
+    ghosts = [M[k] for k in ('paint', 'glass', 'lens', 'lens_red', 'black_gloss', 'black_trim', 'chrome', 'plate', 'mirror', 'drl', 'amber', 'red_led', 'chrome_dark', 'black_satin', 'plate_art_plate_f', 'plate_art_plate_r')]
     wheel_ghosts = [WM['FL'][k] for k in ('tyre', 'alloy', 'black_gloss', 'zinc')]
-    chassis_ghosts = [M[k] for k in ('ecoat', 'alu', 'plastic', 'seat', 'steel', 'iron_c')]
+    chassis_ghosts = [M[k] for k in ('ecoat', 'alu', 'plastic', 'seat', 'steel', 'iron_c', 'screen')]
     return dict(car=car, sprung=sprung, chassis=ch, carriers=C, panels=P, corners=corners, M=M, ghosts=ghosts, wheel_ghosts=wheel_ghosts, chassis_ghosts=chassis_ghosts)
