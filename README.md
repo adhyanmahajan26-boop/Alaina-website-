@@ -76,7 +76,7 @@ python3 scripts/render/films.py car   /tmp/frames --res 800 --samples 40 --thres
 python3 scripts/render/films.py cabin /tmp/frames --res 720 --samples 24 --threshold 0.045   # truck and cabin damper (b000–b058)
 python3 scripts/render/films.py axle  /tmp/frames --res 720 --samples 24 --threshold 0.045   # light truck and axle shocker (x000–x058)
 python3 scripts/render/films.py rear  /tmp/frames --res 720 --samples 24 --threshold 0.045   # car from behind and rear strut (q000–q077)
-python3 scripts/render/encode_films.py /tmp/frames seq    # seq/film and the stills car, axle, rear
+python3 scripts/render/encode_films.py /tmp/frames seq    # seq/film/720, seq/film/1080 and the stills car, axle, rear
 
 python3 scripts/render/damper.py /tmp/frames scripts/render/sequence.json --res 1080 --samples 96   # the damper tour
 python3 scripts/render/encode.py /tmp/frames seq          # seq/720, seq/1080 and the still poster

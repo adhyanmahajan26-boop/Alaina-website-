@@ -27,7 +27,11 @@
   var wide = function () { return window.innerWidth > 860; };
   var big = wide() && window.innerWidth * (window.devicePixelRatio || 1) > 1500;
   var seqDir = stage.getAttribute('data-seq') || 'seq/';
-  var dirs = { c: seqDir + 'film/', b: seqDir + 'film/', s: seqDir + (big ? '1080/' : '720/'), r: seqDir + (big ? '1080/' : '720/') };
+  // the films come in two sizes: the larger one goes to sharp screens on a connection that can take it
+  var net = navigator.connection || {}, slow = net.saveData || /(^|-)[23]g$/.test(net.effectiveType || '');
+  var hd = stage.hasAttribute('data-hd') && !slow && sq.getBoundingClientRect().width * (window.devicePixelRatio || 1) > 900;
+  var film = seqDir + 'film/' + (hd ? '1080/' : '720/'), FMAX = hd ? 1080 : 720;
+  var dirs = { c: film, b: film, s: seqDir + (big ? '1080/' : '720/'), r: seqDir + (big ? '1080/' : '720/') };
   var F = { c: [], b: [], s: [], r: [] }, shown = '';
 
   function pad(i, n) { i = String(i); while (i.length < n) i = '0' + i; return i; }
@@ -69,7 +73,7 @@
     sq.style.transform = '';
     var r = sq.getBoundingClientRect(), view = stage.querySelector('.stage-view').getBoundingClientRect();
     side = r.width;
-    var px = Math.round(Math.min(big ? 1080 : 720, side * Math.min(window.devicePixelRatio || 1, 3)));
+    var px = Math.round(Math.min(Math.max(FMAX, big ? 1080 : 720), side * Math.min(window.devicePixelRatio || 1, 3)));
     if (cv.width !== px) { cv.width = px; cv.height = px; shown = ''; }
     if (wide()) { shiftY = 0; shiftS = 1; }
     else {
@@ -203,7 +207,9 @@
   if (!cvs.length || !cvs[0].getContext || !('IntersectionObserver' in window)) return;
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; // the still stays
   var stage = d.getElementById('stage');
-  var dir = ((stage && stage.getAttribute('data-seq')) || 'seq/') + 'film/';
+  var net = navigator.connection || {}, slow = net.saveData || /(^|-)[23]g$/.test(net.effectiveType || '');
+  var hd = stage && stage.hasAttribute('data-hd') && !slow && cvs[0].parentNode.getBoundingClientRect().width * (window.devicePixelRatio || 1) > 900;
+  var dir = ((stage && stage.getAttribute('data-seq')) || 'seq/') + 'film/' + (hd ? '1080/' : '720/'), FMAX = hd ? 1080 : 720;
   var live = [], running = false, last = 0;
 
   var items = cvs.map(function (cv) {
@@ -229,7 +235,7 @@
     })();
   }
   function size(it) {
-    var px = Math.round(Math.min(720, it.box.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 3)));
+    var px = Math.round(Math.min(FMAX, it.box.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 3)));
     if (px > 0 && it.cv.width !== px) { it.cv.width = px; it.cv.height = px; it.shown = -1; }
   }
   function ok(it, i) { var im = it.F[i]; return !!(im && im.ok); }
