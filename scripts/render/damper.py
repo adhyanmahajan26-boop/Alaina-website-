@@ -223,8 +223,9 @@ D = dict(
 )
 
 
-def build():
-    bpy.ops.wm.read_factory_settings(use_empty=True)
+def build(reset=True):
+    """reset=False builds the damper into the scene that is already open (the vehicle films do this)."""
+    if reset: bpy.ops.wm.read_factory_settings(use_empty=True)
     sc = bpy.context.scene
     M = {}
     M['paint'] = principled('paint', (0.011, 0.011, 0.013), 0.36, coat=0.35, coat_rough=0.12, bump=(1400, 0.035))

@@ -202,16 +202,16 @@ section{padding:clamp(64px,10vw,150px) 0}
 #mobnav .mn-foot a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border-radius:14px;font-weight:600;font-size:14px;border:1px solid var(--deep-line);background:rgba(10,10,11,.6)}
 #mobnav .mn-foot a:last-child{background:var(--wa);border-color:var(--wa);color:#fff}
 
-/* ════════════════ STAGE: the rendered damper, shared by hero and anatomy ════════════════ */
+/* ════════════════ STAGE: the hero film and the cabin damper film, on one canvas ════════════════ */
 .stage{position:relative;background:var(--deep);color:var(--deep-text);margin-top:calc(-1*var(--nav-h));isolation:isolate}
 .stage-view{position:sticky;top:0;height:100vh;height:100svh;z-index:1;overflow:hidden;pointer-events:none}
 .stage-glow{
-  position:absolute;inset:0;
+  position:absolute;inset:0;transition:opacity .7s var(--ease);
   background:radial-gradient(70% 44% at 64% 62%,rgba(255,74,26,.17),transparent 72%),radial-gradient(60% 40% at 22% 34%,rgba(130,150,255,.07),transparent 70%);
 }
 .stage-sq{
-  --sq:min(118vw,calc(100vh - 226px));--sq:min(118vw,calc(100svh - 226px));
-  position:absolute;left:50%;bottom:calc(var(--dock-h) - 34px);width:var(--sq);height:var(--sq);transform:translateX(-50%);
+  --sq:min(130vw,calc(100vh - 250px));--sq:min(130vw,calc(100svh - 250px));
+  position:absolute;left:50%;bottom:calc(var(--dock-h) - 44px);width:var(--sq);height:var(--sq);transform:translateX(-50%);
   pointer-events:auto;touch-action:pan-y;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;will-change:transform;
 }
 .stage-sq canvas,.stage-poster{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -224,10 +224,15 @@ section{padding:clamp(64px,10vw,150px) 0}
 }
 /* close-ups run past the edge of the frame, so the edges melt into the studio instead of cutting off */
 .touring .stage-sq canvas{--mf:16%}
-.stage-poster{animation:arrive 1.4s var(--ease-out) both}
+/* the films are rendered on their own studio floor: their frames fade into the page, and the page glow steps back */
+.film .stage-sq canvas{--mf:7%}
+.film .stage-glow{opacity:0}
+.stage-poster{animation:arrive 1.4s var(--ease-out) both;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
 .seq-on .stage-sq canvas{opacity:1}
-.seq-on .stage-poster{visibility:hidden}
-@keyframes arrive{from{opacity:0;transform:translate(-7%,7%) scale(.94)}to{opacity:1;transform:none}}
+.seq .stage-poster{visibility:hidden}
+/* with scripting on, the film starts from an empty studio, so its last frame must not flash up first */
+@media(prefers-reduced-motion:no-preference){.js .stage-poster{visibility:hidden}}
+@keyframes arrive{from{opacity:0}to{opacity:1}}
 
 #hero{
   position:relative;z-index:2;padding:0;min-height:100vh;min-height:100svh;margin-top:-100vh;margin-top:-100svh;
@@ -249,16 +254,22 @@ h1.hero-title .l2{font-size:calc(var(--w)/6.55);color:var(--deep-60);animation:r
 .hero-cta-row .btn{min-height:46px;padding:0 18px;font-size:14.5px}
 @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 .hero-read{
-  position:absolute;right:var(--pad);bottom:calc(var(--dock-h) + 16px);text-align:right;display:flex;flex-direction:column;gap:3px;
-  font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--deep-40);animation:rise 1s var(--ease-out) 1s both;
-  transition:opacity .4s;
+  position:absolute;right:var(--pad);bottom:calc(var(--dock-h) + 16px);display:flex;align-items:center;
+  font-family:var(--fm);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--deep-60);
+  border:1px solid var(--deep-line);border-radius:12px;background:rgba(10,10,11,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility 0s .5s;
 }
-.hero-read .hr-hint{color:var(--deep-60);display:flex;align-items:center;justify-content:flex-end;gap:8px}
-.hero-read .hr-hint::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blip 1.8s ease-out infinite}
-.hero-read .hr-hint.used::before{animation:none;opacity:.5}
-@keyframes blip{0%{box-shadow:0 0 0 0 rgba(255,74,26,.6)}100%{box-shadow:0 0 0 9px rgba(255,74,26,0)}}
-.hero-read b{font-weight:500;color:#fff;font-size:13px;font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.touring .hero-read{opacity:0}
+.hero-read.done{opacity:1;visibility:visible;transition-delay:0s}
+.hero-read .hr-hint{display:flex;align-items:center;gap:8px;padding:0 12px;white-space:nowrap}
+.hero-read .hr-hint::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.hr-replay{
+  display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 12px;border:0;border-left:1px solid var(--deep-line);border-radius:0 11px 11px 0;background:none;
+  font:inherit;letter-spacing:.14em;text-transform:uppercase;color:#fff;cursor:pointer;pointer-events:auto;transition:background .2s;
+}
+.hr-replay .ico{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hr-replay:hover{background:rgba(255,255,255,.08)}
+.hr-replay:active{background:rgba(255,255,255,.14)}
+.stage:not(.film) .hero-read,.touring .hero-read{opacity:0;visibility:hidden}
 html:not(.seq) .hero-read{display:none}
 .hero-cta-row .hero-open{min-height:56px;padding:0 8px 0 18px;gap:12px;font-size:16px}
 .hero-open i{font-style:normal;font-family:var(--fm);font-size:10.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:7px 8px;border-radius:7px;background:rgba(20,10,6,.13);line-height:1}
@@ -289,12 +300,12 @@ html:not(.seq) .hero-read{display:none}
   .hero-cta-row .btn{min-height:58px;padding:0 24px;font-size:15px}
   .hero-cta-row .hero-open{min-height:58px;padding:0 9px 0 22px;font-size:16px}
   .hero-scroll{margin-top:34px;font-size:11px}
-  .hero-read{right:auto;left:var(--pad);bottom:auto;top:calc(var(--nav-h) + 28px);text-align:left;display:none}
+  .hero-read{right:max(var(--pad),calc((100vw - var(--max))/2 + var(--pad)));bottom:34px}
 }
 
 /* ─── anatomy: scrolling takes the damper apart, one part per stop ─── */
 #anatomy{position:relative;z-index:2;padding:0;pointer-events:none}
-.seq #anatomy{height:620vh;height:620svh}
+.seq #anatomy{height:820vh;height:820svh}
 .seq .an-pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column}
 .seq .an-pin::after{content:'';position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,transparent,rgba(10,10,11,.9) 62%);z-index:-1}
 .an-wrap{flex:1;width:100%;display:flex;flex-direction:column;padding-top:calc(var(--nav-h) + 14px);padding-bottom:calc(var(--dock-h) + 20px)}
@@ -305,6 +316,7 @@ html:not(.seq) .hero-read{display:none}
 .seq .an-steps li.is-active{opacity:1;transform:none}
 .an-no{font-family:var(--fm);font-size:11px;letter-spacing:.14em;color:var(--accent);display:block;margin-bottom:8px}
 .an-no::after{content:' / 06';color:var(--deep-40)}
+.an-lead::before{content:'On the truck';font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:8px}
 .an-steps h4{font-family:var(--fd);font-weight:800;font-stretch:62%;font-size:clamp(38px,11.4vw,64px);text-transform:uppercase;letter-spacing:-.005em;line-height:.9}
 .an-steps p{font-size:15px;line-height:1.5;color:var(--deep-60);margin-top:10px;max-width:420px}
 .an-bar{display:flex;gap:5px;margin-top:16px}
@@ -318,6 +330,7 @@ html:not(.seq) .hero-read{display:none}
   .seq .an-steps li.is-active{opacity:1;border-left-color:var(--accent)}
   .an-no{display:inline;margin:0 12px 0 0}
   .an-no::after{content:''}
+  .an-lead::before{display:inline;margin:0 12px 0 0}
   .an-steps h4{display:inline;font-size:26px}
   .seq .an-steps li p{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease),margin .45s;margin-top:0}
   .seq .an-steps li p>span{overflow:hidden}
@@ -385,6 +398,10 @@ html:not(.seq) #range{padding-bottom:20px}
 .line-sq canvas{opacity:0}
 .line-sq.on canvas{opacity:1}
 .line-sq.on img{visibility:hidden}
+/* a film brings its own studio floor: no page glow behind it, and its edges fade into the page */
+.line-film .line-vis::before{display:none}
+.line-film .line-sq{width:min(124vw,84vh);width:min(124vw,84svh);top:50%}
+.line-film .line-sq img,.line-film .line-sq canvas{-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
 .line-copy{position:relative;z-index:1;margin-top:-9vh;padding:84px 0 clamp(70px,10vw,130px);background:linear-gradient(180deg,rgba(10,10,11,0),var(--deep) 120px)}
 .line .sec-kicker{color:var(--deep-60)}
 .line .sec-title{font-size:clamp(52px,14.6vw,116px);margin-top:12px}
@@ -399,7 +416,7 @@ html:not(.seq) #range{padding-bottom:20px}
   .line-foot .wrap{grid-template-columns:minmax(300px,400px) 1fr;align-items:center;gap:clamp(30px,5vw,80px)}
   .line{display:grid;grid-template-columns:1fr 1fr;align-items:start}
   .line-vis{height:100vh}
-  .line-sq{width:min(50vw,92vh)}
+  .line-sq,.line-film .line-sq{width:min(50vw,92vh)}
   .line-copy{margin-top:0;background:none;padding:clamp(120px,24vh,240px) 0}
   .line-copy .wrap{max-width:calc(var(--max)/2);margin:0;padding-right:var(--pad);padding-left:clamp(20px,3vw,48px)}
   .line-flip .line-vis{order:2}

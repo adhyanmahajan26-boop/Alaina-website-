@@ -1,39 +1,52 @@
-/* Alaina — the rendered products on the homepage.
-   The cabin damper has three frame sets, drawn to one canvas:
-     h  the damper at rest, swept through its stroke (driven by a spring-and-damper model you can press)
-     s  the scroll sequence: it comes apart and the camera visits each part
-     r  the assembled unit cycling on the rig
-   The shocker (k) and the strut (t) each turn through one short set as their section scrolls past.
-   Frames are pre-rendered with scripts/render/damper.py and lines.py (see README), so this looks the same on every phone. */
+/* Alaina — the rendered films on the homepage.
+   One canvas is shared by the hero and "Inside a cabin damper":
+     c  hero film: a car drives in, brakes, its body lifts apart and the camera goes in to the strut (plays by itself)
+     b  a truck pulls up, its cabin lifts apart and the camera goes in to the cabin damper (played by scrolling)
+     s  the cabin damper comes apart and the camera visits each part (played by scrolling, straight after b)
+     r  the assembled damper cycling on the rig
+   Further down, the shocker section plays x (a light truck and its axle shocker) and the strut section plays q
+   (the car again, from behind, and its rear strut).
+   Frames are pre-rendered with scripts/render (see README), so this looks the same on every phone. */
 (function () {
   'use strict';
   var d = document, root = d.documentElement;
   var stage = d.getElementById('stage'), cv = d.getElementById('seq');
   if (!stage || !cv || !cv.getContext) return;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) return; // the poster frame and a plain list of parts stay in place
+  if (reduce) return; // the still frame and a plain list of parts stay in place
 
   var ctx = cv.getContext('2d');
   var sq = stage.querySelector('.stage-sq'), anatomy = d.getElementById('anatomy'), intro = d.getElementById('range');
-  var steps = [].slice.call(stage.querySelectorAll('.an-steps li'));
+  var steps = [].slice.call(stage.querySelectorAll('.an-steps li:not(.an-lead)'));
   var ticks = [].slice.call(stage.querySelectorAll('.an-bar i'));
-  var travel = d.getElementById('travel'), hint = stage.querySelector('.hr-hint');
+  var lead = stage.querySelector('.an-lead'), replay = d.getElementById('replay'), read = stage.querySelector('.hero-read');
 
-  var N = { h: 24, s: 85, r: 12 }, SEG = 14;         // SEG frames between two stops of the scroll sequence
-  var H_REST = 4, H_MM = 2.7, R_REST = 2, R_MM = 4.5; // millimetres of stroke per frame
+  var N = { c: +cv.getAttribute('data-c') || 78, b: +cv.getAttribute('data-b') || 59, s: 85, r: 12 }, SEG = 14; // SEG frames between two stops of the tour
+  var FPS = 18, HOLD = 10, XF = 5;             // scroll "frames" the truck film rests on the damper, then dissolves to the damper on its own
+  var R_REST = 2, R_MM = 4.5;                  // millimetres of stroke per frame on the rig
   var wide = function () { return window.innerWidth > 860; };
   var big = wide() && window.innerWidth * (window.devicePixelRatio || 1) > 1500;
-  var base = (stage.getAttribute('data-seq') || 'seq/') + (big ? '1080/' : '720/');
-  var F = { h: [], s: [], r: [] }, dirty = true, shown = '';
+  var seqDir = stage.getAttribute('data-seq') || 'seq/';
+  var dirs = { c: seqDir + 'film/', b: seqDir + 'film/', s: seqDir + (big ? '1080/' : '720/'), r: seqDir + (big ? '1080/' : '720/') };
+  var F = { c: [], b: [], s: [], r: [] }, shown = '';
 
   function pad(i, n) { i = String(i); while (i.length < n) i = '0' + i; return i; }
-  function load(set, i) {
+  function load(set, i, cb) {
     if (F[set][i]) return;
     var im = new Image();
     im.decoding = 'async';
-    im.onload = function () { im.ok = true; dirty = true; if (!root.classList.contains('seq-on') && set === 'h' && i === H_REST) { root.classList.add('seq-on'); } };
-    im.src = base + set + pad(i, set === 's' ? 3 : 2) + '.webp';
+    im.onload = function () { im.ok = true; shown = ''; if (cb) cb(); };
+    im.onerror = function () { if (cb) cb(); };
+    im.src = dirs[set] + set + pad(i, set === 'r' ? 2 : 3) + '.webp';
     F[set][i] = im;
+  }
+  // a film loads in order, a few frames at a time, so the first frames are never stuck behind the last ones
+  function loadInOrder(set, done) {
+    var next = 0, open = 0;
+    (function pump() {
+      while (open < 4 && next < N[set]) { open++; load(set, next++, function () { open--; pump(); }); }
+      if (next >= N[set] && open === 0 && done) { var f = done; done = null; f(); }
+    })();
   }
   function loadSet(set, order) { for (var k = 0; k < order.length; k++) load(set, order[k]); }
   function range(n, step, from) { var a = []; for (var i = from || 0; i < n; i += step) a.push(i); return a; }
@@ -47,9 +60,10 @@
     }
     return null;
   }
+  function ready(set, i) { var im = F[set][i]; return !!(im && im.ok); }
 
-  /* layout: on phones the damper sits low in the hero and moves up under the heading once the tour starts */
-  var vh = 0, side = 0, shiftY = 0, shiftS = 1, anTop = 0, anLen = 1, inTop = 0, inH = 0, dimNow = -1;
+  /* layout: on phones the picture sits low in the hero and moves up under the heading once the tour starts */
+  var vh = 0, side = 0, shiftY = 0, shiftS = 1, anTop = 0, anLen = 1, inTop = 0, inH = 0, dimNow = -1, PB = 0.3;
   function measure() {
     vh = window.innerHeight;
     sq.style.transform = '';
@@ -67,85 +81,92 @@
       shiftY = (top + s2 / 2) - ((r.top - view.top) + side / 2);
     }
     var a = anatomy.getBoundingClientRect(), y = window.pageYOffset;
-    anTop = a.top + y - vh * 0.06;                 // the tour starts once the products title card has left
+    anTop = a.top + y - vh * 0.06;                 // the truck starts to arrive once the products title card has left
     anLen = Math.max(1, a.top + y + a.height - vh - anTop);
     if (intro) { var ir = intro.getBoundingClientRect(); inTop = ir.top + y; inH = ir.height; }
-    dirty = true;
+    shown = '';
   }
 
-  /* spring and damper: x is compression in mm */
-  var x = 0, v = 0, pressed = false, last = 0, nextBump = 0, fS = 0, inView = true, started = false;
-  var W0 = 2 * Math.PI * 2.1, ZETA = 0.3;
-  function physics(dt, now) {
-    var target = pressed ? 40 : 0;
-    var acc = -W0 * W0 * (x - target) - 2 * ZETA * W0 * v;
-    v += acc * dt; x += v * dt;
-    if (x > 51) { x = 51; v = 0; }
-    if (x < -10.5) { x = -10.5; v = 0; }
-    if (!pressed && now > nextBump) {            // the road keeps talking
-      v += 160 + Math.random() * 240;
-      nextBump = now + 2600 + Math.random() * 2600;
-    }
-  }
+  /* the hero film runs on a clock that only moves while the next frame is there to show */
+  var clock = 0, playing = false, ended = false, last = 0, inView = true, started = false, pos = 0;
+  function play() { clock = 0; playing = true; ended = false; shown = ''; if (read) read.classList.remove('done'); }
 
-  function draw(im, key) {
-    if (!im || key === shown) return;
-    shown = key;
-    ctx.clearRect(0, 0, cv.width, cv.height);
+  var prevIm = null, curIm = null, curSet = '', swT = -1e9;
+  function put(im, a) {
+    if (!im) return;
+    ctx.globalAlpha = a;
     ctx.drawImage(im, 0, 0, cv.width, cv.height);
+  }
+  // draw one frame, or two blended; a change of film dissolves instead of cutting
+  function draw(now, set, im, key, im2, mix) {
+    var fading = now - swT < 420;
+    if (!im || (key === shown && !fading)) return;
+    if (set !== curSet) { if (curSet && curIm) { prevIm = curIm; swT = now; fading = true; } curSet = set; }
+    shown = key; curIm = im;
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    put(im, 1);
+    if (im2 && mix > 0.01) put(im2, mix);
+    if (fading && prevIm) put(prevIm, 1 - (now - swT) / 420);
+    ctx.globalAlpha = 1;
   }
 
   function frame(now) {
     requestAnimationFrame(frame);
     if (!inView || d.hidden || root.classList.contains('cat-open')) { last = now; return; }
-    var dt = Math.min(0.033, (now - last) / 1000 || 0.016); last = now;
+    var dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
     var sy = window.pageYOffset;
     var ap = Math.max(0, Math.min(1, (sy - anTop) / anLen));
-    // on phones the products title card passes over the damper, so the damper steps back while it does
+    // on phones the products title card passes over the picture, so the picture steps back while it does
     if (inH) {
       var k = wide() ? 0 : Math.max(0, Math.min(1, Math.min((sy + vh - inTop) / (vh * 0.24) - 0.1, (inTop + inH - sy) / (vh * 0.3) + 0.85)));
       k = k * k * (3 - 2 * k);
-      if (Math.abs(k - dimNow) > 0.004) { dimNow = k; sq.style.opacity = (1 - 0.8 * k).toFixed(3); }
+      if (Math.abs(k - dimNow) > 0.004) { dimNow = k; sq.style.opacity = (1 - 0.84 * k).toFixed(3); }
     }
-    var tF = ap * (N.s - 1);
-    fS += (tF - fS) * Math.min(1, dt * 9);
-    if (Math.abs(tF - fS) < 0.02) fS = tF;
-    var touring = fS > 0.3, m = Math.max(0, Math.min(1, fS / 6));
+    // one scroll position runs the truck film, the dissolve and then the tour of the damper
+    var end = N.b - 1, pre = end + HOLD, tgt = ap <= 0 ? 0 : ap < PB ? ap / PB * pre : pre + XF + (ap - PB) / (1 - PB) * (N.s - 1);
+    pos += (tgt - pos) * Math.min(1, dt * 9);
+    if (Math.abs(tgt - pos) < 0.02) pos = tgt;
+    var fS = pos - pre - XF;                         // frame of the tour (negative while the truck is still on)
+    var touring = fS > 0.3, m = Math.max(0, Math.min(1, pos / 6));
     m = m * m * (3 - 2 * m);
     if (!wide()) sq.style.transform = 'translate(-50%,' + (shiftY * m).toFixed(1) + 'px) scale(' + (1 + (shiftS - 1) * m).toFixed(4) + ')';
     stage.classList.toggle('touring', touring);
+    stage.classList.toggle('film', fS < 1);
 
-    var onRig = fS > N.s - 1.4;
-    if (!touring) {
-      physics(dt, now);
-      var hi = Math.round(H_REST + x / H_MM);
-      draw(pick('h', hi), 'h' + hi);
-      if (travel) { var tx = Math.abs(x) < 0.15 ? 0 : x; travel.textContent = (tx < 0 ? '-' : '') + pad(Math.abs(tx).toFixed(1), 4); }
-    } else if (onRig) {
+    if (ap <= 0 && pos < 0.5) {
+      // hero
+      if (playing) {
+        var want = Math.floor(clock * FPS);
+        if (want >= N.c - 1) { want = N.c - 1; playing = false; ended = true; if (read) read.classList.add('done'); }
+        else if (ready('c', Math.min(N.c - 1, want + 1))) clock += dt;
+        if (ready('c', want)) draw(now, 'c', F.c[want], 'c' + want);
+        var ahead = F.c[want + 2]; if (ahead && ahead.ok && ahead.decode) ahead.decode().catch(function () {});
+      } else {
+        draw(now, 'c', pick('c', ended ? N.c - 1 : 0), 'c' + (ended ? 'end' : 'start'));
+      }
+    } else if (fS <= -XF) {
+      var bi = Math.min(end, Math.round(pos));
+      draw(now, 'b', pick('b', bi), 'b' + bi);
+    } else if (fS < 0) {
+      var mix = 1 + fS / XF;                          // 0 → 1 across the dissolve
+      draw(now, 'b', pick('b', end), 'x' + mix.toFixed(2), pick('s', 0), mix);
+    } else if (fS > N.s - 1.4) {
       var rx = 17 + 16 * Math.sin(now / 1000 * 2 * Math.PI * 1.25);
       var ri = Math.round(R_REST + rx / R_MM);
-      draw(pick('r', ri), 'r' + ri);
+      draw(now, 's', pick('r', ri), 'r' + ri);
     } else {
       var si = Math.round(fS);
-      draw(pick('s', si), 's' + si);
+      draw(now, 's', pick('s', si), 's' + si);
     }
     // which part the camera is on
     var stop = Math.round(fS / SEG), near = Math.abs(fS - stop * SEG) < SEG * 0.42;
-    for (var i = 0; i < steps.length; i++) steps[i].classList.toggle('is-active', near && stop === i + 1);
+    for (var i = 0; i < steps.length; i++) steps[i].classList.toggle('is-active', fS > 0 && near && stop === i + 1);
     for (var j = 0; j < ticks.length; j++) ticks[j].classList.toggle('on', fS >= (j + 1) * SEG - SEG * 0.42);
+    if (lead) lead.classList.toggle('is-active', ap > 0 && fS < SEG * 0.42);
   }
 
-  /* pressing the damper loads it; letting go lets it settle */
-  function down(e) {
-    if (stage.classList.contains('touring')) return;
-    pressed = true; nextBump = Infinity;
-    if (hint) hint.classList.add('used');
-  }
-  function up() { if (pressed) { pressed = false; nextBump = performance.now() + 4000; } }
-  sq.addEventListener('pointerdown', down);
-  window.addEventListener('pointerup', up);
-  window.addEventListener('pointercancel', up);
-  window.addEventListener('scroll', function () { if (pressed) up(); }, { passive: true });
+  if (replay) replay.addEventListener('click', function () { if (window.pageYOffset < anTop) play(); });
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (en) { inView = en[0].isIntersecting; }, { rootMargin: '200px' }).observe(stage);
@@ -157,102 +178,92 @@
 
   root.classList.add('seq');
   measure();
-  load('h', H_REST);
-  loadSet('h', range(N.h, 1));
-  // the scroll sequence loads once the first paint is out of the way: every other frame first, then the rest
+  // the truck and the tour load once the hero film is in, or as soon as the reader starts to scroll
   function later() {
     if (started) return; started = true;
-    loadSet('s', range(N.s, 2));
-    loadSet('s', range(N.s, 2, 1));
-    loadSet('r', range(N.r, 1));
+    loadInOrder('b', function () {
+      loadSet('s', range(N.s, 2));
+      loadSet('s', range(N.s, 2, 1));
+      loadSet('r', range(N.r, 1));
+    });
   }
-  if (d.readyState === 'complete') setTimeout(later, 400); else window.addEventListener('load', function () { setTimeout(later, 400); });
+  load('c', 0, function () { root.classList.add('seq-on'); });
+  loadInOrder('c', later);
   window.addEventListener('scroll', later, { passive: true, once: true });
-  // settle in on arrival
-  x = 34; v = 0; nextBump = performance.now() + 3200;
+  // someone who lands part-way down the page (a #link, a reload) should not come back up to a film in mid-flow
+  if (window.pageYOffset > anTop) { ended = true; if (read) read.classList.add('done'); } else play();
   requestAnimationFrame(function (t) { last = t; frame(t); });
 })();
 
-/* The shocker and the strut: a short rendered set each, turned by the scroll position of its section. */
+/* The product lines further down: a canvas with data-film plays its film once, each time its picture comes well into view. */
 (function () {
   'use strict';
   var d = document;
-  var cvs = [].slice.call(d.querySelectorAll('canvas[data-scrub]'));
+  var cvs = [].slice.call(d.querySelectorAll('canvas[data-film]'));
   if (!cvs.length || !cvs[0].getContext || !('IntersectionObserver' in window)) return;
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; // the still stays
   var stage = d.getElementById('stage');
-  var big = window.innerWidth > 860 && window.innerWidth * (window.devicePixelRatio || 1) > 1500;
-  var base = ((stage && stage.getAttribute('data-seq')) || 'seq/') + (big ? '1080/' : '720/');
+  var dir = ((stage && stage.getAttribute('data-seq')) || 'seq/') + 'film/';
   var live = [], running = false, last = 0;
 
   var items = cvs.map(function (cv) {
-    var it = { cv: cv, ctx: cv.getContext('2d'), set: cv.getAttribute('data-scrub'), n: +cv.getAttribute('data-n') || 30,
-      box: cv.parentNode, host: cv.closest('.line') || cv.parentNode, F: [], f: -1, shown: -1, loaded: false };
-    return it;
+    return { cv: cv, ctx: cv.getContext('2d'), set: cv.getAttribute('data-film'), n: +cv.getAttribute('data-n') || 59, fps: +cv.getAttribute('data-fps') || 14,
+      box: cv.parentNode, host: cv.closest('.line') || cv.parentNode, F: [], t: 0, shown: -1, loaded: false, seen: false };
   });
-  function pad(i) { return (i < 10 ? '0' : '') + i; }
+  function pad(i) { i = String(i); while (i.length < 3) i = '0' + i; return i; }
+  // frames load in order, a few at a time, so the film can start before the whole of it is in
   function load(it) {
     if (it.loaded) return; it.loaded = true;
-    // middle frame first so there is something to show, then every other frame, then the rest
-    var order = [it.n >> 1], i;
-    for (i = 0; i < it.n; i += 2) order.push(i);
-    for (i = 1; i < it.n; i += 2) order.push(i);
-    order.forEach(function (k) {
-      if (it.F[k]) return;
-      var im = new Image(); im.decoding = 'async';
-      im.onload = function () { im.ok = true; it.shown = -1; if (!it.box.classList.contains('on')) { size(it); it.box.classList.add('on'); } kick(); };
-      im.src = base + it.set + pad(k) + '.webp';
-      it.F[k] = im;
-    });
+    var next = 0, open = 0;
+    (function pump() {
+      while (open < 4 && next < it.n) {
+        open++;
+        (function (k) {
+          var im = new Image(); im.decoding = 'async';
+          im.onload = function () { im.ok = true; open--; if (k === 0 && !it.box.classList.contains('on')) { size(it); it.box.classList.add('on'); } kick(); pump(); };
+          im.onerror = function () { open--; pump(); };
+          im.src = dir + it.set + pad(k) + '.webp';
+          it.F[k] = im;
+        })(next++);
+      }
+    })();
   }
   function size(it) {
-    var px = Math.round(Math.min(big ? 1080 : 720, it.box.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 3)));
+    var px = Math.round(Math.min(720, it.box.getBoundingClientRect().width * Math.min(window.devicePixelRatio || 1, 3)));
     if (px > 0 && it.cv.width !== px) { it.cv.width = px; it.cv.height = px; it.shown = -1; }
   }
-  function pick(it, i) {
-    for (var k = 0; k < it.n; k++) {
-      var a = it.F[i - k], b = it.F[i + k];
-      if (a && a.ok) return a;
-      if (b && b.ok) return b;
-    }
-    return null;
-  }
+  function ok(it, i) { var im = it.F[i]; return !!(im && im.ok); }
   function frame(now) {
     if (!live.length) { running = false; return; }
     requestAnimationFrame(frame);
     var dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
-    var vh = window.innerHeight;
     live.forEach(function (it) {
-      var r = it.host.getBoundingClientRect();
-      // 0 as the section rises into view, 1 once most of it has gone by
-      var p = Math.max(0, Math.min(1, (vh * 0.92 - r.top) / Math.max(1, r.height - vh * 0.08)));
-      var target = p * (it.n - 1);
-      it.f = it.f < 0 ? target : it.f + (target - it.f) * Math.min(1, dt * 8);
-      var i = Math.round(it.f);
-      if (i === it.shown) return;
-      var im = pick(it, i);
-      if (!im) return;
+      var i = Math.min(it.n - 1, Math.floor(it.t * it.fps));
+      if (i < it.n - 1 && ok(it, i + 1)) it.t += dt;             // waits for frames that have not arrived
+      if (i === it.shown || !ok(it, i)) return;
       it.shown = i;
       it.ctx.clearRect(0, 0, it.cv.width, it.cv.height);
-      it.ctx.drawImage(im, 0, 0, it.cv.width, it.cv.height);
+      it.ctx.drawImage(it.F[i], 0, 0, it.cv.width, it.cv.height);
     });
   }
   function kick() { if (!running && live.length) { running = true; last = performance.now(); requestAnimationFrame(frame); } }
 
   var near = new IntersectionObserver(function (en) {
     en.forEach(function (e) { if (e.isIntersecting) { items.forEach(function (it) { if (it.host === e.target) load(it); }); near.unobserve(e.target); } });
-  }, { rootMargin: '120% 0px' });
+  }, { rootMargin: '150% 0px' });
+  // the picture has to be well on screen before its film starts; it starts again once it has left and come back
   var seen = new IntersectionObserver(function (en) {
     en.forEach(function (e) {
       items.forEach(function (it) {
-        if (it.host !== e.target) return;
+        if (it.box !== e.target) return;
         var k = live.indexOf(it);
-        if (e.isIntersecting && k < 0) { live.push(it); size(it); } else if (!e.isIntersecting && k >= 0) live.splice(k, 1);
+        if (e.isIntersecting && e.intersectionRatio >= 0.45) { if (k < 0) { if (!it.seen) { it.t = 0; it.shown = -1; it.seen = true; } live.push(it); size(it); } }
+        else if (!e.isIntersecting) { if (k >= 0) live.splice(k, 1); it.seen = false; }
       });
     });
     kick();
-  }, { rootMargin: '10% 0px' });
-  items.forEach(function (it) { near.observe(it.host); seen.observe(it.host); });
+  }, { threshold: [0, 0.45] });
+  items.forEach(function (it) { near.observe(it.host); seen.observe(it.box); });
   var rt;
   window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { items.forEach(size); }, 150); });
 })();

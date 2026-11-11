@@ -1,4 +1,5 @@
 """Encode rendered PNG frames into the site's seq/ folder (two sizes, WebP with alpha).
+Only the sets the site plays are written: s and r (the damper tour and the damper on the rig).
 
 usage: encode.py <frames dir> seq
        encode.py --partner <partner.png> images     (writes partner-x.webp and partner-x-720.webp)
@@ -16,6 +17,7 @@ for size, q in ((720, 74), (1080, 78)):
 tot = {720: 0, 1080: 0}; n = 0
 for f in sorted(glob.glob(src + '/*.png')):
     name = os.path.basename(f)[:-4]
+    if name[0] not in 'sr' or len(name) > 4: continue      # the vehicle films are encode_films.py's; h, k and t are no longer played
     for size, q in ((720, 74), (1080, 78)):
         out = f'{dst}/{size}/{name}.webp'
         if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(f):
@@ -25,7 +27,7 @@ for f in sorted(glob.glob(src + '/*.png')):
         tot[size] += os.path.getsize(out)
     n += 1
 # stills shown before the frames arrive, and kept when motion is switched off
-for frame, still in (('h04', 'poster'), ('k15', 'shock'), ('t15', 'strut')):
+for frame, still in (('h04', 'poster'),):
     if os.path.exists(f'{src}/{frame}.png'):
         im = Image.open(f'{src}/{frame}.png').convert('RGBA')
         im.save(f'{dst}/{still}.webp', 'WEBP', quality=80, method=6, alpha_quality=90)
