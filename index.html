@@ -40,7 +40,7 @@
 <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
 <script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}setTimeout(function(){if(!window.__alainaReady)d.classList.remove('js')},3000)})();</script>
-<link rel="stylesheet" href="style.css?v=31"/>
+<link rel="stylesheet" href="style.css?v=33"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -367,13 +367,13 @@
 </div>
 
 <main>
-<!-- ═══ STAGE: hero and anatomy share one rendered damper ═══ -->
-<div class="stage" id="stage" data-seq="seq/">
+<!-- ═══ STAGE: the hero film and the cabin damper film share one canvas ═══ -->
+<div class="stage" id="stage" data-seq="seq/" data-hd>
   <div class="stage-view" aria-hidden="true">
     <div class="stage-glow"></div>
     <div class="stage-sq">
-      <img class="stage-poster" src="seq/poster.webp" alt="" width="1080" height="1080" fetchpriority="high" decoding="async"/>
-      <canvas id="seq" width="720" height="720"></canvas>
+      <img class="stage-poster" src="seq/car.webp" alt="" width="800" height="800" decoding="async"/>
+      <canvas id="seq" width="720" height="720" data-c="78" data-b="59"></canvas>
     </div>
   </div>
 
@@ -390,9 +390,9 @@
       </div>
       <a class="hero-scroll" href="#range"><i aria-hidden="true"></i><span>Scroll</span><b>Our products</b></a>
     </div>
-    <div class="hero-read" aria-hidden="true">
-      <span class="hr-hint">Press the damper</span>
-      <span class="hr-val"><b id="travel">00.0</b> mm travel</span>
+    <div class="hero-read">
+      <span class="hr-hint" aria-hidden="true">Front strut, as fitted</span>
+      <button class="hr-replay" id="replay" type="button"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.6h4.6"/></svg>Replay</button>
     </div>
   </section>
 
@@ -421,6 +421,7 @@
           <h3 class="sec-title" id="an-h">Inside a cabin damper</h3>
         </div>
         <ol class="an-steps">
+          <li class="an-lead"><h4>Under the cabin</h4><p><span>The cabin sits on dampers between it and the chassis. They take the jolts of the road before they reach the driver.</span></p></li>
           <li><span class="an-no">01</span><h4>Mounting eyes</h4><p><span>Bushed eyes at both ends carry the cabin's movement without knocking.</span></p></li>
           <li><span class="an-no">02</span><h4>Damper body</h4><p><span>Length and stroke are matched to the OE part number it replaces.</span></p></li>
           <li><span class="an-no">03</span><h4>Coil spring</h4><p><span>Holds the cabin at ride height, so the damper only has to control it.</span></p></li>
@@ -429,6 +430,7 @@
           <li><span class="an-no">06</span><h4>Tested as one unit</h4><p><span>Every unit is cycled on the rig and pressure-tested before dispatch.</span></p></li>
         </ol>
         <div class="an-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <a class="an-skip" href="#catalogue">Skip to catalogue <b aria-hidden="true">&rarr;</b></a>
       </div>
     </div>
   </section>
@@ -453,11 +455,11 @@
     </div>
   </div>
 
-  <article class="line" id="shockers" aria-labelledby="shockers-h">
+  <article class="line line-film" id="shockers" aria-labelledby="shockers-h">
     <div class="line-vis" aria-hidden="true">
       <div class="line-sq">
-        <img class="line-poster" src="seq/shock.webp" alt="" width="1080" height="1080" loading="lazy" decoding="async"/>
-        <canvas data-scrub="k" data-n="30" width="720" height="720"></canvas>
+        <img class="line-poster" src="seq/axle.webp" alt="" width="800" height="800" loading="lazy" decoding="async"/>
+        <canvas data-film="x" data-n="59" data-fps="14" width="720" height="720"></canvas>
       </div>
     </div>
     <div class="line-copy">
@@ -482,11 +484,11 @@
     </div>
   </article>
 
-  <article class="line line-flip" id="struts" aria-labelledby="struts-h">
+  <article class="line line-flip line-film" id="struts" aria-labelledby="struts-h">
     <div class="line-vis" aria-hidden="true">
       <div class="line-sq">
-        <img class="line-poster" src="seq/strut.webp" alt="" width="1080" height="1080" loading="lazy" decoding="async"/>
-        <canvas data-scrub="t" data-n="30" width="720" height="720"></canvas>
+        <img class="line-poster" src="seq/rear.webp" alt="" width="800" height="800" loading="lazy" decoding="async"/>
+        <canvas data-film="q" data-n="78" data-fps="18" width="720" height="720"></canvas>
       </div>
     </div>
     <div class="line-copy">
@@ -809,11 +811,12 @@
   </div>
 </div>
 
-<!-- ═══ DOCK (phones) + FLOATING WA (desktop) ═══ -->
+<!-- ═══ DOCK (phones) + FLOATING CATALOGUE AND WA (desktop) ═══ -->
 <nav class="dock" aria-label="Quick actions">
-  <button type="button" class="dock-find" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><span>Find a part</span><i>74 parts</i></button>
+  <button type="button" class="dock-find" id="dockSearch"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><span>Catalogue</span><i><b data-total>74</b> parts</i></button>
   <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener" aria-label="WhatsApp the trade desk"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
 </nav>
+<a id="catfab" href="#catalogue"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg>Catalogue <i><b data-total>74</b> parts</i></a>
 <a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
 
 <div id="toast">Opening WhatsApp…</div>
@@ -1041,7 +1044,7 @@ document.addEventListener('click',e=>{
 $('#catClose').addEventListener('click',()=>closeCat());
 // Escape closes the top layer only: the spec sheet first, then the catalogue
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if($('#lb').classList.contains('open'))closeLb();else closeCat();});
-function findPart(){openCat({focus:true});}
+function findPart(){openCat();}
 $('#dockSearch').addEventListener('click',findPart);
 
 /* ════════ COUNTS ════════ */
@@ -1058,7 +1061,7 @@ if(fQ && $('#q')) $('#q').value=fQ;
 renderChips();renderTable();
 if(CAT_ON&&(fQ||wantsCat()))openCat({restore:true,focus:location.hash==='#find'});
 </script>
-<script src="site.js?v=31" defer></script>
-<script src="stage.js?v=31" defer></script>
+<script src="site.js?v=33" defer></script>
+<script src="stage.js?v=33" defer></script>
 </body>
 </html>

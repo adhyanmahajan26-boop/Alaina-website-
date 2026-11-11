@@ -57,8 +57,8 @@ def eye(M, parent, z, R=0.024, W=0.034):
 SH = dict(R=0.0232, body0=0.021, body1=0.262, coverR=0.0282, cover0=0.232, top=0.440, rodR=0.0072)
 
 
-def build_shock():
-    bpy.ops.wm.read_factory_settings(use_empty=True)
+def build_shock(reset=True):
+    if reset: bpy.ops.wm.read_factory_settings(use_empty=True)
     M = materials()
     root, G = groups(('lower', 'upper'))
     d = SH; R = d['R']
@@ -187,8 +187,8 @@ def tab(name, mat, parent, size, loc, hole=0.0):
     return ob
 
 
-def build_strut():
-    bpy.ops.wm.read_factory_settings(use_empty=True)
+def build_strut(reset=True):
+    if reset: bpy.ops.wm.read_factory_settings(use_empty=True)
     M = materials()
     root, G = groups(('lower', 'rod'))
     d = ST; R = d['R']; b1 = d['body1']
