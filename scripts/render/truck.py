@@ -11,9 +11,9 @@ import parts as pt
 from vkit import lerp, interp, linterp, smooth, rbox, cyl, lathe, tube, empty, extrude_poly
 
 HEAVY = dict(kind='heavy', XF=1.40, CL=2.25, CW=1.23, ZB=1.02, ZBELT=1.80, ZRAIL=2.74, ZROOF=2.88, WR=0.52, WW=0.29, RIM=0.286, WB=3.55, TR=1.03,
-             RAILY=0.43, RAILTOP=1.00, RAILH=0.27, REAR=1.15, FLOOR=1.42, ARCH=0.68, RAKE=0.20)
+             RAILY=0.43, RAILTOP=1.00, RAILH=0.27, REAR=1.15, FLOOR=1.42, ARCH=0.68, RAKE=0.30)
 LIGHT = dict(kind='light', XF=1.12, CL=1.78, CW=0.99, ZB=0.80, ZBELT=1.43, ZRAIL=2.13, ZROOF=2.24, WR=0.40, WW=0.215, RIM=0.215, WB=3.35, TR=0.83,
-             RAILY=0.38, RAILTOP=0.78, RAILH=0.20, REAR=1.75, FLOOR=1.10, ARCH=0.53, RAKE=0.16)
+             RAILY=0.38, RAILTOP=0.78, RAILH=0.20, REAR=1.75, FLOOR=1.10, ARCH=0.53, RAKE=0.25)
 
 PANELS = ['front', 'windshield', 'roof', 'back', 'door_L', 'door_R', 'side_L', 'side_R', 'glass_L', 'glass_R', 'bpillar_L', 'bpillar_R', 'qglass_L', 'qglass_R', 'grille', 'visor']
 PI = {n: i for i, n in enumerate(PANELS)}
@@ -31,6 +31,9 @@ def materials(P):
     M['glass'] = vk.glass('cab_glass', tint=(0.30, 0.34, 0.36))
     M['rubber_t'] = vk.simple('t_rubber_hose', (0.012, 0.012, 0.013), 0.55, bump=(800, 0.03), spec=0.35)
     M['cast_dark'] = pt.cast('t_cast_dark', (0.03, 0.031, 0.034), 0.55, metal=0.5)
+    M['loom'] = pt.corrugated('t_loom') if hasattr(pt, 'corrugated') else vk.simple('t_loom', (0.012, 0.012, 0.013), 0.5)
+    M['airline'] = vk.simple('t_airline', (0.30, 0.03, 0.02), 0.35, coat=0.4)
+    M['rad_core'] = pt.fins('t_rad_core')
     M['chamber'] = vk.simple('t_chamber', (0.02, 0.021, 0.024), 0.45, coat=0.3, bump=(700, 0.03))
     M['black_gloss'] = vk.simple('t_black_gloss', (0.012, 0.012, 0.014), 0.14, coat=0.6, ghost=True)
     M['black_trim'] = vk.simple('t_black_trim', (0.018, 0.018, 0.02), 0.55, bump=(900, 0.03), ghost=True)
@@ -43,7 +46,7 @@ def materials(P):
     M['frame'] = vk.simple('frame', (0.016, 0.0165, 0.018), 0.5, metal=0.2, bump=(500, 0.04), spec=0.35)
     M['iron'] = vk.simple('t_iron', (0.05, 0.051, 0.055), 0.55, metal=0.6, bump=(700, 0.05))
     M['steel'] = vk.simple('t_steel', (0.24, 0.245, 0.26), 0.4, metal=1.0, bump=(1500, 0.02))
-    M['alu'] = vk.simple('t_alu', (0.66, 0.67, 0.69), 0.3, metal=1.0, bump=(300, 0.03))
+    M['alu'] = vk.simple('t_alu', (0.66, 0.67, 0.69), 0.3, metal=1.0, bump=(300, 0.08))
     M['plastic'] = vk.simple('t_plastic', (0.02, 0.02, 0.022), 0.6, bump=(1200, 0.02))
     M['engine'] = vk.simple('t_engine', (0.11, 0.115, 0.125), 0.5, metal=0.9, bump=(500, 0.06))
     M['seat'] = vk.simple('t_seat', (0.04, 0.04, 0.045), 0.7, bump=(400, 0.06), spec=0.3)
@@ -75,11 +78,13 @@ def build_cab(P, M, cab):
         return ZB
 
     def station(s):
-        w = CW - 0.13 * (1 - min(1, s / 0.22)) ** 2 - 0.03 * max(0.0, (s - (CL - 0.12)) / 0.12)
+        # rounded front corners, a gentle taper at the back wall
+        w = CW - 0.20 * (1 - min(1, s / 0.36)) ** 2 - 0.035 * max(0.0, (s - (CL - 0.14)) / 0.14)
         z0 = z_low(s)
-        rake = P['RAKE'] * (1 - smooth(s / (0.55 * k)))
-        pts = [(0, w - 0.03, z0), (0, w, lerp(z0, ZBELT, 0.26)), (0, w, lerp(z0, ZBELT, 0.63)), (-0.10 * rake, w - 0.012, ZBELT),
-               (-rake, w - 0.10, ZRAIL), (-rake * 0.98, w - 0.20, ZROOF - 0.03), (-rake * 0.92, w * 0.5, ZROOF + 0.012), (-rake * 0.90, 0.0, ZROOF + 0.028)]
+        rake = P['RAKE'] * (1 - smooth(s / (0.62 * k)))
+        fl = 0.035 * max(0.0, 1 - abs(s - XF) / (ARCH * 1.05)) ** 0.5     # wheel-arch flare
+        pts = [(0, w - 0.03 + fl, z0), (0, w + fl * 0.8, lerp(z0, ZBELT, 0.26)), (0, w + fl * 0.3, lerp(z0, ZBELT, 0.63)), (-0.10 * rake, w - 0.014, ZBELT),
+               (-rake, w - 0.12, ZRAIL), (-rake * 0.97, w - 0.24, ZROOF - 0.045), (-rake * 0.92, w * 0.55, ZROOF + 0.045), (-rake * 0.90, 0.0, ZROOF + 0.065)]
         return dict(x=XF - s, s=s, pts=pts)
 
     def panel_of(i, row, side):
@@ -106,7 +111,7 @@ def build_cab(P, M, cab):
         if r == 1 and inner: return PI['grille']
         return PI['front']
 
-    gf = vk.cap(bm, ring[0], J, 4, nose_panel, lambda t, u: 0.05 * (1 - u ** 2.4) * (1 - 0.5 * t), +1)
+    gf = vk.cap(bm, ring[0], J, 4, nose_panel, lambda t, u: 0.085 * (1 - u ** 2.0) * (1 - 0.35 * t), +1)
     gr = vk.cap(bm, ring[-1], J, 4, lambda r, c: PI['back'], lambda t, u: 0.012 * (1 - u * u), -1)
 
     class _P:
@@ -121,15 +126,15 @@ def build_cab(P, M, cab):
     for row in ring:
         for a in range(len(row) - 1):
             e = bm.edges.get((row[a], row[a + 1]))
-            if e and row is ring[0]: e[cr] = 0.35
-            if e and row is ring[-1]: e[cr] = 0.6
+            if e and row is ring[0]: e[cr] = 0.12
+            if e and row is ring[-1]: e[cr] = 0.35
     for i in range(len(ring) - 1):
-        for kk in (3, 4, 2 * J - 2 - 3, 2 * J - 2 - 4):
+        for kk in (3, 2 * J - 2 - 3):
             e = bm.edges.get((ring[i][kk], ring[i + 1][kk]))
-            if e: e[cr] = 0.5
-        for kk in (5, 2 * J - 2 - 5):
+            if e: e[cr] = 0.38          # the belt line stays crisp
+        for kk in (4, 2 * J - 2 - 4):
             e = bm.edges.get((ring[i][kk], ring[i + 1][kk]))
-            if e: e[cr] = 0.25
+            if e: e[cr] = 0.2
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = vk.subdivided(bm, 3)
     mats = [M['paint']] * len(PANELS)
@@ -213,6 +218,45 @@ def cabin_damper(name, parent, loc, yaw=0.0):
     return dict(root=root, G=G, spring=hold, h=h, mats=DM)
 
 
+def ARCHX(P):
+    return P['ARCH'] * 0.98
+
+
+def snapper(objs):
+    """Nearest point (and its normal) on a set of panel meshes, in the cab's frame."""
+    from mathutils.kdtree import KDTree
+    pts = [(v.co.copy(), v.normal.copy()) for o in objs for v in o.data.vertices]
+    kd = KDTree(len(pts))
+    for i, (co, _) in enumerate(pts): kd.insert(co, i)
+    kd.balance()
+    def snap(p):
+        co, i, _ = kd.find(Vector(p))
+        return co, pts[i][1]
+    return snap
+
+
+def gasket(name, ob, mat, parent, r=0.011, out=0.006):
+    """A rubber surround along a panel's open edge (windscreen, door glass)."""
+    me = ob.data
+    edges = [e for e in me.edges if e.is_loose is False]
+    count = {}
+    for poly in me.polygons:
+        for ek in poly.edge_keys: count[ek] = count.get(ek, 0) + 1
+    bnd = [ek for ek, n in count.items() if n == 1]
+    if not bnd: return None
+    adj = {}
+    for a, b in bnd: adj.setdefault(a, []).append(b); adj.setdefault(b, []).append(a)
+    start = bnd[0][0]; loop = [start]; prev = None; cur = start
+    while True:
+        nxt = [v for v in adj[cur] if v != prev]
+        if not nxt or nxt[0] == start or len(loop) > len(adj) + 1: break
+        prev, cur = cur, nxt[0]; loop.append(cur)
+    vs = me.vertices
+    co = [vs[i].co + vs[i].normal * (0.020 + out) for i in loop]
+    co = co[::max(1, len(co) // 160)]
+    return tube(name, [c[:] for c in co], r, mat, parent, smooth_path=True, cyclic=True)
+
+
 def air_brake(name, parent, M, pos, sg, line_to, k=1.0, spring=True):
     """Air brake chamber on its bracket, push rod to a slack adjuster on the camshaft, and the air line up to the frame."""
     p = Vector(pos)
@@ -267,16 +311,45 @@ def build(P):
         rbox(f'marker_c{i}', (0.04, 0.07, 0.022), M['amber'], C['roof'], loc=(XF - P['RAKE'] * 0.93 - 0.05, i * 0.22, ZROOF + 0.045), r=0.008)
     # sun visor and wipers
     vz = ZRAIL - 0.03
-    rbox('visor', (0.26, 2 * (CW - 0.16), 0.03), M['visor'], C['windshield'], loc=(XF - P['RAKE'] + 0.17, 0, vz + 0.02), rot=(0, math.radians(14), 0), r=0.012)
+    snap = snapper([Pn['windshield'], Pn['roof'], Pn['front']])
+    q, n = snap((XF, 0, ZRAIL + 0.02))
+    rbox('visor', (0.24, 2 * (CW - 0.20), 0.022), M['visor'], C['windshield'], loc=(q.x + 0.10, 0, q.z + 0.03), rot=(0, math.radians(9), 0), r=0.010, taper=(0, (0.92, 0.6)))
+    for sgn in (-1, 1):
+        rbox(f'visor_bracket{sgn}', (0.12, 0.03, 0.05), M['visor'], C['windshield'], loc=(q.x + 0.02, sgn * (CW - 0.40), q.z + 0.02), r=0.008)
     for sgn in (-1, 1):
         rake_ang = math.atan2(P['RAKE'], ZRAIL - ZBELT)
-        tube(f'wiper{sgn}', [(XF + 0.045, sgn * 0.12 - 0.3, ZBELT + 0.03), (XF + 0.045 - 0.4 * math.sin(rake_ang) * 0.75, sgn * 0.12 + 0.12, ZBELT + 0.45 * k)], 0.008, M['black_trim'], C['windshield'], smooth_path=False)
+        ws = snapper([Pn['windshield']])
+        pa, na = ws((XF + 0.1, sgn * 0.42 - 0.18, ZBELT + 0.06)); pb, nb = ws((XF, sgn * 0.42 + 0.30, ZBELT + 0.40 * k))
+        pt.wiper(f'wiper{sgn}', C['windshield'], dict(M, black_satin=M['black_trim'], rubber=M['black_trim']), (pa + na * 0.004)[:], (pb + nb * 0.004)[:], up=((na + nb) / 2)[:], arm_r=0.008)
     # grille bars and badge plate
     gz0, gz1 = gf[1][3].co.z, gf[2][3].co.z
     gx = gf[1][3].co.x
     for i in range(4):
         rbox(f'grille_bar{i}', (0.03, 2 * (CW - 0.30), 0.022), M['chrome'] if i == 3 else M['black_gloss'], C['front'], loc=(gx - 0.012, 0, lerp(gz0, gz1, 0.14 + 0.24 * i)), r=0.008)
     rbox('badge', (0.012, 0.42, 0.075), M['chrome'], C['front'], loc=(gf[2][3].co.x + 0.004, 0, lerp(gf[2][3].co.z, gf[3][3].co.z, 0.5)), r=0.004)
+
+    # rubber surrounds on the screen and the door glass
+    gasket('gasket_ws', Pn['windshield'], M['black_trim'], C['windshield'], r=0.013)
+    for side in ('L', 'R'):
+        gasket('gasket_' + side, Pn['glass_' + side], M['black_trim'], C['door_' + side], r=0.010)
+    side_snap = snapper([Pn['side_L'], Pn['side_R'], Pn['door_L'], Pn['door_R'], Pn['front']])
+    for side, sg in (('L', 1), ('R', -1)):
+        # grab handle on the A-pillar edge beside the door
+        a, na = side_snap((XF - D0 + 0.03, sg * CW, ZBELT - 0.32)); b, nb = side_snap((XF - D0 + 0.03, sg * CW, ZBELT + 0.18))
+        tube('grab_' + side, [a[:], (a + na * 0.05)[:], (b + nb * 0.05)[:], b[:]], 0.013, M['chrome'], C['door_' + side], smooth_path=True)
+        # cab-side air intake behind the door (heavy cab), a slatted grille set into the side panel
+        if heavy:
+            c, nc = side_snap((XF - D1 - 0.24 * k, sg * CW, lerp(ZBELT, ZRAIL, 0.35)))
+            yaw = math.atan2(nc.y, nc.x) - math.pi / 2 * sg
+            rbox('intake_' + side, (0.34 * k, 0.03, 0.46), M['black_gloss'], C['side_' + side], loc=(c - nc * 0.004)[:], rot=(0, 0, yaw + math.pi / 2 * sg - math.pi / 2 * sg), r=0.02)
+            for i in range(9):
+                rbox(f'intake_slat_{side}{i}', (0.30 * k, 0.03, 0.012), M['black_trim'], C['side_' + side], loc=(c.x, c.y + nc.y * 0.008, c.z - 0.19 + i * 0.0475), rot=(math.radians(-25) * sg, 0, 0), r=0.004)
+        # wide-angle mirror under the main head
+        mx = XF - 0.10
+        rbox('mirror_wide_' + side, (0.07, 0.17 * k + 0.02, 0.17 * k), M['black_trim'], C['door_' + side], loc=(mx + 0.06, sg * (CW + 0.24), ZBELT + wsz * 0.18), rot=(0, 0, sg * math.radians(-18)), r=0.03, seg=4)
+        rbox('mirror_wide_glass_' + side, (0.004, 0.15 * k + 0.01, 0.15 * k - 0.01), M['mirror'], C['door_' + side], loc=(mx + 0.022, sg * (CW + 0.235), ZBELT + wsz * 0.18), rot=(0, 0, sg * math.radians(-18)), r=0.0015)
+        # mudflap behind the front wheel
+        rbox('mudflap_' + side, (0.012, WW + 0.06, 0.36), M['black_trim'], truck, loc=(-ARCHX(P) - 0.02, sg * (TR - 0.01), 0.36), r=0.004)
 
     # ── cab floor and interior (stay on the dampers when the panels leave) ──
     rbox('cab_floor', (CL - 0.12, 2 * CW - 0.14, 0.07), M['frame'], cab, loc=(XF - CL / 2, 0, FLOOR), r=0.02)
@@ -309,8 +382,16 @@ def build(P):
     # bumper with lamps
     bz0, bz1 = (0.42, ZB - 0.04)
     bx = XF - 0.02
-    rbox('bumper', (0.42, 2 * CW - 0.02, bz1 - bz0), M['black_trim'], ch, loc=(bx - 0.16, 0, (bz0 + bz1) / 2), r=0.07, seg=5)
-    rbox('bumper_face', (0.06, 2 * CW - 0.9, (bz1 - bz0) * 0.42), M['paint_solid'] if 'paint_solid' in M else M['steel'], ch, loc=(bx + 0.035, 0, lerp(bz0, bz1, 0.36)), r=0.02)
+    # sculpted bumper: a chin lip, a lamp shelf and corners that wrap back, with a step in each corner
+    prof = [(-0.34, bz0 + 0.04), (-0.04, bz0), (0.035, bz0 + 0.035), (0.05, lerp(bz0, bz1, 0.42)), (0.03, lerp(bz0, bz1, 0.48)), (0.04, bz1 - 0.07), (0.0, bz1), (-0.34, bz1)]
+    extrude_poly('bumper', prof, 2 * CW - 0.52, M['black_trim'], ch, axis='Y', bevel=0.02, seg=4, loc=(bx - 0.02, 0, 0))
+    for sg in (1, -1):
+        o = extrude_poly(f'bumper_corner{sg}', prof, 0.36, M['black_trim'], ch, axis='Y', bevel=0.02, seg=4, loc=(bx - 0.13, sg * (CW - 0.11), 0))
+        o.rotation_euler = (0, 0, sg * math.radians(38))
+        rbox(f'bumper_step{sg}', (0.16, 0.24, 0.05), M['black_gloss'], ch, loc=(bx - 0.03, sg * (CW - 0.30), lerp(bz0, bz1, 0.30)), r=0.01)
+        rbox(f'bumper_tread{sg}', (0.17, 0.22, 0.012), M['alu'], ch, loc=(bx - 0.02, sg * (CW - 0.30), lerp(bz0, bz1, 0.30) + 0.026), r=0.004)
+    rbox('bumper_cap', (0.10, 2 * CW - 0.62, 0.05), M['paint'], ch, loc=(bx - 0.01, 0, bz1 - 0.02), r=0.02)
+    rbox('bumper_face', (0.04, 2 * CW - 0.9, (bz1 - bz0) * 0.36), M['black_gloss'], ch, loc=(bx + 0.045, 0, lerp(bz0, bz1, 0.36)), r=0.015)
     pm = pt.label('t_plate', os.path.join(vk.HDRI_DIR, 'plate_%s.png' % P['kind']), (1040, 230), pt.plate_art('MH 14 GT 7045' if heavy else 'MH 12 LT 3318'), base=(0.92, 0.74, 0.06), ghost=False)
     nt = pm.node_tree; nt.links.new(nt.nodes['Separate XYZ'].outputs[1], nt.nodes['Combine XYZ'].inputs[0])
     rbox('plate', (0.012, 0.50, 0.12), pm, ch, loc=(bx + 0.07, 0, lerp(bz0, bz1, 0.36)), r=0.004)
@@ -328,8 +409,18 @@ def build(P):
     rbox('engine', (1.15 * k, 0.56, 0.62 * k), M['engine'], ch, loc=(XF - 1.1 * k, 0, ez + 0.36 * k), r=0.04)
     rbox('head', (1.05 * k, 0.40, 0.14), M['steel'], ch, loc=(XF - 1.1 * k, 0, ez + 0.72 * k + 0.05), r=0.03)
     rbox('sump', (0.8 * k, 0.40, 0.18), M['engine'], ch, loc=(XF - 1.1 * k, 0, ez + 0.02), r=0.05, seg=4)
-    rbox('radiator', (0.10, 0.82 * k + 0.1, 0.78 * k), M['iron'], ch, loc=(XF - 0.34, 0, ez + 0.44 * k), r=0.01)
+    # radiator: a finned core between plastic side tanks, in a shroud
+    rw, rh = 0.82 * k + 0.1, 0.78 * k
+    rz = ez + 0.44 * k
+    rbox('radiator', (0.06, rw - 0.12, rh - 0.06), M['rad_core'], ch, loc=(XF - 0.34, 0, rz), r=0.004, seg=1)
+    for sgn in (-1, 1):
+        rbox(f'rad_tank{sgn}', (0.09, 0.07, rh), M['plastic'], ch, loc=(XF - 0.34, sgn * (rw / 2 - 0.03), rz), r=0.015)
+        cyl(f'rad_neck{sgn}', 0.025, 0.08, M['plastic'], ch, loc=(XF - 0.40, sgn * (rw / 2 - 0.03), rz + sgn * rh * 0.3), axis='X', seg=24)
+    rbox('rad_top', (0.08, rw - 0.10, 0.04), M['plastic'], ch, loc=(XF - 0.34, 0, rz + rh / 2), r=0.01)
+    tube('rad_hose_top', [(XF - 0.40, rw / 2 - 0.03, rz + rh * 0.3), (XF - 0.55, rw / 2 - 0.12, rz + rh * 0.32), (XF - 0.80 * k, 0.12, ez + 0.70 * k)], 0.028, M['rubber_t'], ch)
+    tube('rad_hose_bot', [(XF - 0.40, -(rw / 2 - 0.03), rz - rh * 0.3), (XF - 0.60, -(rw / 2 - 0.15), rz - rh * 0.36), (XF - 0.85 * k, -0.15, ez + 0.20 * k)], 0.028, M['rubber_t'], ch)
     lathe('fan', [(0.0, 0.0), (0.30 * k, 0.0, 0.004), (0.30 * k, 0.03, 0.004), (0.0, 0.03)], M['plastic'], ch, axis='X', seg=48, rad=0.003, loc=(XF - 0.45, 0, ez + 0.44 * k))
+    lathe('fan_shroud', [(0.31 * k, 0.0), (0.36 * k, 0.0, 0.01), (0.36 * k, 0.10, 0.01), (0.33 * k, 0.12)], M['plastic'], ch, axis='X', seg=64, rad=0.0, loc=(XF - 0.50, 0, ez + 0.44 * k))
     lathe('gearbox', [(0.0, 0.0), (0.24 * k, 0.0, 0.03), (0.26 * k, 0.25, 0.02), (0.18 * k, 0.45, 0.04), (0.16 * k, 0.75 * k, 0.03), (0.07, 0.80 * k, 0.01), (0.0, 0.80 * k)], M['alu'], ch, axis='X', seg=48, rad=0.01,
           loc=(XF - 1.7 * k, 0, ez + 0.30 * k), rot=(0, 0, math.pi))
     px0 = XF - 1.7 * k - 0.80 * k
@@ -459,6 +550,32 @@ def build(P):
             rbox(f'cabmount_ear_{key}{e}', (0.012, 0.075, 0.09), M['frame'], ch, loc=(x + e * 0.036, y, dz - 0.012), r=0.004)
             rbox(f'cabmount_top_{key}{e}', (0.012, 0.075, 0.10), M['frame'], cab, loc=(x + e * 0.036, y, dz + dm.D['topEyeZ'] + 0.008), r=0.004)
         cyl('cabmount_pin_' + key, 0.0085, 0.11, M['zinc'], ch, loc=(x, y, dz), axis='X', seg=16)
+        ztop = dz + dm.D['topEyeZ']
+        rbox('cabmount_flange_' + key, (0.15, 0.12, 0.012), M['frame'], cab, loc=(x, y, ztop + 0.060), r=0.003)
+        for ex in (-1, 1):
+            for ey in (-1, 1):
+                dm.hex_nut(f'cabmount_bolt_{key}{ex}{ey}', M['zinc'], 0.0085, 0.008, ztop + 0.050 - 0.008, cab).location = (x + ex * 0.055, y + ey * 0.042, 0)
+        # bolted bracket on the outer web of the rail where the outrigger meets it, with a row of bolt heads
+        rbox('railplate_' + key, (0.26, 0.012, RH * 0.85), M['frame'], ch, loc=(x, sgy * (RY + 0.046), RT - RH / 2), r=0.004)
+        for ex in (-0.09, -0.03, 0.03, 0.09):
+            for ez_ in (-0.06, 0.06):
+                n = dm.hex_nut(f'railbolt_{key}{ex}{ez_}', M['zinc'], 0.010, 0.010, 0, ch)
+                n.rotation_euler = (-sgy * math.pi / 2, 0, 0); n.location = (x + ex, sgy * (RY + 0.052), RT - RH / 2 + ez_)
+        for ex in (-0.04, 0.04):
+            dm.hex_nut(f'armbolt_{key}{ex}', M['zinc'], 0.010, 0.009, dz - 0.035, ch).location = (x + ex, sgy * (RY + 0.08), 0)
+    # the cab floor crossmembers the front mounts hang from
+    for xc in (XF - 0.34, XF - CL + 0.16):
+        rbox(f'cab_xmember{xc:.2f}', (0.11, 2 * CW - 0.30, 0.075), M['frame'], cab, loc=(xc - 0.15, 0, FLOOR - 0.035 - 0.040), r=0.008)
+        for i in range(9):
+            dm.hex_nut(f'xm_bolt{xc:.2f}_{i}', M['zinc'], 0.008, 0.007, FLOOR - 0.035 - 0.085, cab).location = (xc - 0.15 + 0.035 * (1 if i % 2 else -1), lerp(-(CW - 0.25), CW - 0.25, i / 8), 0)
+    # wiring loom and air lines along the outside of both rails, held in P-clips
+    for sg in (1, -1):
+        y0 = sg * (RY + 0.065)
+        for nm, dy, dz_, r_, mat in (('loom', 0.0, -0.05, 0.013, M['loom']), ('airline_a', 0.012, 0.035, 0.0065, M['airline']), ('airline_b', 0.026, 0.035, 0.0065, M['rubber_t'])):
+            tube(f'{nm}{sg}', [(XF - 0.05, y0 + sg * dy, RT + dz_ - 0.02), (XF - 0.6, y0 + sg * dy, RT + dz_), (XF - 1.6, y0 + sg * dy, RT + dz_), (XF - CL - 0.6, y0 + sg * dy, RT + dz_ + 0.01)], r_, mat, ch)
+        for i in range(7):
+            xc = XF - 0.25 - i * 0.32
+            rbox(f'pclip{sg}{i}', (0.018, 0.05, 0.12), M['zinc'], ch, loc=(xc, y0 + sg * 0.01, RT - 0.005), r=0.004)
     cab_ghosts = [M[kk] for kk in ('paint', 'glass', 'black_gloss', 'black_trim', 'chrome', 'visor')]
     extra_ghosts = [M['deck'], M['wood']]
     wheel_ghosts = [WM[kk] for kk in ('tyre', 'steel_wheel', 'hub', 'zinc')]

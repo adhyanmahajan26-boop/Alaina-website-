@@ -54,6 +54,33 @@ def cast(name, base=(0.075, 0.076, 0.08), rough=0.62, metal=0.55, ghost_kw=None)
     return m
 
 
+def corrugated(name, base=(0.012, 0.012, 0.013), pitch=420.0):
+    """Corrugated loom tube: fine rings along its length (object X), as bump."""
+    m = dm.principled(name, base, 0.45, coat=0.2)
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    wv = nt.nodes.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = 'X'; wv.inputs['Scale'].default_value = pitch
+    nt.links.new(tc.outputs['Object'], wv.inputs['Vector'])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.6; bp.inputs['Distance'].default_value = 0.002
+    nt.links.new(wv.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], b.inputs['Normal'])
+    return m
+
+
+def fins(name, base=(0.10, 0.10, 0.105), pitch=900.0):
+    """Radiator core: tight horizontal fins and tube rows, dark aluminium."""
+    m = dm.principled(name, base, 0.45, metal=0.9)
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    w1 = nt.nodes.new('ShaderNodeTexWave'); w1.wave_type = 'BANDS'; w1.bands_direction = 'Z'; w1.inputs['Scale'].default_value = pitch
+    w2 = nt.nodes.new('ShaderNodeTexWave'); w2.wave_type = 'BANDS'; w2.bands_direction = 'Y'; w2.inputs['Scale'].default_value = pitch / 9
+    for w in (w1, w2): nt.links.new(tc.outputs['Object'], w.inputs['Vector'])
+    mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'
+    nt.links.new(w1.outputs['Fac'], mx.inputs[0]); nt.links.new(w2.outputs['Fac'], mx.inputs[1])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.8; bp.inputs['Distance'].default_value = 0.003
+    nt.links.new(mx.outputs[0], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], b.inputs['Normal'])
+    return m
+
+
 def label(name, path, size_px, draw, base=(0.9, 0.9, 0.88), rough=0.35, ghost=True, face=1):
     """A flat printed part (number plate): PIL draws the artwork, mapped over the object's Generated Y/Z box.
     draw(img, ImageDraw) paints into an RGB image of size_px."""

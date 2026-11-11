@@ -109,12 +109,24 @@ def film_car(view='front'):
     # studio
     fl = vk.floor(); vk.world()
     Ls = [vk.area('top', (-1.3, 0, 4.4), (8.0, 1.4), 820, target=(-1.3, 0, 0)),
-          vk.area('side', (1.5, 7.0, 1.7), (8, 1.2), 800, target=(-1.2, 0, 0.6)),
-          vk.area('front', (8.0, 2.0, 1.4), (3, 1.2), 240, target=(0, 0, 0.6)),
-          vk.area('rim', (-7, -5, 2.8), (6, 1.0), 1500, (1.0, 0.42, 0.16), target=(-1.2, 0, 0.8)),
-          vk.area('back', (-8, 4, 3.0), (4, 1.0), 500, (0.75, 0.84, 1.0), target=(-1.2, 0, 0.8))]
+          vk.area('side', (1.5, 7.0, 1.7), (8, 1.2), 330, target=(-1.2, 0, 0.6)),
+          vk.area('front', (8.0, 2.0, 1.4), (3, 1.2), 150, target=(0, 0, 0.6)),
+          vk.area('rim', (-7, -5, 2.8), (6, 1.0), 1300, (1.0, 0.62, 0.38), target=(-1.2, 0, 0.8)),
+          vk.area('back', (-8, 4, 3.0), (4, 1.0), 1100, (0.80, 0.88, 1.0), target=(-1.2, 0, 0.8))]
     vk.keep_off_floor(Ls, fl, also=[H['panels']['windshield' if view == 'front' else 'backlight']])
+    # studio reflection cards: long strips along the camera side draw streaks down the doors and shoulder,
+    # a broad one overhead the roof and bonnet; none of them light the set or show on the floor
+    cards = [vk.card('card_shoulder', (-2.0, 3.0, 4.2), (16.0, 0.9), 45.0, (-2.0, 0, 0.9), soft=0.45),
+             vk.card('card_high', (-2.0, 4.2, 2.45), (16.0, 1.2), 9.0, (-2.0, 0, 1.0)),
+             vk.card('card_top', (-1.3, 0.6, 3.6), (7.0, 1.6), 6.0, (-1.3, 0, 0.0)),
+             vk.card('card_nose', (5.0, 1.2, 2.2), (2.2, 1.2), 10.0, (0.6, 0, 0.6)),
+             vk.card('card_tail', (-7.6, 1.5, 2.2), (2.2, 1.2), 10.0, (-3.2, 0, 0.6))]
+    vk.keep_off_floor(cards, fl)
+    for c_ in cards:
+        for nd in c_.data.materials[0].node_tree.nodes:
+            if nd.type == 'MATH' and nd.operation == 'MULTIPLY' and nd.inputs[1].default_value > 1: rig.add(nd.inputs[1], 'default_value', (lambda t, s0=nd.inputs[1].default_value: s0 * (1 - ramp(t, Z0, Z1))))
     pool = vk.spot('pool', (-1.3, 0, 11), (-1.3, 0, 0), 30000, size=0.78, blend=1.0, radius=0.8)
+    vk.floor_only([pool], fl)
     rig.add(pool.data, 'energy', lambda t: 30000 * (1 - 0.85 * ramp(t, Z0, Z1)))      # the floor steps back as the camera goes in
     sx = 0.0 if view == 'front' else -sd.WB
     kd = 1 if view == 'front' else -1          # the key light stands on the camera's side of the strut
@@ -212,8 +224,18 @@ def film_truck(kind):
           vk.area('rim', (-8, -6, hgt * 1.2), (7, 1.2), 2600, (1.0, 0.42, 0.16), target=(cx, 0, hgt * 0.5)),
           vk.area('back', (-9, 5, hgt * 1.2), (5, 1.2), 900, (0.75, 0.84, 1.0), target=(cx, 0, hgt * 0.5))]
     vk.keep_off_floor(Ls, fl)
+    # reflection cards: the cab sides are near vertical, so their streaks come from long low strips beside the truck
+    cards = [vk.card('card_side_lo', (cx - 1.0, 5.2, hgt * 0.30), (20.0, 0.5), 40.0, (cx - 1.0, 0, hgt * 0.55), soft=0.5),
+             vk.card('card_side_hi', (cx - 1.0, 4.6, hgt * 1.45), (20.0, 1.0), 14.0, (cx - 1.0, 0, hgt * 0.6)),
+             vk.card('card_front', (8.0, 3.0, hgt * 0.25), (3.0, 0.6), 30.0, (XF, 0, hgt * 0.5), soft=0.5),
+             vk.card('card_top', (cx, 0.8, hgt * 2.0), (9.0, 1.8), 6.0, (cx, 0, 0))]
+    vk.keep_off_floor(cards, fl)
+    for c_ in cards:
+        for nd in c_.data.materials[0].node_tree.nodes:
+            if nd.type == 'MATH' and nd.operation == 'MULTIPLY' and nd.inputs[1].default_value > 1: rig.add(nd.inputs[1], 'default_value', (lambda t, s0=nd.inputs[1].default_value: s0 * (1 - ramp(t, Z0, Z1))))
     pool = vk.spot('pool', (cx, 0, 15), (cx, 0, 0), 46000, size=0.72, blend=1.0, radius=0.8)
     rig.add(pool.data, 'energy', lambda t: 46000 * (1 - 0.8 * ramp(t, Z0, Z1)))
+    vk.floor_only([pool], fl)
     L = XF + WB + P['REAR']
     if kind == 'cabin':
         d0 = H['dampers']['FL']['root'].location
@@ -231,7 +253,19 @@ def film_truck(kind):
     k1 = vk.spot('key_part', (hero.x + 1.5, hero.y + 1.9, hero.z + 0.9), hero[:], 0, size=0.30, blend=0.7, radius=0.25)
     k2 = vk.spot('rim_part', (hero.x - 1.2, hero.y + 0.9, hero.z + 0.7), hero[:], 0, size=0.36, blend=0.7, color=(1.0, 0.42, 0.16), radius=0.2)
     k3 = vk.spot('fill_part', (hero.x + 2.0, hero.y + 0.5, hero.z - 0.1), hero[:], 0, size=0.30, blend=0.8, color=(0.8, 0.88, 1.0), radius=0.3)
-    vk.keep_off_floor([k1, k2, k3], fl)
+    if kind == 'cabin':
+        # the part lights see only the damper and its brackets, so it stands clear of the structure behind it
+        hero_objs = [o for o in vk.descendants(H['dampers']['FL']['root']) if o.type in ('MESH', 'CURVE')]
+        hero_objs += [o for o in bpy.data.objects if o.name.startswith(('cabmount_ear_FL', 'cabmount_top_FL', 'cabmount_pin_FL', 'cabmount_flange_FL', 'cabmount_bolt_FL'))]
+        coll = bpy.data.collections.new('hero_part')
+        for o in hero_objs: coll.objects.link(o)
+        for co in coll.collection_objects: co.light_linking.link_state = 'INCLUDE'
+        for L_ in (k1, k2, k3): L_.light_linking.receiver_collection = coll
+        # and a low, soft light on the structure behind, so it reads in soft focus
+        bgl = vk.area('bg_struct', (hero.x + 0.2, hero.y - 1.2, hero.z + 1.4), (1.2, 0.8), 0, (0.85, 0.9, 1.0), target=(hero.x - 0.3, 0.0, hero.z))
+        rig.add(bgl.data, 'energy', lambda t: 120 * ramp(t, Z0, Z1))
+    else:
+        vk.keep_off_floor([k1, k2, k3], fl)
     rig.add(k1.data, 'energy', lambda t: 2600 * ramp(t, E0 + 0.3, Z1 - 0.2))
     rig.add(k2.data, 'energy', lambda t: 2200 * ramp(t, E0 + 0.3, Z1 - 0.2))
     rig.add(k3.data, 'energy', lambda t: 700 * ramp(t, E0 + 0.3, Z1 - 0.2))

@@ -108,7 +108,7 @@ def panel_of_factory(S):
 
 def materials():
     M = {}
-    M['paint'] = vk.paint('paint', (0.048, 0.052, 0.060), metallic=0.85, rough=0.26)
+    M['paint'] = vk.paint('paint', (0.050, 0.054, 0.062), metallic=0.85, rough=0.20)
     M['glass'] = vk.glass('glass', tint=(0.30, 0.34, 0.36))
     M['lens'] = vk.glass('lens', tint=(0.8, 0.8, 0.8), clear=0.6)
     M['lens_red'] = vk.simple('lens_red', (0.45, 0.01, 0.01), 0.08, coat=1.0, ghost=True, emit=((1.0, 0.03, 0.02), 1.6))

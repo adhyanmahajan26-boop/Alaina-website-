@@ -342,7 +342,7 @@ def paint(name, color, metallic=0.0, rough=0.32, flake=True, inner=(0.035, 0.036
     return m
 
 
-def glass(name, tint=(0.10, 0.13, 0.14), ghost=True, clear=0.0):
+def glass(name, tint=(0.10, 0.13, 0.14), ghost=True, clear=0.0, refl=0.6):
     """Window glass: reflective by Fresnel, tinted see-through otherwise (cheap to render, no caustics)."""
     m = bpy.data.materials.new(name); m.use_nodes = True
     nt = m.node_tree
@@ -351,6 +351,7 @@ def glass(name, tint=(0.10, 0.13, 0.14), ghost=True, clear=0.0):
     fr = nt.nodes.new('ShaderNodeFresnel'); fr.inputs['IOR'].default_value = 1.5
     tr = nt.nodes.new('ShaderNodeBsdfTransparent'); tr.inputs['Color'].default_value = (*[lerp(c, 1, clear) for c in tint], 1)
     gl = nt.nodes.new('ShaderNodeBsdfGlossy'); gl.inputs['Roughness'].default_value = 0.02
+    gl.inputs['Color'].default_value = (refl, refl, refl, 1)
     mix = nt.nodes.new('ShaderNodeMixShader')
     nt.links.new(fr.outputs[0], mix.inputs[0]); nt.links.new(tr.outputs[0], mix.inputs[1]); nt.links.new(gl.outputs[0], mix.inputs[2])
     if ghost: _ghost_mix(nt, mix.outputs[0], edge=0.4, body=0.02)
@@ -544,6 +545,45 @@ def spot(name, loc, target, power, size=0.6, blend=0.6, color=(1, 1, 1), radius=
     o.location = loc
     o.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
     return o
+
+
+def card(name, loc, size, strength, target, color=(1, 1, 1), soft=0.35):
+    """A studio reflection card: an emissive strip seen only in reflections (not by the camera, not as light),
+    with a soft falloff across its short side, so paint and glass pick up a clean softbox streak."""
+    bm = bmesh.new()
+    bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=0.5)
+    bmesh.ops.scale(bm, verts=bm.verts, vec=(size[0], size[1], 1))
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        if n.type != 'OUTPUT_MATERIAL': nt.nodes.remove(n)
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sep.inputs[0])
+    # 1 in the middle of the short side, easing to 0 at its edges (and a little at the ends)
+    def edge(out, k):
+        a = nt.nodes.new('ShaderNodeMath'); a.operation = 'PINGPONG'; a.inputs[1].default_value = 0.5
+        nt.links.new(out, a.inputs[0])
+        b = nt.nodes.new('ShaderNodeMapRange'); b.interpolation_type = 'SMOOTHSTEP'; b.inputs[1].default_value = 0.0; b.inputs[2].default_value = k
+        nt.links.new(a.outputs[0], b.inputs[0]); return b.outputs[0]
+    mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'
+    nt.links.new(edge(sep.outputs[1], soft), mul.inputs[0]); nt.links.new(edge(sep.outputs[0], 0.08), mul.inputs[1])
+    em = nt.nodes.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (*color, 1)
+    st = nt.nodes.new('ShaderNodeMath'); st.operation = 'MULTIPLY'; st.inputs[1].default_value = strength
+    nt.links.new(mul.outputs[0], st.inputs[0]); nt.links.new(st.outputs[0], em.inputs['Strength'])
+    nt.links.new(em.outputs[0], nt.nodes['Material Output'].inputs['Surface'])
+    ob = new_obj(name, bm, m, smooth_shade=False, loc=loc)
+    ob.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat('Z', 'Y').to_euler()
+    ob.visible_camera = False; ob.visible_diffuse = False; ob.visible_shadow = False; ob.visible_transmission = False; ob.visible_volume_scatter = False
+    ob.visible_glossy = True
+    return ob
+
+
+def floor_only(lights, fl):
+    """These lights light the floor and nothing else (the pool of light the vehicle stands in)."""
+    coll = bpy.data.collections.new('floor_only')
+    coll.objects.link(fl)
+    for co in coll.collection_objects: co.light_linking.link_state = 'INCLUDE'
+    for L in lights: L.light_linking.receiver_collection = coll
 
 
 def keep_off_floor(lights, fl, also=()):
