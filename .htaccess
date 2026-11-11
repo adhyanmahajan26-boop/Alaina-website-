@@ -31,6 +31,7 @@ AddType image/svg+xml .svg
 AddType image/x-icon .ico
 AddType image/vnd.microsoft.icon .ico
 AddType application/manifest+json .webmanifest
+AddType font/woff2 .woff2
 
 <Files "sitemap.xml">
   Header set Content-Type "application/xml; charset=UTF-8"
@@ -73,6 +74,8 @@ RewriteRule ^ - [R=404,L]
   ExpiresByType video/mp4 "access plus 1 month"
   ExpiresByType text/css "access plus 1 week"
   ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType text/javascript "access plus 1 week"
+  ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
 # Block access to sensitive files

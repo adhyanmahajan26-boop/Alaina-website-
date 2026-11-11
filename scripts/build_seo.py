@@ -19,6 +19,7 @@ from xml.etree import ElementTree as ET
 
 sys.path.insert(0, str(Path(__file__).parent))
 import legal_pages as legal  # noqa: E402
+from site_chrome import ASSET_VERSION, GASSPRING, HEAD_BOOT, MARK, SPRITE  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://alainashockabsorbers.com"
@@ -325,8 +326,22 @@ def webp_rel(img: str) -> str | None:
     return rel if (ROOT / rel).exists() else None
 
 
-def with_webp(rel_prefix: str, img_src: str, img_tag: str) -> str:
-    """Wrap an <img> in <picture> with the pixel-identical WebP; the PNG stays the fallback."""
+def card_rel(img: str, big: bool = False) -> str | None:
+    """Catalogue cut-out from scripts/build_cards.py: every part at the same angle, size and light."""
+    rel = f"images/cards/{Path(img).stem}{'@2x' if big else ''}.webp"
+    return rel if (ROOT / rel).exists() else None
+
+
+def with_webp(rel_prefix: str, img_src: str, img_tag: str, *, sizes: str = "") -> str:
+    """Wrap an <img> in <picture>. Browsers get the matched catalogue cut-out (or, where a photo has
+    none, the pixel-identical WebP); the original PNG stays the <img src> that crawlers index."""
+    small, big = card_rel(img_src), card_rel(img_src, True)
+    if small and big:
+        sz = f' sizes="{sizes}"' if sizes else ""
+        return (
+            f'<picture><source type="image/webp" srcset="{esc(rel_prefix + small)} 640w, '
+            f'{esc(rel_prefix + big)} 1280w"{sz}/>{img_tag}</picture>'
+        )
     webp = webp_rel(img_src)
     if not webp:
         return img_tag
@@ -348,8 +363,7 @@ def picture(rel_prefix: str, p: dict, *, lazy: bool, class_name: str = "") -> st
         f'<img{cls} src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
         f'width="{w}" height="{h}" loading="{loading}"{fetch} decoding="async"/>'
     )
-    # Lossless only: the 2026-10-13 lossy copies flattened transparent PNGs onto grey.
-    return with_webp(rel_prefix, p["img"], img)
+    return with_webp(rel_prefix, p["img"], img, sizes="(max-width:860px) 100vw, 640px")
 
 
 def json_ld(obj) -> str:
@@ -510,14 +524,14 @@ def head_tags(
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
 <meta name="theme-color" content="#FF4A1A"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<script>(function(){{var d=document.documentElement;try{{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}}catch(e){{}}document.addEventListener('DOMContentLoaded',function(){{var b=document.getElementById('themeToggle');if(!b)return;function sync(){{var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'\u2600':'\u263E'}}sync();b.addEventListener('click',function(){{var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{{localStorage.setItem('alaina-theme',n)}}catch(e){{}}sync()}})}})}})();</script>
-<link rel="stylesheet" href="{esc('REL')}style.css?v=seo5"/>"""
+<link rel="preload" href="@@REL@@fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="@@REL@@fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
+{HEAD_BOOT}
+<link rel="stylesheet" href="@@REL@@style.css?v={ASSET_VERSION}"/>"""
 
 
 CHROME_NAV = """
+{sprite}
 <div id="topbar">
   <div class="wrap">
     <span class="tb-left">Technical Catalogue <b>No.04</b> — 2026 Edition</span>
@@ -529,47 +543,70 @@ CHROME_NAV = """
 </div>
 <header id="nav">
   <div class="wrap">
-    <a href="{home}" class="brand">
-      <div class="brand-mark">A</div>
+    <a href="{home}" class="brand" aria-label="Alaina Shockers, home">
+      {mark}
       <div class="brand-word">ALAINA<sup>®</sup><small>Precision damping</small></div>
     </a>
     <nav class="navlinks">
-      <a href="{home}#range">Range</a>
+      <a href="{home}#range">Our products</a>
       <a href="{home}#catalogue">Catalogue</a>
       <a href="{cd}">Cabin Dampers</a>
       <a href="{sa}">Shockers</a>
       <a href="{rs}">Rare Struts</a>
+      <a href="{xs}" class="nav-x">Alaina <b>×</b> Superlift</a>
       <a href="{home}#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
-    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><b>Menu</b><span></span><span></span></button></div>
   </div>
 </header>
 <div id="mobnav">
   <div class="mn-top">
     <div class="brand-word">ALAINA<sup>®</sup></div>
-    <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
+    <button class="mn-x" id="mnClose" aria-label="Close menu">Close</button>
   </div>
   <nav>
-    <a href="{home}#range">Range</a>
+    <a href="{home}">Home</a>
     <a href="{home}#catalogue">Catalogue</a>
     <a href="{cd}">Cabin Dampers</a>
     <a href="{sa}">Shockers</a>
     <a href="{rs}">Rare Struts</a>
+    <a href="{bv}">Shockers by vehicle</a>
+    <a href="{xs}">Alaina × Superlift</a>
     <a href="{home}#enquire">Enquire</a>
   </nav>
+  <div class="mn-foot">
+    <a href="tel:+917982555636">+91 79825 55636</a>
+    <a href="{wa}" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
 </div>
 """
 
+WA_HELLO = f"{WA}?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers."
 
-def chrome(rel: str) -> tuple[str, str]:
-    home = rel + "index.html" if rel else "/"
-    # Prefer clean directory URLs
-    nav = CHROME_NAV.format(
+
+def ico(name: str, fill: bool = False) -> str:
+    return f'<svg class="ico{" ico-fill" if fill else ""}" aria-hidden="true"><use href="#i-{name}"/></svg>'
+
+
+def chrome_nav(rel: str) -> str:
+    return CHROME_NAV.format(
+        sprite=SPRITE,
+        mark=MARK,
         home=rel or "/",
         cd=rel + "cabin-dampers/",
         sa=rel + "shock-absorbers/",
         rs=rel + "rare-struts/",
+        bv=rel + "shockers/",
+        xs=rel + "alaina-x-superlift/",
+        wa=WA_HELLO,
     )
+
+
+def chrome(rel: str, dock_wa: str | None = None) -> tuple[str, str]:
+    """Header and footer shared by every generated page. `rel` is the path back to the site root."""
+    nav = chrome_nav(rel)
+    home = rel or "/"
+    wa = dock_wa or WA_HELLO
     legal_links = " ".join(f'<a href="{rel}{href.lstrip("/")}">{esc(lab)}</a>' for lab, href in legal.LEGAL_LINKS)
     footer = f"""
 <footer>
@@ -600,16 +637,20 @@ def chrome(rel: str) -> tuple[str, str]:
         <a href="{rel}shockers/tata-4018/">Tata 4018 cabin dampers</a>
         <a href="{rel}shockers/leyland-u-truck/">Leyland U Truck parts</a>
         <a href="{rel}shockers/mahindra-bolero/">Bolero shockers</a>
-        <a href="{rel}#catalogue">Full catalogue</a>
+        <a href="{home}#catalogue">Full catalogue</a>
         <a href="{rel}dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>
+        <a href="{rel}alaina-x-superlift/">Alaina × Superlift</a>
       </div>
       <div class="fcol">
         <div class="fc-lab">Contact</div>
         <a href="tel:+917982555636">{PHONE}</a>
         <a href="mailto:{EMAIL}">{EMAIL}</a>
-        <a href="{WA}?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp ↗</a>
+        <a href="{WA_HELLO}" target="_blank" rel="noopener">WhatsApp ↗</a>
       </div>
     </div>
+  </div>
+  <div class="foot-giant" aria-hidden="true">Alaina</div>
+  <div class="wrap">
     <div class="foot-base">
       <span>© 2026 Alaina Shockers — All parts catalogued</span>
       <span class="foot-legal">{legal_links}</span>
@@ -617,25 +658,19 @@ def chrome(rel: str) -> tuple[str, str]:
     </div>
   </div>
 </footer>
-<a id="wafab" href="{WA}?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp</a>
-<script>
-(function(){{
-  var b=document.getElementById('burger'), m=document.getElementById('mobnav'), x=document.getElementById('mnClose');
-  if(!b||!m) return;
-  function shut(){{m.classList.remove('open');b.setAttribute('aria-expanded','false');document.body.style.overflow='';}}
-  b.onclick=function(){{m.classList.add('open');b.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}};
-  if(x) x.onclick=shut;
-  m.querySelectorAll('a').forEach(function(a){{a.addEventListener('click',shut);}});
-  document.addEventListener('keydown',function(e){{if(e.key==='Escape'&&m.classList.contains('open'))shut();}});
-}})();
-</script>
+<nav class="dock" aria-label="Quick actions">
+  <a class="dock-find" href="{home}#find">{ico("search")}<span>Find a part</span><i>Catalogue</i></a>
+  <a class="dock-wa" href="{wa}" target="_blank" rel="noopener" aria-label="WhatsApp the trade desk">{ico("wa", True)}<span>WhatsApp</span></a>
+</nav>
+<a id="wafab" href="{wa}" target="_blank" rel="noopener">{ico("wa", True)}WhatsApp</a>
+<script src="{rel}site.js?v={ASSET_VERSION}" defer></script>
 """
     return nav, footer
 
 
-def page_shell(rel: str, head: str, body: str, ld: list) -> str:
-    nav, footer = chrome(rel)
-    head = head.replace("REL", rel)
+def page_shell(rel: str, head: str, body: str, ld: list, *, dock_wa: str | None = None, body_class: str = "") -> str:
+    nav, footer = chrome(rel, dock_wa)
+    head = head.replace("@@REL@@", rel)
     lds = "\n".join(json_ld(x) for x in ld)
     return f"""<!DOCTYPE html>
 <html lang="en-IN">
@@ -643,7 +678,7 @@ def page_shell(rel: str, head: str, body: str, ld: list) -> str:
 {head}
 {lds}
 </head>
-<body>
+<body{f' class="{body_class}"' if body_class else ""}>
 <a id="top"></a>
 {nav}
 {body}
@@ -668,7 +703,8 @@ def crumbs(items: list[tuple[str, str]]) -> str:
 
 def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
     wamsg = quote(f"Hi, I want to enquire about {p['partno']} — {p['_name']} ({p['_app']}).")
-    img = ""
+    href = f"{rel}products/{p['_slug']}/"
+    tag = f'<span class="pc-tag">{esc(p["_tag"])}</span>' if p.get("_tag") else ""
     if p["_has_photo"]:
         src_png = rel + p["img"]
         w, h = p["_size"] or (800, 800)
@@ -676,24 +712,21 @@ def product_card_html(rel: str, p: dict, lazy: bool = True) -> str:
             f'<img src="{esc(src_png)}" alt="{esc(p["_alt"])}" title="{esc(p["_alt"])}" '
             f'width="{w}" height="{h}" loading="{"lazy" if lazy else "eager"}" decoding="async"/>'
         )
-        img = with_webp(rel, p["img"], img)
-        stage =f'<a class="pc-stage" href="{rel}products/{p["_slug"]}/">{img}</a>'
+        img = with_webp(rel, p["img"], img, sizes="(max-width:640px) 46vw, 300px")
+        stage = f'<a class="pc-stage" href="{href}">{tag}{img}</a>'
     else:
-        stage = (
-            f'<a class="pc-stage no-zoom" href="{rel}products/{p["_slug"]}/">'
-            f'<span class="nopic">Photo<br/>on request</span></a>'
-        )
+        stage = f'<a class="pc-stage no-zoom" href="{href}">{tag}<span class="nopic">Photo<br/>on request</span></a>'
     return f"""<article class="pcard">
   {stage}
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">{esc(p['partno'])}</span><span class="pc-brand">{esc(p['brand'])}</span></div>
-    <h3 class="pc-name"><a href="{rel}products/{p['_slug']}/">{esc(p['_name'])}</a></h3>
+    <h3 class="pc-name"><a href="{href}">{esc(p['_name'])}</a></h3>
     <div class="pc-app">{esc(p['_app'])}</div>
-    <div class="pc-oe">{'OE ' + esc(p['_oe']) if p['_oe'] else '&nbsp;'}</div>
+    <div class="pc-oe">{'OE ' + esc(p['_oe']) if p['_oe'] else ''}</div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="{rel}products/{p['_slug']}/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="{WA}?text={wamsg}">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="{WA}?text={wamsg}" aria-label="Enquire about {esc(p['partno'])} on WhatsApp">{ico("wa", True)}Enquire</a>
+    <a class="pc-btn go" href="{href}" aria-label="Details for {esc(p['partno'])}">Details{ico("next")}</a>
   </div>
 </article>"""
 
@@ -960,7 +993,7 @@ def render_product(p: dict, all_products: list[dict]) -> str:
 </main>
 """
     ld = [organization_ld(), product_schema(p, description=desc, image=img_abs), product_jsonld(p), crumb_ld]
-    return page_shell(rel, head, body, ld)
+    return page_shell(rel, head, body, ld, dock_wa=f"{WA}?text={wa}")
 
 
 # Visible buyer's guide + FAQ per category page. General product knowledge and
@@ -1849,6 +1882,7 @@ AddType image/svg+xml .svg
 AddType image/x-icon .ico
 AddType image/vnd.microsoft.icon .ico
 AddType application/manifest+json .webmanifest
+AddType font/woff2 .woff2
 
 <Files "sitemap.xml">
   Header set Content-Type "application/xml; charset=UTF-8"
@@ -1891,6 +1925,8 @@ RewriteRule ^ - [R=404,L]
   ExpiresByType video/mp4 "access plus 1 month"
   ExpiresByType text/css "access plus 1 week"
   ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType text/javascript "access plus 1 week"
+  ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
 # Block access to sensitive files
@@ -1901,6 +1937,273 @@ RewriteRule ^ - [R=404,L]
 """,
         encoding="utf-8",
     )
+
+
+# ───────────────────────── Alaina × Superlift ─────────────────────────
+# Superlift is the gas spring line sold by Mahajan Motors India, the same distributor
+# and trade desk as Alaina. Alaina does not make gas springs, so this page presents the
+# two as partner lines and never calls a Superlift part an Alaina part. The catalogue is
+# imported by scripts/import_superlift.py. No prices: this site does not publish them.
+#
+# The page stays out of the index (and the sitemap) so it cannot compete with the
+# shocker pages here or with the Superlift pages on mahajanmotorsindia.com. Set this to
+# True to let search engines list it.
+SUPERLIFT_INDEXABLE = False
+SUPERLIFT_PATH = "/alaina-x-superlift/"
+MMI_SUPERLIFT_URL = "https://mahajanmotorsindia.com/superlift"
+SUPERLIFT_POS = {"dicky": "Boot", "bonnet": "Bonnet", "other": "Other"}
+SUPERLIFT_FAQS = [
+    (
+        "Does Alaina make gas springs?",
+        "No. Alaina makes cabin dampers, shock absorbers and struts. Dicky (boot) and bonnet gas springs on this page are Superlift parts. Both lines are supplied by Mahajan Motors India, Kashmere Gate, Delhi.",
+    ),
+    (
+        "How do I order a Superlift gas spring?",
+        f"Send the Superlift part number or your car model on WhatsApp to {PHONE}. It is the same trade desk that handles Alaina enquiries, so you can ask for shockers and gas springs in one message.",
+    ),
+    (
+        "Are boot gas springs sold as a pair?",
+        "Most boot (dicky) gas springs in this catalogue are listed as a set of two, and most bonnet gas springs as a single unit. Every card shows which applies to that part number.",
+    ),
+    (
+        "Where can I see prices?",
+        "This site does not publish list prices. Ask on WhatsApp for a quote, or open the part on the Mahajan Motors India Superlift catalogue.",
+    ),
+]
+
+
+def load_superlift() -> list[dict]:
+    path = ROOT / "scripts" / "superlift.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+
+
+def superlift_card(rel: str, r: dict) -> str:
+    pos = SUPERLIFT_POS.get(r["pos"], "Other")
+    make = "Other applications" if r["brand"] == "Others" else r["brand"]
+    kind = "gas spring" if "gas spring" not in r["app"].lower() else ""
+    app = f"{r['app']} {kind}".strip()
+    if r["note"]:
+        app += f" · {r['note']}"
+    set_txt = f"Set of {r['set']}" if r["set"] > 1 else "Single unit"
+    search = " ".join([r["pn"], r["car"], make, r["app"], r["oe"], r["note"]]).lower()
+    if r["img"]:
+        alt = r["alt"] or f"Superlift {r['pn']} gas spring for {r['car']}"
+        stage = (
+            f'<div class="pc-stage"><span class="pc-tag">{esc(pos)}</span>'
+            f'<img src="{rel}{esc(r["img"])}" alt="{esc(alt)}" width="{r["w"]}" height="{r["h"]}" loading="lazy" decoding="async"/></div>'
+        )
+    else:
+        stage = f'<div class="pc-stage no-zoom"><span class="pc-tag">{esc(pos)}</span><span class="nopic">Photo<br/>on request</span></div>'
+    qty = f"a set of {r['set']} " if r["set"] > 1 else ""
+    wamsg = quote(f"Hi, I want to enquire about {qty}Superlift {r['pn']} for {r['car']} ({r['app']}).")
+    mmi = f"{MMI_SUPERLIFT_URL}/{r['slug']}"
+    return f"""<article class="pcard" data-pos="{r['pos']}" data-make="{esc(slugify(make))}" data-s="{esc(search)}">
+  {stage}
+  <div class="pc-body">
+    <div class="pc-top"><span class="pc-no">{esc(r['pn'])}</span><span class="pc-brand">Superlift</span></div>
+    <h3 class="pc-name">{esc(r['car'])}</h3>
+    <div class="pc-app">{esc(app)}</div>
+    <div class="pc-set">{set_txt}</div>
+    <div class="pc-oe">{esc(r['oe'])}</div>
+  </div>
+  <div class="pc-foot">
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="{WA}?text={wamsg}" aria-label="Enquire about {esc(r['pn'])} on WhatsApp">{ico("wa", True)}Enquire</a>
+    <a class="pc-btn go" target="_blank" rel="noopener" href="{esc(mmi)}" aria-label="{esc(r['car'])} gas springs on Mahajan Motors India">{ico("go")}</a>
+  </div>
+</article>"""
+
+
+SUPERLIFT_JS = """<script>
+(function(){
+  var grid=document.getElementById('slGrid'); if(!grid) return;
+  var cards=[].slice.call(grid.querySelectorAll('.pcard')), heads=[].slice.call(grid.querySelectorAll('.cat-ghead'));
+  var q=document.getElementById('slQ'), shown=document.getElementById('slShown'), empty=document.getElementById('slEmpty');
+  var pos='all', make='all';
+  function apply(){
+    var t=(q.value||'').trim().toLowerCase().split(/\\s+/).filter(Boolean), n=0, per={};
+    cards.forEach(function(c){
+      var s=c.getAttribute('data-s'), m=c.getAttribute('data-make');
+      var ok=(pos==='all'||c.getAttribute('data-pos')===pos)&&(make==='all'||m===make)&&t.every(function(w){return s.indexOf(w)>-1});
+      c.hidden=!ok; if(ok){n++; per[m]=(per[m]||0)+1;}
+    });
+    heads.forEach(function(h){var k=per[h.getAttribute('data-make')]||0; h.hidden=!k; h.lastElementChild.textContent=k+(k===1?' part':' parts');});
+    shown.textContent=n; empty.classList.toggle('on',!n);
+  }
+  function group(id,set){
+    var box=document.getElementById(id);
+    box.addEventListener('click',function(e){
+      var b=e.target.closest('.chip'); if(!b) return;
+      [].forEach.call(box.querySelectorAll('.chip'),function(x){x.classList.toggle('on',x===b); x.setAttribute('aria-pressed',x===b);});
+      set(b.getAttribute('data-v')); apply();
+      if(grid.getBoundingClientRect().top<0) document.getElementById('sl-catalogue').scrollIntoView();
+    });
+  }
+  group('slPos',function(v){pos=v}); group('slMake',function(v){make=v});
+  q.addEventListener('input',apply);
+  q.addEventListener('keydown',function(e){if(e.key==='Enter')q.blur()});
+  var m=/[?&]q=([^&]+)/.exec(location.search); if(m){q.value=decodeURIComponent(m[1].replace(/\\+/g,' ')); apply();}
+})();
+</script>"""
+
+
+def write_superlift() -> tuple[str, str, list, str] | None:
+    rows = load_superlift()
+    if not rows:
+        return None
+    rel = "../"
+    url = SITE + SUPERLIFT_PATH
+    cars = len({r["slug"] for r in rows})
+    makes: dict[str, list[dict]] = {}
+    for r in rows:
+        makes.setdefault("Other applications" if r["brand"] == "Others" else r["brand"], []).append(r)
+    order = sorted(makes, key=lambda m: (m == "Other applications", -len(makes[m]), m))
+    n_make = len([m for m in order if m != "Other applications"])
+    by_pos = {k: sum(1 for r in rows if r["pos"] == k) for k in SUPERLIFT_POS}
+    title = "Alaina × Superlift | Dicky & Bonnet Gas Springs for Cars"
+    description = (
+        f"Superlift dicky and bonnet gas springs for {cars // 10 * 10}+ cars and SUVs, shown alongside Alaina shockers. "
+        "One trade desk at Mahajan Motors India. Enquire on WhatsApp."
+    )
+    banner = f"{SITE}/images/superlift/superlift-banner.webp"
+    head = head_tags(
+        title=title,
+        description=description,
+        canonical=url,
+        keywords="Superlift gas springs, dicky gas spring, bonnet gas spring, boot gas strut, Alaina Superlift, Mahajan Motors India",
+        og_type="website",
+        image=banner,
+        image_alt="Superlift gas springs",
+        robots=None if SUPERLIFT_INDEXABLE else "noindex, follow",
+    )
+    crumb_html, crumb_ld = crumbs([("Home", SITE + "/"), ("Alaina × Superlift", url)])
+    grid = []
+    for m in order:
+        items = makes[m]
+        grid.append(
+            f'<div class="cat-ghead" data-make="{esc(slugify(m))}"><span>{esc(m)}</span>'
+            f'<span>{len(items)} part{"s" if len(items) != 1 else ""}</span></div>'
+        )
+        grid.extend(superlift_card(rel, r) for r in items)
+    pos_chips = f'<button type="button" class="chip on" data-v="all" aria-pressed="true">All <i>{len(rows)}</i></button>' + "".join(
+        f'<button type="button" class="chip" data-v="{k}" aria-pressed="false">{lab} <i>{by_pos[k]}</i></button>'
+        for k, lab in SUPERLIFT_POS.items()
+        if by_pos[k]
+    )
+    make_chips = '<button type="button" class="chip on" data-v="all" aria-pressed="true">All makes</button>' + "".join(
+        f'<button type="button" class="chip" data-v="{esc(slugify(m))}" aria-pressed="false">{esc(m)} <i>{len(makes[m])}</i></button>'
+        for m in order
+    )
+    wa_sl = f"{WA}?text=" + quote("Hi, I want to enquire about Superlift gas springs.")
+    wa_both = f"{WA}?text=" + quote("Hi, I want to enquire about Alaina shockers and Superlift gas springs.")
+    body = f"""
+<main class="seo-main px-main">
+  <div class="px-hero">
+    <div class="wrap">
+      {crumb_html}
+      <div class="px-hero-grid">
+        <div class="px-hero-copy">
+          <p class="kicker">Partner line</p>
+          <h1><span class="al">Alaina</span> <span class="x" aria-label="and">×</span> <span class="sl">Superlift</span></h1>
+          <p class="seo-lead">Alaina looks after the ride. <strong>Superlift</strong> looks after the lift: dicky and bonnet gas springs for {cars // 10 * 10}+ cars and SUVs. Two specialist lines, one trade desk at Mahajan Motors India.</p>
+          <div class="px-cta">
+            <a class="btn btn-fill" href="#sl-catalogue">Browse the catalogue {ico("next")}</a>
+            <a class="btn btn-line" href="{wa_both}" target="_blank" rel="noopener">{ico("wa", True)}Ask the trade desk</a>
+          </div>
+        </div>
+        <div class="px-art"><picture><source type="image/webp" srcset="{rel}images/partner-x-720.webp 720w, {rel}images/partner-x.webp 1280w" sizes="(max-width:860px) 100vw, 50vw"/><img src="{rel}images/partner-x.webp" alt="An Alaina cabin damper crossed with a Superlift gas spring" width="1280" height="1280" fetchpriority="high" decoding="async"/></picture></div>
+      </div>
+      <div class="px-stats">
+        <div class="px-stat"><b data-count="{len(rows)}">{len(rows)}</b><span>Superlift part numbers</span></div>
+        <div class="px-stat"><b data-count="{cars}">{cars}</b><span>Car and SUV models</span></div>
+        <div class="px-stat"><b data-count="{n_make}">{n_make}</b><span>Vehicle makes</span></div>
+        <div class="px-stat"><b>1</b><span>Trade desk for both lines</span></div>
+      </div>
+      <div class="px-film" data-reveal>
+        <video muted loop playsinline preload="none" data-lazy data-src="{rel}images/superlift/superlift-film.mp4" poster="{rel}images/superlift/superlift-film-poster.jpg" aria-label="Superlift gas spring film"></video>
+        <div class="px-lock">{MARK}<span class="x">×</span><b>Superlift</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+  <section>
+    <p class="kicker">The partnership</p>
+    <h2>Two specialists, one trade desk</h2>
+    <div class="px-duo">
+      <div class="px-brand is-al" data-reveal>
+        <div class="tag">Ride control</div>
+        <h3>Alaina</h3>
+        <p>Cabin dampers, shock absorbers and rare struts for trucks, pickups and cars. Supplying Indian transporters since 1978.</p>
+        <ul>
+          <li>Cabin dampers for Tata, Ashok Leyland, Eicher and BharatBenz</li>
+          <li>Pickup and LCV shockers, steering dampers</li>
+          <li>Struts for cars the OEM no longer supplies</li>
+        </ul>
+        <a class="px-link" href="{rel}#catalogue">Alaina catalogue {ico("next")}</a>
+      </div>
+      <div class="px-brand is-sl" data-reveal>
+        <div class="tag">Lift support</div>
+        <h3>Superlift</h3>
+        <p>Gas springs that hold a boot lid or bonnet open and lower it under control. Listed here by car model and Superlift part number.</p>
+        <ul>
+          <li>{by_pos['dicky']} boot (dicky) and tailgate gas springs</li>
+          <li>{by_pos['bonnet']} bonnet gas springs</li>
+          <li>OE reference numbers where the catalogue lists them</li>
+        </ul>
+        <a class="px-link" href="#sl-catalogue">Superlift catalogue {ico("next")}</a>
+        <div class="px-gs" aria-hidden="true">{GASSPRING.replace(' role="img" aria-label="Gas spring"', "")}</div>
+      </div>
+    </div>
+    <p class="px-note">Superlift is a separate brand, not an Alaina product. Both lines are distributed by <a href="{MMI_ALAINA_URL}" rel="noopener">Mahajan Motors India</a>, Kashmere Gate, Delhi, and enquiries for both reach the same WhatsApp number.</p>
+  </section>
+  <section id="sl-catalogue">
+    <p class="kicker">Superlift catalogue</p>
+    <h2>Dicky and bonnet gas springs by car</h2>
+    <p>Search by car model, Superlift part number or OE number. Tap Enquire to send that part to the trade desk on WhatsApp, or the arrow to open the car on the Mahajan Motors India catalogue.</p>
+    <div class="px-tools">
+      <label class="cat-search" for="slQ">{ico("search")}<input type="search" id="slQ" placeholder="Search car, part no or OE ref" autocomplete="off" enterkeyhint="search" aria-label="Search the Superlift catalogue"/></label>
+      <div class="px-chips" id="slPos" role="group" aria-label="Filter by position">{pos_chips}</div>
+      <div class="px-count">Showing <b id="slShown">{len(rows)}</b> of {len(rows)}</div>
+    </div>
+    <div class="px-chips px-makes" id="slMake" role="group" aria-label="Filter by make">{make_chips}</div>
+    <div class="cat-grid sl-grid" id="slGrid">
+      {"".join(grid)}
+    </div>
+    <div class="cat-empty sl-empty" id="slEmpty">No Superlift part matches. Try another car model, or <a href="{wa_sl}" target="_blank" rel="noopener">ask on WhatsApp</a>.</div>
+  </section>
+  <section>
+    <h2>Order shockers and gas springs together</h2>
+    <ol class='seo-steps'>
+      <li><strong>Note the part numbers.</strong> Alaina numbers start with AL, Superlift numbers start with SL. A car or truck model works too.</li>
+      <li><strong>Send one WhatsApp message</strong> to <a href='{wa_both}' target='_blank' rel='noopener'>{PHONE}</a> with the quantities. A photo of the old unit helps.</li>
+      <li><strong>Get a quote and dispatch.</strong> The trade desk confirms price and stock for both lines, then dispatches across India through Mahajan Motors India, Kashmere Gate, Delhi.</li>
+    </ol>
+    <p class='seo-also'><a href="{rel}cabin-dampers/">Alaina cabin dampers</a><a href="{rel}shock-absorbers/">Alaina shock absorbers</a><a href="{rel}rare-struts/">Alaina rare struts</a><a href="{MMI_SUPERLIFT_URL}" rel="noopener">Superlift at Mahajan Motors India</a></p>
+  </section>
+  {faq_html(SUPERLIFT_FAQS, "Alaina × Superlift questions")}
+  </div>
+</main>
+{SUPERLIFT_JS}
+"""
+    ld = [
+        organization_ld(),
+        crumb_ld,
+        faq_ld(SUPERLIFT_FAQS),
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": "Alaina × Superlift",
+            "description": description,
+            "url": url,
+            "isPartOf": {"@type": "WebSite", "url": SITE + "/", "name": "Alaina Shockers"},
+            "about": {"@type": "Brand", "name": "Superlift"},
+            "provider": MMI_ORG,
+        },
+    ]
+    write(ROOT / "alaina-x-superlift" / "index.html", page_shell(rel, head, body, ld, dock_wa=wa_both, body_class="has-hero"))
+    if not SUPERLIFT_INDEXABLE:
+        return None
+    images = [(banner, "Superlift gas springs")]
+    return (SUPERLIFT_PATH, TODAY, images, "0.6")
 
 
 def write_legal_pages() -> list[tuple[str, str, list, str]]:
@@ -1954,12 +2257,7 @@ def write_legal_pages() -> list[tuple[str, str, list, str]]:
 
 def write_404() -> None:
     """ErrorDocument body. Root-absolute links so nested missing URLs still resolve."""
-    nav = CHROME_NAV.format(
-        home="/",
-        cd="/cabin-dampers/",
-        sa="/shock-absorbers/",
-        rs="/rare-struts/",
-    )
+    nav = chrome_nav("/")
     _, footer = chrome("/")
     head = head_tags(
         title="Page not found | Alaina Shockers",
@@ -1973,7 +2271,7 @@ def write_404() -> None:
         image=f"{SITE}/images/tata-4018-hywa-cabin.png",
         image_alt="Alaina cabin damper for Tata 4018 Hywa / Prima",
         robots="noindex, follow",
-    ).replace("REL", "/")
+    ).replace("@@REL@@", "/")
     # Do not claim the missing URL (or /404.html) as a canonical page.
     head = re.sub(r'<link rel="canonical" href="[^"]*"/>\n?', "", head)
     head = re.sub(r'<link rel="alternate" hreflang="[^"]+" href="[^"]*"/>\n?', "", head)
@@ -2241,7 +2539,7 @@ def main() -> None:
             h1="Dickey & bonnet struts",
             description="Dickey shocker and bonnet gas strut enquiries for Alaina. Catalogue No.04 on this site lists cabin dampers, shock absorbers and rare struts — dickey/bonnet SKUs are not published here.",
             keywords="dickey shocker, bonnet gas strut, dickey strut, boot gas strut, Alaina",
-            intro="Searches for <strong>dickey shocker</strong> and <strong>bonnet gas strut</strong> are common. Alaina does not make or sell dickey shockers or bonnet gas struts, so this page lists no part numbers. Mahajan Motors India, which distributes Alaina, separately sells Superlift (not Alaina) dicky and bonnet gas springs: see <a href='https://mahajanmotorsindia.com/superlift' rel='noopener'>Superlift gas springs at Mahajan Motors India</a>.",
+            intro="Searches for <strong>dickey shocker</strong> and <strong>bonnet gas strut</strong> are common. Alaina does not make or sell dickey shockers or bonnet gas struts, so this page lists no part numbers. Mahajan Motors India, which distributes Alaina, separately sells Superlift (not Alaina) dicky and bonnet gas springs: see <a href='https://mahajanmotorsindia.com/superlift' rel='noopener'>Superlift gas springs at Mahajan Motors India</a>. The Superlift catalogue is also on this site at <a href='../alaina-x-superlift/'>Alaina × Superlift</a>.",
             items=[],
             crumb="Dickey & bonnet struts",
             extra=[("Rare struts", "/rare-struts/"), ("Enquire", "/#enquire")],
@@ -2342,6 +2640,9 @@ def main() -> None:
     pages.insert(0, ("/", TODAY, home_imgs, "1.0"))
 
     pages.extend(write_legal_pages())
+    superlift_page = write_superlift()
+    if superlift_page:
+        pages.append(superlift_page)
 
     add_seo_css()
     patch_index(products, collections)
@@ -2403,6 +2704,8 @@ Generated from Technical Catalogue No.04 data already in `index.html`. No part n
 - SKU pages add schema.org **Product** JSON-LD (name, sku, mpn, brand, manufacturer `@id`, image, additionalProperty for OE/fitment). **No `offers` and no price.**
 - Homepage Organization + WebSite (`SearchAction` on `/?q=`) + AutoPartsStore (`hasOfferCatalog` ItemList of landings, not Product/Offer) + FAQ + homepage ItemList / BreadcrumbList / ImageObject.
 - Canonical host is **`https://alainashockabsorbers.com`** (HTTPS, no `www`). `alainashockers.com` does not resolve — it was only a search keyword. `.htaccess` 301s `www` (and HTTP) to that apex URL without changing paths.
+- `/alaina-x-superlift/` presents the Superlift gas spring catalogue (imported from the Mahajan Motors India site by `scripts/import_superlift.py`) as a partner line. Superlift parts are never described as Alaina parts and no prices are shown. The page is `noindex,follow` and left out of the sitemap, so it cannot compete with the shocker pages here or with the Superlift pages on mahajanmotorsindia.com. Set `SUPERLIFT_INDEXABLE = True` in `build_seo.py` to index it.
+- Page furniture (header, footer, phone dock, icons, logo mark) comes from `scripts/site_chrome.py`. Fonts are self-hosted in `/fonts/`; nothing loads from a third-party host.
 - Google image sitemap extension (`xmlns:image`) on sub-sitemaps. `robots.txt` allows pages and image files and points at the sitemap index.
 - `.htaccess` serves `sitemap.xml` / `robots.txt` as real files with XML/text content-types, allows WebP, and does **not** SPA-fallback `google2874721c1e7298d6.html`.
 - **Originals kept, lossless WebP shown.** The original studio PNGs are untouched. `images/webp/` holds pixel-identical lossless WebP copies from `scripts/build_webp.py` (same alpha, same visible pixels, about 5x smaller), served through `<picture>` with the PNG as fallback on every page and in the homepage catalogue. Image sitemaps, OG, and JSON-LD `ImageObject` still point at the original PNG paths. The lightbox opens the original. `llms.txt` is generated for AI search. Titles are held to 60 characters and descriptions to 160 by `fit_title` / `fit_description`; brand names are not repeated when the application already names them (`join_brand`).

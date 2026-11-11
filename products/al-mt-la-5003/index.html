@@ -35,11 +35,10 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 <link rel="manifest" href="/site.webmanifest"/>
 <meta name="theme-color" content="#FF4A1A"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
-<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('themeToggle');if(!b)return;function sync(){var k=d.getAttribute('data-theme')==='dark';b.setAttribute('aria-pressed',k);b.setAttribute('aria-label',k?'Switch to light mode':'Switch to dark mode');b.textContent=k?'☀':'☾'}sync();b.addEventListener('click',function(){var n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('alaina-theme',n)}catch(e){}sync()})})})();</script>
-<link rel="stylesheet" href="../../style.css?v=seo5"/>
+<link rel="preload" href="../../fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="../../fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin/>
+<script>(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('alaina-theme');if(t==='dark'||t==='light')d.setAttribute('data-theme',t)}catch(e){}setTimeout(function(){if(!window.__alainaReady)d.classList.remove('js')},3000)})();</script>
+<link rel="stylesheet" href="../../style.css?v=31"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -237,6 +236,7 @@
 <body>
 <a id="top"></a>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5.001L2.044 22l5.112-1.338A9.955 9.955 0 0011.999 22C17.522 22 22 17.523 22 12S17.522 2 11.999 2zm0 18c-1.658 0-3.197-.489-4.487-1.33l-.322-.19-3.038.795.812-2.966-.209-.333A7.944 7.944 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></symbol><symbol id="i-go" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></symbol><symbol id="i-next" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-5.2v-5.2H9.2V20H4z"/></symbol><symbol id="i-gas" viewBox="0 0 24 24"><circle cx="4.5" cy="19.5" r="1.7"/><circle cx="19.5" cy="4.5" r="1.7"/><path d="m5.8 18.2 3-3M15.2 8.8l3-3"/><path d="m8.3 15.7 6.4-6.4" stroke-width="4.6"/></symbol><symbol id="i-spin" viewBox="0 0 24 24"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/></symbol></defs></svg>
 <div id="topbar">
   <div class="wrap">
     <span class="tb-left">Technical Catalogue <b>No.04</b> — 2026 Edition</span>
@@ -248,34 +248,41 @@
 </div>
 <header id="nav">
   <div class="wrap">
-    <a href="../../" class="brand">
-      <div class="brand-mark">A</div>
+    <a href="../../" class="brand" aria-label="Alaina Shockers, home">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="11" fill="#FF4A1A"/><path fill="#fff" d="M10 37.5 20.4 10.5h7.2L38 37.5h-6.9L24 17.6 16.9 37.5z"/><path fill="#101114" d="M17.2 27.2h23.3v4.6H15.4z"/></svg>
       <div class="brand-word">ALAINA<sup>®</sup><small>Precision damping</small></div>
     </a>
     <nav class="navlinks">
-      <a href="../../#range">Range</a>
+      <a href="../../#range">Our products</a>
       <a href="../../#catalogue">Catalogue</a>
       <a href="../../cabin-dampers/">Cabin Dampers</a>
       <a href="../../shock-absorbers/">Shockers</a>
       <a href="../../rare-struts/">Rare Struts</a>
+      <a href="../../alaina-x-superlift/" class="nav-x">Alaina <b>×</b> Superlift</a>
       <a href="../../#enquire" class="nav-cta">Enquire &#8599;</a>
     </nav>
-    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button></div>
+    <div class="nav-tools"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode"></button><button class="nav-burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobnav"><b>Menu</b><span></span><span></span></button></div>
   </div>
 </header>
 <div id="mobnav">
   <div class="mn-top">
     <div class="brand-word">ALAINA<sup>®</sup></div>
-    <button class="mn-x" id="mnClose" aria-label="Close menu">&#10005;</button>
+    <button class="mn-x" id="mnClose" aria-label="Close menu">Close</button>
   </div>
   <nav>
-    <a href="../../#range">Range</a>
+    <a href="../../">Home</a>
     <a href="../../#catalogue">Catalogue</a>
     <a href="../../cabin-dampers/">Cabin Dampers</a>
     <a href="../../shock-absorbers/">Shockers</a>
     <a href="../../rare-struts/">Rare Struts</a>
+    <a href="../../shockers/">Shockers by vehicle</a>
+    <a href="../../alaina-x-superlift/">Alaina × Superlift</a>
     <a href="../../#enquire">Enquire</a>
   </nav>
+  <div class="mn-foot">
+    <a href="tel:+917982555636">+91 79825 55636</a>
+    <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp</a>
+  </div>
 </div>
 
 
@@ -287,7 +294,7 @@
   <div class="seo-split">
     
         <figure class="seo-figure">
-          <picture><source type="image/webp" srcset="../../images/webp/lancer-rear-lh.webp"/><img src="../../images/lancer-rear-lh.png" alt="Alaina rare strut AL-MT-LA-5003 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5003 for Mitsubishi Lancer" width="1536" height="1024" loading="eager" fetchpriority="high" decoding="async"/></picture>
+          <picture><source type="image/webp" srcset="../../images/cards/lancer-rear-lh.webp 640w, ../../images/cards/lancer-rear-lh@2x.webp 1280w" sizes="(max-width:860px) 100vw, 640px"/><img src="../../images/lancer-rear-lh.png" alt="Alaina rare strut AL-MT-LA-5003 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5003 for Mitsubishi Lancer" width="1536" height="1024" loading="eager" fetchpriority="high" decoding="async"/></picture>
           <figcaption>Alaina rare strut AL-MT-LA-5003 — Mitsubishi Lancer Rear LH (Mitsubishi Lancer)</figcaption>
         </figure>
         
@@ -314,76 +321,76 @@
     <ol class='seo-steps'><li><strong>Find the part.</strong> Use the Alaina part number, the OE number on your old unit, or your vehicle model.</li><li><strong>Send it on WhatsApp</strong> to <a href='https://wa.me/917982555636' target='_blank' rel='noopener'>+91 79825 55636</a> with the quantity. A photo of the old unit helps.</li><li><strong>Get a quote and dispatch.</strong> We confirm price and stock, then dispatch across India through Mahajan Motors India, Kashmere Gate, Delhi.</li></ol>
   </section>
   <section><h2>More Mitsubishi parts</h2><div class='cat-grid'><article class="pcard">
-  <a class="pc-stage" href="../../products/al-mt-la-5001/"><picture><source type="image/webp" srcset="../../images/webp/lancer-front-lh.webp"/><img src="../../images/lancer-front-lh.png" alt="Alaina rare strut AL-MT-LA-5001 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5001 for Mitsubishi Lancer" width="512" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-mt-la-5001/"><span class="pc-tag">Front LH</span><picture><source type="image/webp" srcset="../../images/cards/lancer-front-lh.webp 640w, ../../images/cards/lancer-front-lh@2x.webp 1280w" sizes="(max-width:640px) 46vw, 300px"/><img src="../../images/lancer-front-lh.png" alt="Alaina rare strut AL-MT-LA-5001 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5001 for Mitsubishi Lancer" width="512" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-MT-LA-5001</span><span class="pc-brand">Mitsubishi</span></div>
     <h3 class="pc-name"><a href="../../products/al-mt-la-5001/">Lancer Front LH</a></h3>
     <div class="pc-app">Mitsubishi Lancer</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-mt-la-5001/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5001%20%E2%80%94%20Lancer%20Front%20LH%20%28Mitsubishi%20Lancer%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5001%20%E2%80%94%20Lancer%20Front%20LH%20%28Mitsubishi%20Lancer%29." aria-label="Enquire about AL-MT-LA-5001 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-mt-la-5001/" aria-label="Details for AL-MT-LA-5001">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-mt-la-5002/"><picture><source type="image/webp" srcset="../../images/webp/lancer-front-rh.webp"/><img src="../../images/lancer-front-rh.png" alt="Alaina rare strut AL-MT-LA-5002 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5002 for Mitsubishi Lancer" width="512" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-mt-la-5002/"><span class="pc-tag">Front RH</span><picture><source type="image/webp" srcset="../../images/cards/lancer-front-rh.webp 640w, ../../images/cards/lancer-front-rh@2x.webp 1280w" sizes="(max-width:640px) 46vw, 300px"/><img src="../../images/lancer-front-rh.png" alt="Alaina rare strut AL-MT-LA-5002 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5002 for Mitsubishi Lancer" width="512" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-MT-LA-5002</span><span class="pc-brand">Mitsubishi</span></div>
     <h3 class="pc-name"><a href="../../products/al-mt-la-5002/">Lancer Front RH</a></h3>
     <div class="pc-app">Mitsubishi Lancer</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-mt-la-5002/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5002%20%E2%80%94%20Lancer%20Front%20RH%20%28Mitsubishi%20Lancer%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5002%20%E2%80%94%20Lancer%20Front%20RH%20%28Mitsubishi%20Lancer%29." aria-label="Enquire about AL-MT-LA-5002 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-mt-la-5002/" aria-label="Details for AL-MT-LA-5002">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-mt-la-5004/"><picture><source type="image/webp" srcset="../../images/webp/lancer-rear-rh.webp"/><img src="../../images/lancer-rear-rh.png" alt="Alaina rare strut AL-MT-LA-5004 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5004 for Mitsubishi Lancer" width="1536" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-mt-la-5004/"><span class="pc-tag">Rear RH</span><picture><source type="image/webp" srcset="../../images/cards/lancer-rear-rh.webp 640w, ../../images/cards/lancer-rear-rh@2x.webp 1280w" sizes="(max-width:640px) 46vw, 300px"/><img src="../../images/lancer-rear-rh.png" alt="Alaina rare strut AL-MT-LA-5004 for Mitsubishi Lancer" title="Alaina rare strut AL-MT-LA-5004 for Mitsubishi Lancer" width="1536" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-MT-LA-5004</span><span class="pc-brand">Mitsubishi</span></div>
     <h3 class="pc-name"><a href="../../products/al-mt-la-5004/">Lancer Rear RH</a></h3>
     <div class="pc-app">Mitsubishi Lancer</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-mt-la-5004/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5004%20%E2%80%94%20Lancer%20Rear%20RH%20%28Mitsubishi%20Lancer%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5004%20%E2%80%94%20Lancer%20Rear%20RH%20%28Mitsubishi%20Lancer%29." aria-label="Enquire about AL-MT-LA-5004 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-mt-la-5004/" aria-label="Details for AL-MT-LA-5004">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-mt-la-5005/"><picture><source type="image/webp" srcset="../../images/webp/lancer-cedia-front-lh.webp"/><img src="../../images/lancer-cedia-front-lh.png" alt="Alaina rare strut AL-MT-LA-5005 for Mitsubishi Lancer Cedia" title="Alaina rare strut AL-MT-LA-5005 for Mitsubishi Lancer Cedia" width="1024" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-mt-la-5005/"><span class="pc-tag">Front LH</span><picture><source type="image/webp" srcset="../../images/cards/lancer-cedia-front-lh.webp 640w, ../../images/cards/lancer-cedia-front-lh@2x.webp 1280w" sizes="(max-width:640px) 46vw, 300px"/><img src="../../images/lancer-cedia-front-lh.png" alt="Alaina rare strut AL-MT-LA-5005 for Mitsubishi Lancer Cedia" title="Alaina rare strut AL-MT-LA-5005 for Mitsubishi Lancer Cedia" width="1024" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-MT-LA-5005</span><span class="pc-brand">Mitsubishi</span></div>
     <h3 class="pc-name"><a href="../../products/al-mt-la-5005/">Lancer Cedia Front LH</a></h3>
     <div class="pc-app">Mitsubishi Lancer Cedia</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-mt-la-5005/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5005%20%E2%80%94%20Lancer%20Cedia%20Front%20LH%20%28Mitsubishi%20Lancer%20Cedia%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5005%20%E2%80%94%20Lancer%20Cedia%20Front%20LH%20%28Mitsubishi%20Lancer%20Cedia%29." aria-label="Enquire about AL-MT-LA-5005 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-mt-la-5005/" aria-label="Details for AL-MT-LA-5005">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-mt-la-5006/"><picture><source type="image/webp" srcset="../../images/webp/lancer-cedia-front-rh.webp"/><img src="../../images/lancer-cedia-front-rh.png" alt="Alaina rare strut AL-MT-LA-5006 for Mitsubishi Lancer Cedia" title="Alaina rare strut AL-MT-LA-5006 for Mitsubishi Lancer Cedia" width="1024" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-mt-la-5006/"><span class="pc-tag">Front RH</span><picture><source type="image/webp" srcset="../../images/cards/lancer-cedia-front-rh.webp 640w, ../../images/cards/lancer-cedia-front-rh@2x.webp 1280w" sizes="(max-width:640px) 46vw, 300px"/><img src="../../images/lancer-cedia-front-rh.png" alt="Alaina rare strut AL-MT-LA-5006 for Mitsubishi Lancer Cedia" title="Alaina rare strut AL-MT-LA-5006 for Mitsubishi Lancer Cedia" width="1024" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-MT-LA-5006</span><span class="pc-brand">Mitsubishi</span></div>
     <h3 class="pc-name"><a href="../../products/al-mt-la-5006/">Lancer Cedia Front RH</a></h3>
     <div class="pc-app">Mitsubishi Lancer Cedia</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-mt-la-5006/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5006%20%E2%80%94%20Lancer%20Cedia%20Front%20RH%20%28Mitsubishi%20Lancer%20Cedia%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5006%20%E2%80%94%20Lancer%20Cedia%20Front%20RH%20%28Mitsubishi%20Lancer%20Cedia%29." aria-label="Enquire about AL-MT-LA-5006 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-mt-la-5006/" aria-label="Details for AL-MT-LA-5006">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article><article class="pcard">
-  <a class="pc-stage" href="../../products/al-mt-la-5009/"><picture><source type="image/webp" srcset="../../images/webp/lancer-cedia-rear.webp"/><img src="../../images/lancer-cedia-rear.png" alt="Alaina rare strut AL-MT-LA-5009 for Mitsubishi Lancer Cedia" title="Alaina rare strut AL-MT-LA-5009 for Mitsubishi Lancer Cedia" width="1024" height="1024" loading="lazy" decoding="async"/></picture></a>
+  <a class="pc-stage" href="../../products/al-mt-la-5009/"><span class="pc-tag">Rear</span><picture><source type="image/webp" srcset="../../images/cards/lancer-cedia-rear.webp 640w, ../../images/cards/lancer-cedia-rear@2x.webp 1280w" sizes="(max-width:640px) 46vw, 300px"/><img src="../../images/lancer-cedia-rear.png" alt="Alaina rare strut AL-MT-LA-5009 for Mitsubishi Lancer Cedia" title="Alaina rare strut AL-MT-LA-5009 for Mitsubishi Lancer Cedia" width="1024" height="1024" loading="lazy" decoding="async"/></picture></a>
   <div class="pc-body">
     <div class="pc-top"><span class="pc-no">AL-MT-LA-5009</span><span class="pc-brand">Mitsubishi</span></div>
     <h3 class="pc-name"><a href="../../products/al-mt-la-5009/">Lancer Cedia Rear</a></h3>
     <div class="pc-app">Mitsubishi Lancer Cedia</div>
-    <div class="pc-oe">&nbsp;</div>
+    <div class="pc-oe"></div>
   </div>
   <div class="pc-foot">
-    <a class="pc-btn" href="../../products/al-mt-la-5009/">View →</a>
-    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5009%20%E2%80%94%20Lancer%20Cedia%20Rear%20%28Mitsubishi%20Lancer%20Cedia%29.">WA</a>
+    <a class="pc-btn wa" target="_blank" rel="noopener" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5009%20%E2%80%94%20Lancer%20Cedia%20Rear%20%28Mitsubishi%20Lancer%20Cedia%29." aria-label="Enquire about AL-MT-LA-5009 on WhatsApp"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>Enquire</a>
+    <a class="pc-btn go" href="../../products/al-mt-la-5009/" aria-label="Details for AL-MT-LA-5009">Details<svg class="ico" aria-hidden="true"><use href="#i-next"/></svg></a>
   </div>
 </article></div></section>
 </main>
@@ -419,6 +426,7 @@
         <a href="../../shockers/mahindra-bolero/">Bolero shockers</a>
         <a href="../../#catalogue">Full catalogue</a>
         <a href="../../dickey-bonnet-struts/">Dickey &amp; bonnet struts</a>
+        <a href="../../alaina-x-superlift/">Alaina × Superlift</a>
       </div>
       <div class="fcol">
         <div class="fc-lab">Contact</div>
@@ -427,6 +435,9 @@
         <a href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp ↗</a>
       </div>
     </div>
+  </div>
+  <div class="foot-giant" aria-hidden="true">Alaina</div>
+  <div class="wrap">
     <div class="foot-base">
       <span>© 2026 Alaina Shockers — All parts catalogued</span>
       <span class="foot-legal"><a href="../../privacy-policy/">Privacy policy</a> <a href="../../shipping-policy/">Shipping &amp; delivery</a> <a href="../../returns-policy/">Returns &amp; refunds</a> <a href="../../terms/">Terms</a></span>
@@ -434,18 +445,12 @@
     </div>
   </div>
 </footer>
-<a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20Alaina%20Shockers." target="_blank" rel="noopener">WhatsApp</a>
-<script>
-(function(){
-  var b=document.getElementById('burger'), m=document.getElementById('mobnav'), x=document.getElementById('mnClose');
-  if(!b||!m) return;
-  function shut(){m.classList.remove('open');b.setAttribute('aria-expanded','false');document.body.style.overflow='';}
-  b.onclick=function(){m.classList.add('open');b.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';};
-  if(x) x.onclick=shut;
-  m.querySelectorAll('a').forEach(function(a){a.addEventListener('click',shut);});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.classList.contains('open'))shut();});
-})();
-</script>
+<nav class="dock" aria-label="Quick actions">
+  <a class="dock-find" href="../../#find"><svg class="ico" aria-hidden="true"><use href="#i-search"/></svg><span>Find a part</span><i>Catalogue</i></a>
+  <a class="dock-wa" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5003%20%E2%80%94%20Lancer%20Rear%20LH%20%28Mitsubishi%20Lancer%29." target="_blank" rel="noopener" aria-label="WhatsApp the trade desk"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+</nav>
+<a id="wafab" href="https://wa.me/917982555636?text=Hi%2C%20I%20want%20to%20enquire%20about%20AL-MT-LA-5003%20%E2%80%94%20Lancer%20Rear%20LH%20%28Mitsubishi%20Lancer%29." target="_blank" rel="noopener"><svg class="ico ico-fill" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+<script src="../../site.js?v=31" defer></script>
 
 </body>
 </html>
