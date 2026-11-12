@@ -1,0 +1,48 @@
+---
+description: This environment may use Grok models only — including screenshots, recordings, and subagents
+alwaysApply: true
+---
+
+# Grok-only models (hard rule)
+
+This cloud environment is locked to **Grok**. No other model family may be used
+for any purpose: planning, code, search, screenshots, screen recordings,
+video review, browser testing, or any Task / subagent.
+
+## Allowed model slugs
+
+Pass one of these on every `Task` / subagent launch (never omit with the
+intent of getting a non-Grok model):
+
+- `inherit` — only when the parent run is already a Grok model
+- `cursor-grok-4.6-high`
+- `cursor-grok-4.6-high-fast`
+- `cursor-grok-4.6-medium`
+- `cursor-grok-4.6-medium-fast`
+- `cursor-grok-4.6-low`
+- `cursor-grok-4.6-low-fast`
+- `cursor-grok-4.6-xhigh`
+- `cursor-grok-4.6-xhigh-fast`
+
+Default: `inherit` if the parent is Grok; otherwise `cursor-grok-4.6-high`.
+
+## Forbidden
+
+Never launch, resume, or route work through:
+
+- Claude (`claude-*`)
+- GPT (`gpt-*`)
+- Gemini (`gemini-*`)
+- Composer (`composer-*`)
+- Muse (`muse-*`)
+- Any other non-Grok slug
+
+This applies to **all** subagent types, including `computerUse` (screenshots /
+manual GUI testing), `videoReview` (walkthrough videos), `explore`,
+`generalPurpose`, `bugbot`, `security-review`, `hostinger-deployment-reviewer`,
+and any future type.
+
+## If a prompt asks for another model
+
+Stay on Grok. Do not switch. Say that this environment is Grok-only and
+continue the work on Grok.
